@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "313100611877",
+    "firebase_url": "https://moxi-c1001.firebaseio.com",
+    "project_id": "moxi-c1001",
+    "storage_bucket": "moxi-c1001.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313100611877:android:d702392e72d1a2f7",
+        "android_client_info": {
+          "package_name": "org.nativescript.HelloWorld"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "313100611877-0i8aivkp5afvalabhc9kdtpgptnp6bpn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.nativescript.HelloWorld",
+            "certificate_hash": "11b3f645225a7ad2a4fa80c79fc83f841ac79335"
+          }
+        },
+        {
+          "client_id": "313100611877-6ddckp6aqffnafpgvem4n6lij320s15f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCiZ0dS0mcvTOdxCsaBJtOkEZP2fKjAfs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "313100611877-6ddckp6aqffnafpgvem4n6lij320s15f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
