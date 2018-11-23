@@ -12,6 +12,29 @@ const firebase = require("nativescript-plugin-firebase");
 export class HomeComponent implements OnInit {
     public counter: number = 0;
 
+    public logoutNow () : void
+    {
+        console.log("logingout..");    
+        firebase.logout();
+    }
+    public LoginNow () : void 
+    {
+        firebase.login({
+            type: firebase.LoginType.GOOGLE,
+            // Optional 
+            googleOptions: {
+              hostedDomain: "org.nativescript.HelloWorld"
+            }
+          }).then(
+              function (result) {
+                JSON.stringify(result);
+              },
+              function (errorMessage) {
+                console.log(errorMessage);
+              }
+          );
+    }
+
     onTap(args: EventData) {
         let button = <Button>args.object;
         console.log("trying..");
@@ -23,9 +46,6 @@ export class HomeComponent implements OnInit {
           }).then(
               function (token) {
                 console.log("Auth token retrieved: " + token);
-                firebase.getCurrentUser()
-                .then(user => console.log("User uid: " + user.uid))
-                .catch(error => console.log("Trouble in paradise: " + error));
               },
               function (errorMessage) {
                 console.log("Auth token retrieval error: " + errorMessage);
