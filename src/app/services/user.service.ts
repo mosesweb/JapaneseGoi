@@ -11,15 +11,18 @@ import {
   HttpRequestOptions,
   HttpResponse
 } from 'tns-core-modules/http';
+const firebase = require("nativescript-plugin-firebase")
 
 @Injectable()
 export class UserService {
   getAllUsers = (): Observable<Array<User>> => {
     return of([{ name: 'Moses'}, { name: 'Someone'}]);
   };
-  getUserName = () : User => 
+  getUserName = () : Observable<string> => 
   {
-    return { name: "" };
+    let auser;
+    return ;
+
   }
 
   
