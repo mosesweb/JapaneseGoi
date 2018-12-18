@@ -1,5 +1,6 @@
-export class User {
-    name?: string;
-    email?: string;
-    uid?: number;
+import { User as FirebaseUser} from  "nativescript-plugin-firebase"
+
+
+export interface User extends FirebaseUser {
+    points?: number;
 }

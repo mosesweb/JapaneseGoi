@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
     public userEmail$ : Observable<string>;
 
     loadingUser: boolean = true;
-    user: firebaseUser;
+    user: User;
     users$: Observable<Array<User>>;
 
 
@@ -89,7 +89,12 @@ export class HomeComponent implements OnInit {
                 console.log(data.loggedIn ? "Logged in to firebase" : "Logged out from firebase");
                 if (data.loggedIn) {
                     console.log(data);
-                    this.user = data.user as firebaseUser;
+                    this.user = data.user as User;
+                    this.user.points = 0;
+                    
+                    const usersCollection = firebase.firestore().collection("users");
+
+                    usersCollection.doc("SF").add(this.user);
                      
                 }
             }

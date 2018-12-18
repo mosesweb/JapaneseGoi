@@ -16,12 +16,12 @@ const firebase = require("nativescript-plugin-firebase")
 @Injectable()
 export class UserService {
   getAllUsers = (): Observable<Array<User>> => {
-    return of([{ name: 'Moses'}, { name: 'Someone'}]);
+    return;
   };
   getUserName = () : Observable<string> => 
   {
     let auser;
-    return ;
+    return;
 
   }
 
