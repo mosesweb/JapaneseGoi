@@ -5,16 +5,12 @@
 
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
-        <!-- >> button-tap-event-html -->
-        <Button class="btn btn-primary btn-active" id="button" text="getAuthToken" (tap)="onTap($event)"></Button>
-        <Button class="btn btn-primary btn-active" id="login-button" text="Login" (tap)="LoginNow()"></Button>
-        <Button class="btn btn-primary btn-active" id="logout-button" text="Logout" (tap)="logoutNow()"></Button>
+        
         <Label class="h3 p-15" [text]="user?.name" textWrap="true"></Label> 
         <Label class="h3 p-15" [text]="user?.email" textWrap="true"></Label> 
+        <Label class="h3 p-15" text="Hello my lists!" textWrap="true"></Label> 
 
-        <SearchBar hint="Search hint" [text]="searchPhrase" (textChange)="onTextChanged($event)" (submit)="onSubmit($event)" 
-            color="white" textFieldBackgroundColor="red" textFieldHintColor="white"></SearchBar>
-        <!-- << button-tap-event-html -->
+
     </StackLayout>
 
 </GridLayout>  

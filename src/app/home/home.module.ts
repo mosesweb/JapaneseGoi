@@ -3,6 +3,7 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 
 import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
+import { MylistComponent } from "./mylist.component";
 
 @NgModule({
     imports: [
@@ -11,6 +12,7 @@ import { HomeComponent } from "./home.component";
     ],
     declarations: [
         HomeComponent,
+        MylistComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA
