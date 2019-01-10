@@ -6,6 +6,7 @@ import { User } from "../model/user.model";
 import { Observable } from "rxjs";
 import { UserService } from "../services/user.service";
 import { getBoolean, setBoolean } from "tns-core-modules/application-settings";
+import { SearchBar } from "tns-core-modules/ui/search-bar";
 
 import { 
     firestore, 
@@ -29,6 +30,20 @@ export class HomeComponent implements OnInit {
     user: User;
     users$: Observable<Array<User>>;
 
+
+    public searchPhrase: string;
+
+    public onSubmit(args) {
+        let searchBar = <SearchBar>args.object;
+        let feedback = this.userService.search(searchBar.text);
+        alert(feedback);
+
+    }
+
+    public onTextChanged(args) {
+        let searchBar = <SearchBar>args.object;
+        console.log("SearchBar text changed! New value: " + searchBar.text);
+    }
 
     public logoutNow () : void
     {

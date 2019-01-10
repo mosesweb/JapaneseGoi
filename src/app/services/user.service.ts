@@ -11,7 +11,8 @@ import {
   HttpRequestOptions,
   HttpResponse
 } from 'tns-core-modules/http';
-const firebase = require("nativescript-plugin-firebase")
+const firebase = require("nativescript-plugin-firebase");
+const http = require('http');
 
 @Injectable()
 export class UserService {
@@ -22,7 +23,17 @@ export class UserService {
   {
     let auser;
     return;
+  }
+  search = (searchtag : string) : string => 
+  {
+    getJSON("https://jisho.org/api/v1/search/words?keyword=" + searchtag).then((r: any) => 
+    {
+      console.log(r);
+    }, (e) => {
+      console.log(e)
+    });
 
+    return searchtag;
   }
 
   
