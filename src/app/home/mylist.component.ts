@@ -3,7 +3,7 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { Button } from "tns-core-modules/ui/button";
 import { EventData } from "tns-core-modules/data/observable";
 import { User } from "../model/user.model";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { UserService } from "../services/user.service";
 import { getBoolean, setBoolean } from "tns-core-modules/application-settings";
 import { SearchBar } from "tns-core-modules/ui/search-bar";
@@ -14,6 +14,7 @@ import {
     firestore, 
     User as firebaseUser, 
     login as firebaseLogin} from "nativescript-plugin-firebase"
+import { VocabList } from "../model/vocabList.model";
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 
@@ -48,19 +49,49 @@ export class MylistComponent implements OnInit {
     public userEmail$ : Observable<string>;
 
     loadingUser: boolean = true;
+    CurrentUser: Observable<User>;
     user: User;
     users$: Observable<Array<User>>;
+    vocablists: Array<VocabList>;
 
     ngOnInit(): void {
-        
-        
+        firebase.init();
+        firebase.getCurrentUser()
+        .then(user =>  this.loadLists(user))
+        .catch(error => console.log("Trouble in paradise: " + error));
+        console.log("this is another window");
     }
 
+
+    loadLists = (user: User) : void =>
+    {
+        const vocablistCollection = firebase2.firestore().collection("vocablists");
+                    
+        // "Gimme all lists from this user
+        const query = vocablistCollection
+        .where("uid", "==", user.uid);
+
+        vocablistCollection
+        .get()
+        .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+            this.vocablists.push(
+                new VocabList(doc.data().title, "")
+            );
+        });
+        });
+
+        console.log('thiis many ' + this.vocablists.length);
+
+            
+    }
+        
     public countries: Array<Country>;
     public dataItems: Array<Item>;
 
     constructor() {
         this.countries = [];
+        this.vocablists = [];
 
         for (let i = 0; i < europianCountries.length; i++) {
             this.countries.push(new Country(europianCountries[i]));
