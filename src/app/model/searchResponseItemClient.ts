@@ -16,5 +16,8 @@ import { searchResponse, DataEntity } from '../model/searchResponse.model';// St
 export interface searchResponseItemClient extends DataEntity
 {
     AllJapaneseWord?: string,
-    AllJapaneseReading?: string
+    AllJapaneseReading?: string,
+
+    MainJapaneseWord?: string,
+    MainJapaneseReading?: string
 } 

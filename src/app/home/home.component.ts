@@ -59,8 +59,35 @@ export class HomeComponent implements OnInit {
         firebase.login({
             type: firebase.LoginType.GOOGLE,
           }).then(
-              function (result) {
+               (result : firebaseUser) => {
                 JSON.stringify(result);
+                
+                this.user = result as User;
+                this.user.points = 0;
+
+                
+                const usersCollection = firebase2.firestore().collection("users");
+                const query = usersCollection
+                .where("uid", "==", this.user.uid);
+            
+                query
+                .get()
+                .then(querySnapshot => {
+                    if(querySnapshot.docs.length > 0)
+                    {
+                        console.log('found someone!');
+                        querySnapshot.forEach(doc => {
+                            console.log(`person found: ${doc.id} => ${JSON.stringify(doc.data().name)}`);
+                        });
+                        }
+                    else
+                    {
+                        console.log(querySnapshot);
+                    console.log('nope no found ill insert this person..');
+                    usersCollection.add(this.user);
+                    }
+                  
+                });
               },
               function (errorMessage) {
                 console.log('NAH.. ' + errorMessage);
@@ -105,9 +132,6 @@ export class HomeComponent implements OnInit {
                     this.user = data.user as User;
                     this.user.points = 0;
                     
-                    const usersCollection = firebase.firestore().collection("users");
-
-                    usersCollection.doc("SF").add(this.user);
                      
                 }
             }

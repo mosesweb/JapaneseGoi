@@ -55,7 +55,10 @@ export class UserService {
         let japanese_reading = "";
         let japanese_word = "";
         clientItem = value;
-        clientItem.AllJapaneseReading = "testingtesting!!";
+        
+        clientItem.MainJapaneseWord = value.japanese[0].word;
+        clientItem.MainJapaneseReading = value.japanese[0].reading;
+
         value.japanese.forEach((japaneseEntity: JapaneseEntity) =>
         { 
           if(japaneseEntity.reading !== undefined && japaneseEntity.reading != null && japaneseEntity.reading != "")
