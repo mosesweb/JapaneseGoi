@@ -10,8 +10,9 @@ export interface searchResponse {
     tags?: (string | null)[] | null;
     japanese?: (JapaneseEntity)[] | null;
     senses?: (SensesEntity)[] | null;
-    attribution: Attribution;
-  }
+    attribution: Attribution;    
+}
+   
   export interface JapaneseEntity {
     word?: string | null;
     reading: string;

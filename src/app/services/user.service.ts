@@ -11,13 +11,20 @@ import {
   HttpRequestOptions,
   HttpResponse
 } from 'tns-core-modules/http';
-import { searchResponse, DataEntity } from '../model/searchResponse.model';
+import { searchResponse, DataEntity, JapaneseEntity } from '../model/searchResponse.model';
 import { searchResponseProxy } from '../model/searchResponseProxy';
+import { searchResponseItemClient } from '../model/searchResponseItemClient';
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
 
 @Injectable()
 export class UserService {
+  clientItemsList: Array<searchResponseItemClient>
+
+  constructor()
+  {
+    this.clientItemsList = [];
+  }
   getAllUsers = (): Observable<Array<User>> => {
     return;
   };
@@ -42,7 +49,29 @@ export class UserService {
           });
       });
         
-      callback(of(responseItems));
+      responseItems.forEach((value: DataEntity) =>
+      {
+        let clientItem: searchResponseItemClient;
+        let japanese_reading = "";
+        let japanese_word = "";
+        clientItem = value;
+        clientItem.AllJapaneseReading = "testingtesting!!";
+        value.japanese.forEach((japaneseEntity: JapaneseEntity) =>
+        { 
+          if(japaneseEntity.reading !== undefined && japaneseEntity.reading != null && japaneseEntity.reading != "")
+          japanese_reading += japaneseEntity.reading + ', ';
+
+          if(japaneseEntity.word !== undefined && japaneseEntity.word != null && japaneseEntity.word != "")
+          japanese_word += japaneseEntity.word + ', ';
+          
+        })
+        clientItem.AllJapaneseReading = japanese_reading;
+        clientItem.AllJapaneseWord = japanese_word;
+
+        this.clientItemsList.push(clientItem);
+      })
+
+      callback(of(this.clientItemsList));
 
 
       }, (e) => {

@@ -16,8 +16,9 @@
         <ListView [items]="responseItems$ | async" class="list-group">
                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                     <StackLayout [class.odd]="odd" [class.even]="even">
-                        <Label [text]='"index: " + i'></Label>
-                        <Label [text]='item.is_common'></Label>
+                       <Label [text]='item.AllJapaneseWord'></Label>
+                       <!-- <Label [text]='"index: " + i'></Label>-->
+                        <Label [text]='item.AllJapaneseReading'></Label>
                     </StackLayout>
                 </ng-template>
             </ListView>

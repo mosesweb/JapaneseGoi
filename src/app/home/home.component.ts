@@ -13,6 +13,7 @@ import {
     User as firebaseUser, 
     login as firebaseLogin} from "nativescript-plugin-firebase"
 import { DataEntity } from "../model/searchResponse.model";
+import { searchResponseItemClient } from "../model/searchResponseItemClient";
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 
@@ -30,7 +31,7 @@ export class HomeComponent implements OnInit {
     loadingUser: boolean = true;
     user: User;
     users$: Observable<Array<User>>;
-    responseItems$: Observable<Array<DataEntity>>;
+    responseItems$: Observable<Array<searchResponseItemClient>>;
 
     public searchPhrase: string;
 
