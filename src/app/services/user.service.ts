@@ -11,6 +11,8 @@ import {
   HttpRequestOptions,
   HttpResponse
 } from 'tns-core-modules/http';
+import { searchResponse } from '../model/searchResponse.model';
+import { searchResponseProxy } from '../model/searchResponseProxy';
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
 
@@ -26,16 +28,24 @@ export class UserService {
   }
   search = (searchtag : string) : string => 
   {
-    getJSON("https://jisho.org/api/v1/search/words?keyword=" + searchtag).then((r: any) => 
+    if(searchtag != "")
     {
-      console.log(r);
-    }, (e) => {
-      console.log(e)
-    });
-
+      getJSON("https://jisho.org/api/v1/search/words?keyword=" + searchtag).then((r: any) => 
+      {
+        
+        let whatisthis = searchResponseProxy.Create(r);
+        console.log(whatisthis.data.length);
+        whatisthis.data.forEach(function (searchResponse) {
+          searchResponse.japanese.forEach(function(searchResponseJapanese) {
+            console.log(searchResponseJapanese.word);
+            console.log(searchResponseJapanese.reading);
+          });
+      });
+        
+      }, (e) => {
+        console.log(e)
+      });
+    }
     return searchtag;
   }
-
-  
-
 }

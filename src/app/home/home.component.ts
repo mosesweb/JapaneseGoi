@@ -56,10 +56,10 @@ export class HomeComponent implements OnInit {
     {
         firebase.login({
             type: firebase.LoginType.GOOGLE,
-            // Optional 
-            googleOptions: {
-              hostedDomain: "org.nativescript.HelloWorld"
-            }
+            // // Optional 
+            // googleOptions: {
+            //   hostedDomain: "org.nativescript.HelloWorld"
+            // }
           }).then(
               function (result) {
                 JSON.stringify(result);
