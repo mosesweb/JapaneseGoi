@@ -13,6 +13,15 @@
         <Label class="h3 p-15" [text]="user?.email" textWrap="true"></Label> 
         <Button text="Button" [nsRouterLink]="['mylists']" pageTransition="slide" clearHistory="true"></Button>
 
+        <ListView [items]="responseItems$ | async" class="list-group">
+                <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                    <StackLayout [class.odd]="odd" [class.even]="even">
+                        <Label [text]='"index: " + i'></Label>
+                        <Label [text]='item.is_common'></Label>
+                    </StackLayout>
+                </ng-template>
+            </ListView>
+
         <SearchBar hint="Search hint" [text]="searchPhrase" (textChange)="onTextChanged($event)" (submit)="onSubmit($event)" 
             color="white" textFieldBackgroundColor="red" textFieldHintColor="white"></SearchBar>
         <!-- << button-tap-event-html -->

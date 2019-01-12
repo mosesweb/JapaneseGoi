@@ -3,7 +3,7 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { Button } from "tns-core-modules/ui/button";
 import { EventData } from "tns-core-modules/data/observable";
 import { User } from "../model/user.model";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { UserService } from "../services/user.service";
 import { getBoolean, setBoolean } from "tns-core-modules/application-settings";
 import { SearchBar } from "tns-core-modules/ui/search-bar";
@@ -12,6 +12,7 @@ import {
     firestore, 
     User as firebaseUser, 
     login as firebaseLogin} from "nativescript-plugin-firebase"
+import { DataEntity } from "../model/searchResponse.model";
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 
@@ -29,15 +30,15 @@ export class HomeComponent implements OnInit {
     loadingUser: boolean = true;
     user: User;
     users$: Observable<Array<User>>;
-
+    responseItems$: Observable<Array<DataEntity>>;
 
     public searchPhrase: string;
 
-    public onSubmit(args) {
+    onSubmit = (args: any) =>  {
         let searchBar = <SearchBar>args.object;
-        let feedback = this.userService.search(searchBar.text);
-        alert(feedback);
-
+        this.userService.search(searchBar.text, (result) => {
+            this.responseItems$ = result;
+        });
     }
 
     public onTextChanged(args) {
@@ -56,10 +57,6 @@ export class HomeComponent implements OnInit {
     {
         firebase.login({
             type: firebase.LoginType.GOOGLE,
-            // // Optional 
-            // googleOptions: {
-            //   hostedDomain: "org.nativescript.HelloWorld"
-            // }
           }).then(
               function (result) {
                 JSON.stringify(result);
@@ -89,11 +86,11 @@ export class HomeComponent implements OnInit {
     }
     constructor(private userService: UserService) {
         // Use the component constructor to inject providers.
+        this.responseItems$ = of([]);
     }
     ngOnInit(): void {
         this.users$ = this.userService.getAllUsers();
         this.userEmail$ = this.userService.getUserName();
-
         firebase.getCurrentUser()
         .then(user =>  this.user = user)
         .catch(error => console.log("Trouble in paradise: " + error));
