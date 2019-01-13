@@ -38,21 +38,16 @@ export class MylistComponent implements OnInit {
     user: User;
     vocablists: Array<VocabList>;
     titleTextFieldText: any;
+    _listTitle = "";
     userView = new Observable();
 
     ngOnInit(): void {
-
-        firebase.getCurrentUser()
-        .then(user =>  this.loadLists(user))
-        .catch(error => console.log("Trouble in paradise: " + error));
-        console.log("this is another window");
-
         
         // Create an Observable out of a promise
         const userdata = from(firebase.getCurrentUser());
         
         const example = userdata.pipe(map((val: User) => this.user = val));
-        const subscribe = example.subscribe(val => console.log('sup: ' + val));
+        const subscribe = example.subscribe((val: User) => this.loadLists(val));
 
         // Subscribe to begin listening for async result
         userdata.subscribe({
@@ -74,7 +69,7 @@ export class MylistComponent implements OnInit {
         
         this.counter++;
         alert("Tapped " + this.counter + " times!");
-        this.userService.addVocabList(this.titleTextFieldText, "xxx");
+        this.userService.addVocabList(this._listTitle, this.user.uid);
     }
 
     loadLists = (user: User) : void =>
