@@ -1,4 +1,4 @@
-<ActionBar class="action-bar">
+<ActionBar class="action-bar" [nsRouterLink]="['']">
     <Label class="action-bar-title" text="Home hell yeahhh"></Label>
 </ActionBar>
 
@@ -7,6 +7,7 @@
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
         
         <Label class="h3 p-15" [text]="user?.name" textWrap="true"></Label> 
+        <Label class="h3 p-15" [text]="globalListChoice" textWrap="true"></Label> 
 
         <TextField 
             id="newListTitle"
@@ -22,14 +23,13 @@
            <Button class="btn btn-primary btn-active" id="CreateListButton" text="Create" (tap)="onTap($event)"></Button>
 
 
-            <ListView [items]="vocablists" (setupItemView)="onSetupItemView($event)" class="list-group">
+            <ListView [items]="vocablists" (itemTap)="onItemTap($event)" (setupItemView)="onSetupItemView($event)" class="list-group">
                     <ng-template let-dataitem="item" let-i="index" let-odd="odd" let-even="even" let-header="header" let-footer="footer">
                         <GridLayout [class.odd]="odd" [class.even]="even" [class.header]="header" [class.footer]="footer" class="list-group-item">
                             <Label [text]="dataitem.title" android:class="label-item"></Label>
                         </GridLayout>
                     </ng-template>
                 </ListView>
-        
     </StackLayout>
 
 </GridLayout>  

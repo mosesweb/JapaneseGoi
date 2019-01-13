@@ -3,7 +3,7 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { Button } from "tns-core-modules/ui/button";
 import { EventData } from "tns-core-modules/data/observable";
 import { User } from "../model/user.model";
-import { Observable, of } from "rxjs";
+import { Observable, of, from } from "rxjs";
 import { UserService } from "../services/user.service";
 import { getBoolean, setBoolean } from "tns-core-modules/application-settings";
 import { SearchBar } from "tns-core-modules/ui/search-bar";
@@ -14,6 +14,10 @@ import {
     login as firebaseLogin} from "nativescript-plugin-firebase"
 import { DataEntity } from "../model/searchResponse.model";
 import { searchResponseItemClient } from "../model/searchResponseItemClient";
+import { VocabList } from "../model/vocabList.model";
+import { map } from "rxjs/operators";
+import { ListPicker } from "tns-core-modules/ui/list-picker";
+
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 
@@ -27,11 +31,13 @@ export class HomeComponent implements OnInit {
     public username : string = "";
     public userEmail : string = "";
     public userEmail$ : Observable<string>;
+    public picked: string;
 
     loadingUser: boolean = true;
     user: User;
     users$: Observable<Array<User>>;
     responseItems$: Observable<Array<searchResponseItemClient>>;
+    usersLists$: Observable<Array<VocabList>>;
 
     public searchPhrase: string;
 
@@ -41,6 +47,7 @@ export class HomeComponent implements OnInit {
             this.responseItems$ = result;
         });
     }
+    globalListChoice: string;
 
     public onTextChanged(args) {
         let searchBar = <SearchBar>args.object;
@@ -119,9 +126,8 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {
         this.users$ = this.userService.getAllUsers();
         this.userEmail$ = this.userService.getUserName();
-        firebase.getCurrentUser()
-        .then(user =>  this.user = user)
-        .catch(error => console.log("Trouble in paradise: " + error));
+        const userdata = from(firebase.getCurrentUser());
+        const userObs = userdata.pipe(map((val: User) => this.user = val));
 
         // Init your component properties here.
         firebase.init({
@@ -130,14 +136,23 @@ export class HomeComponent implements OnInit {
                 if (data.loggedIn) {
                     console.log(data);
                     this.user = data.user as User;
-                    this.user.points = 0;
-                    
-                     
+                    this.user.points = 0;    
                 }
             }
         });
+        userObs.subscribe(val => 
+        this.userService.getUserLists(val, (result) => {
+            this.usersLists$ = result;
+            result.subscribe(r => console.log('length: ' + r.length));
+        }));
 
-        
+        this.globalListChoice = this.userService.getlistChoice();
+
+    }
+
+    public selectedIndexChanged(args) {
+        let picker = <ListPicker>args.object;
+        this.picked = this.usersLists$[picker.selectedIndex];
     }
 
 }

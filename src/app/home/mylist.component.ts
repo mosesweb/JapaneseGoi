@@ -19,6 +19,8 @@ import {
 import { VocabList } from "../model/vocabList.model";
 import { getViewById, View } from "tns-core-modules/ui/core/view/view";
 import { Observable, from, of } from "rxjs";
+import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
+import { NavigationExtras, Router } from "@angular/router";
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 const view = require("ui/core/view");
@@ -39,6 +41,8 @@ export class MylistComponent implements OnInit {
     titleTextFieldText: any;
     _listTitle = "";
     userView = new Observable();
+    globalListChoice: string;
+
 
     ngOnInit(): void {
         
@@ -96,17 +100,22 @@ export class MylistComponent implements OnInit {
         });
 
         console.log('thiis many ' + this.vocablists.length);
-
-            
     }
         
     constructor(private userService: UserService) {
         this.vocablists = [];
+        this.globalListChoice = this.userService.getlistChoice();
 
     }
-
-    public onItemTap(args) {
-        console.log("Item Tapped at cell index: " + args.index);
+     onItemTap(args: ItemEventData) {
+        const index = args.index;
+        if(this.vocablists.length > 0)
+        {
+            this.userService.setlistChoice(this.vocablists[args.index].title);
+            this.globalListChoice = this.userService.getlistChoice();
+        }
+        else
+            alert("cant add no items in list!");
     }
-
 }
+

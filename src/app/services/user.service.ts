@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { User } from '../model/user.model';
-import * as appSettings from 'application-settings';
+const appSettings = require("application-settings");
 import {
   request,
   getFile,
@@ -15,14 +15,28 @@ import {
 import { searchResponse, DataEntity, JapaneseEntity } from '../model/searchResponse.model';
 import { searchResponseProxy } from '../model/searchResponseProxy';
 import { searchResponseItemClient } from '../model/searchResponseItemClient';
+import { VocabList } from '../model/vocabList.model';
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
 const firebase2 = require("nativescript-plugin-firebase/app");
 
 @Injectable()
 export class UserService {
-     
-  
+  public globalListChoice: string;
+
+  setlistChoice = (listchoice : string) : void =>
+  {
+    appSettings.setString("listChoice", listchoice);
+    const listChoice = appSettings.getString("listChoice", "");
+    this.globalListChoice = listChoice;
+  }
+  getlistChoice = () : string =>
+  {
+    return appSettings.getString("listChoice", "");
+  }
+    
+    vocablists: Array<VocabList>;
+
   addVocabList = (title: string, uid: string): any => {
       const listsCollection = firebase2.firestore().collection("vocablists");
       listsCollection.add({title: title, uid: uid });
@@ -32,7 +46,10 @@ export class UserService {
 
   constructor()
   {
+
+    
     this.clientItemsList = [];
+    this.vocablists = [];
   }
   getAllUsers = (): Observable<Array<User>> => {
     return;
@@ -42,6 +59,28 @@ export class UserService {
     let auser;
     return;
   }
+  getUserLists = (user: User, callback: (n: Observable<Array<VocabList>>) => any) : void =>
+    {
+      
+        const vocablistCollection = firebase2.firestore().collection("vocablists");
+            
+        //"Gimme all lists from this user
+        const query = vocablistCollection
+        .where("uid", "==", user.uid);
+
+        query
+        .get()
+        .then(querySnapshot => {
+
+
+        querySnapshot.forEach(doc => {
+            this.vocablists.push(
+                new VocabList(doc.data().title, "")
+            );
+        });
+        callback(of(this.vocablists));
+        });
+    }
   search = (searchtag : string, callback: (n: Observable<Array<DataEntity>>) => any) : void => 
   {
     if(searchtag != "")

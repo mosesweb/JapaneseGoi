@@ -10,13 +10,13 @@
         <Button class="btn btn-primary btn-active" id="login-button" text="Login" (tap)="LoginNow()"></Button>
         <Button class="btn btn-primary btn-active" id="logout-button" text="Logout" (tap)="logoutNow()"></Button>
         <Label class="h3 p-15" [text]="user?.name" textWrap="true"></Label> 
-        <Label class="h3 p-15" [text]="user?.email" textWrap="true"></Label> 
+        <Label class="h3 p-15" [text]="globalListChoice" textWrap="true"></Label> 
         <Button text="Button" [nsRouterLink]="['mylists']" pageTransition="slide" clearHistory="true"></Button>
 
         
         <SearchBar hint="Search hint" [text]="searchPhrase" (textChange)="onTextChanged($event)" (submit)="onSubmit($event)" 
             color="white" textFieldBackgroundColor="red" textFieldHintColor="white"></SearchBar>
-            
+
         <ListView [items]="responseItems$ | async" class="list-group">
                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                     <StackLayout [class.odd]="odd" [class.even]="even">
