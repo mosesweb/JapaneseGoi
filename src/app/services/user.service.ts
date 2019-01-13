@@ -24,9 +24,24 @@ const firebase2 = require("nativescript-plugin-firebase/app");
 export class UserService {
   public globalListChoice: string;
 
+  insertIntoList = (listId: string, word: string) : void =>
+  {
+    
+    const wordsCollection = firebase2.firestore().collection("wordsInList");
+    wordsCollection.add({listId: listId, word: word});
+    
+  }
   setlistChoice = (listchoice : string) : void =>
   {
     appSettings.setString("listChoice", listchoice);
+    const listChoice = appSettings.getString("listChoice", "");
+    this.globalListChoice = listChoice;
+  }
+  setlistChoiceWithListId = (listchoice : VocabList) : void =>
+  {
+    appSettings.setString("listChoice", listchoice.title);
+    appSettings.setString("listChoiceId", listchoice.listid);
+
     const listChoice = appSettings.getString("listChoice", "");
     this.globalListChoice = listChoice;
   }
@@ -34,15 +49,17 @@ export class UserService {
   {
     return appSettings.getString("listChoice", "");
   }
-    
+  getlistChoiceId = () : string =>
+  {
+    return appSettings.getString("listChoiceId", "");
+  } 
     vocablists: Array<VocabList>;
 
-  addVocabList = (title: string, uid: string): any => {
+    addVocabList = (vocablist: VocabList, uid: string): any => {
       const listsCollection = firebase2.firestore().collection("vocablists");
-      listsCollection.add({title: title, uid: uid });
-
+      listsCollection.add({title: vocablist.title, listId: vocablist.listid, uid: uid });
     }
-  clientItemsList: Array<searchResponseItemClient>
+    clientItemsList: Array<searchResponseItemClient>
 
   constructor()
   {

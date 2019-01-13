@@ -78,7 +78,8 @@ export class MylistComponent implements OnInit {
         
         this.counter++;
         alert("Tapped " + this.counter + " times!");
-        this.userService.addVocabList(this._listTitle, this.user.uid);
+        let newList = new VocabList(this._listTitle, this.user.uid);
+        this.userService.addVocabList(newList, this.user.uid);
     }
 
     loadLists = (user: User) : void =>
@@ -111,7 +112,7 @@ export class MylistComponent implements OnInit {
         const index = args.index;
         if(this.vocablists.length > 0)
         {
-            this.userService.setlistChoice(this.vocablists[args.index].title);
+            this.userService.setlistChoiceWithListId(this.vocablists[args.index]);
             this.globalListChoice = this.userService.getlistChoice();
         }
         else

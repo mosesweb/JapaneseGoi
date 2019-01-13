@@ -6,18 +6,18 @@
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
         <!-- >> button-tap-event-html -->
-        <Button class="btn btn-primary btn-active" id="button" text="getAuthToken" (tap)="onTap($event)"></Button>
-        <Button class="btn btn-primary btn-active" id="login-button" text="Login" (tap)="LoginNow()"></Button>
-        <Button class="btn btn-primary btn-active" id="logout-button" text="Logout" (tap)="logoutNow()"></Button>
+        <!-- <Button class="btn btn-primary btn-active" id="button" text="getAuthToken" (tap)="onTap($event)"></Button> -->
+        <Button id="login-button" *ngIf="user == null" text="Login" (tap)="LoginNow()"></Button>
+        <Button id="logout-button" *ngIf="user != null" text="Logout" (tap)="logoutNow()"></Button>
         <Label class="h3 p-15" [text]="user?.name" textWrap="true"></Label> 
-        <Label class="h3 p-15" [text]="globalListChoice" textWrap="true"></Label> 
-        <Button text="Button" [nsRouterLink]="['mylists']" pageTransition="slide" clearHistory="true"></Button>
+        <Label class="h3 p-15" [text]="globalListChoice + ' ' + globalListChoiceId" textWrap="true"></Label> 
+        <Button text="My lists" [nsRouterLink]="['mylists']" pageTransition="slide" clearHistory="true"></Button>
 
         
         <SearchBar hint="Search hint" [text]="searchPhrase" (textChange)="onTextChanged($event)" (submit)="onSubmit($event)" 
             color="white" textFieldBackgroundColor="red" textFieldHintColor="white"></SearchBar>
 
-        <ListView [items]="responseItems$ | async" class="list-group">
+        <ListView (itemTap)="wordClick($event)" [items]="responseItems$ | async" class="list-group">
                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                     <StackLayout [class.odd]="odd" [class.even]="even">
                        <Label [text]='item.MainJapaneseWord'></Label>

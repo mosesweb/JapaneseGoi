@@ -17,6 +17,7 @@ import { searchResponseItemClient } from "../model/searchResponseItemClient";
 import { VocabList } from "../model/vocabList.model";
 import { map } from "rxjs/operators";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
+import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
@@ -32,12 +33,15 @@ export class HomeComponent implements OnInit {
     public userEmail : string = "";
     public userEmail$ : Observable<string>;
     public picked: string;
-
+    public showlogin: boolean = true;
     loadingUser: boolean = true;
     user: User;
     users$: Observable<Array<User>>;
     responseItems$: Observable<Array<searchResponseItemClient>>;
     usersLists$: Observable<Array<VocabList>>;
+
+    globalListChoice: string;
+    globalListChoiceId: string;
 
     public searchPhrase: string;
 
@@ -47,8 +51,6 @@ export class HomeComponent implements OnInit {
             this.responseItems$ = result;
         });
     }
-    globalListChoice: string;
-
     public onTextChanged(args) {
         let searchBar = <SearchBar>args.object;
         console.log("SearchBar text changed! New value: " + searchBar.text);
@@ -124,12 +126,6 @@ export class HomeComponent implements OnInit {
         this.responseItems$ = of([]);
     }
     ngOnInit(): void {
-        this.users$ = this.userService.getAllUsers();
-        this.userEmail$ = this.userService.getUserName();
-        const userdata = from(firebase.getCurrentUser());
-        const userObs = userdata.pipe(map((val: User) => this.user = val));
-
-        // Init your component properties here.
         firebase.init({
             onAuthStateChanged: (data) => { // optional but useful to immediately re-logon the user when he re-visits your app
                 console.log(data.loggedIn ? "Logged in to firebase" : "Logged out from firebase");
@@ -140,19 +136,51 @@ export class HomeComponent implements OnInit {
                 }
             }
         });
-        userObs.subscribe(val => 
-        this.userService.getUserLists(val, (result) => {
-            this.usersLists$ = result;
-            result.subscribe(r => console.log('length: ' + r.length));
-        }));
-
+        this.users$ = this.userService.getAllUsers();
+        this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();
+        this.globalListChoiceId = this.userService.getlistChoiceId();
 
+        let gotData = false; 
+        firebase.getCurrentUser().then(data => data == null ? gotData = false : gotData = true);
+        
+        if(gotData)
+        {
+            this.showlogin = false;
+            const currentUserData = firebase.getCurrentUser();
+            from(currentUserData).subscribe(u => console.log(u));
+            const userdata = from(currentUserData);
+            const userObs = userdata.pipe(map((val: User) => this.user = val));
+            userObs.subscribe(val => 
+            {
+                if(val != null)
+                {
+                    this.userService.getUserLists(val, (result) => {
+                        this.usersLists$ = result;
+                        result.subscribe(r => console.log('length: ' + r.length));
+                    });
+                }
+    
+            })
+        }
+        else
+            this.showlogin = true;
     }
 
     public selectedIndexChanged(args) {
         let picker = <ListPicker>args.object;
         this.picked = this.usersLists$[picker.selectedIndex];
     }
-
+    wordClick(args: ItemEventData) {
+        const index = args.index;
+        let list;
+        const userObs = this.responseItems$.pipe();
+        userObs.subscribe(val => 
+        {
+            if(val.length > 0)
+            {
+                this.userService.insertIntoList(this.userService.getlistChoiceId(), val[args.index].MainJapaneseReading);
+            }
+        });
+    }
 }
