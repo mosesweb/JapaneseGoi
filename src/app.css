@@ -36,15 +36,28 @@ Image {
     text-align: left;
     vertical-align: center;
 }
-
+.odd
+{
+    background-color: rgb(19, 98, 124);
+    color: whitesmoke;
+    text-align: left;
+    vertical-align: center;
+}
+.even
+{
+    background-color: rgb(19, 98, 124);
+    color: whitesmoke;
+    text-align: left;
+    vertical-align: center;
+}
 .header {
-    background-color: #8C489F;
+    background-color: #0099CB;
     color: whitesmoke;
     border-radius: 3;
 }
 
 .footer {
-    background-color: #8C489F;
+    background-color: #0099CC;
     color: whitesmoke;
     border-radius: 3;
 }

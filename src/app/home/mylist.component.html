@@ -6,8 +6,7 @@
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
         
-        <Label class="h3 p-15" [text]="user.name" textWrap="true"></Label> 
-        <Label class="h3 p-15" [text]="user.profileImageURL" textWrap="true"></Label> 
+        <Label class="h3 p-15" [text]="user?.name" textWrap="true"></Label> 
 
         <TextField 
             id="newListTitle"
@@ -22,14 +21,14 @@
 
            <Button class="btn btn-primary btn-active" id="CreateListButton" text="Create" (tap)="onTap($event)"></Button>
 
-        <ListView [items]="vocablists" class="list-group">
-                <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-                    <StackLayout [class.odd]="odd" [class.even]="even">
-                       <Label [text]='item.title'></Label>
-                       <!-- <Label [text]='"index: " + i'></Label>-->
-                    </StackLayout>
-                </ng-template>
-            </ListView>
+
+            <ListView [items]="vocablists" (setupItemView)="onSetupItemView($event)" class="list-group">
+                    <ng-template let-dataitem="item" let-i="index" let-odd="odd" let-even="even" let-header="header" let-footer="footer">
+                        <GridLayout [class.odd]="odd" [class.even]="even" [class.header]="header" [class.footer]="footer" class="list-group-item">
+                            <Label [text]="dataitem.title" android:class="label-item"></Label>
+                        </GridLayout>
+                    </ng-template>
+                </ListView>
         
     </StackLayout>
 

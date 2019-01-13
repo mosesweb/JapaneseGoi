@@ -30,7 +30,6 @@ const view = require("ui/core/view");
 })
 export class MylistComponent implements OnInit {
     public counter: number = 0;
-    public username : string = "test";
     public userEmail : string = "";
 
     loadingUser: boolean = true;
@@ -59,7 +58,13 @@ export class MylistComponent implements OnInit {
         complete() { console.log('Completed'); }
         });
         
-        console.log('test!');
+    }
+    onSetupItemView(args: SetupItemViewArgs) {
+        args.view.context.even = (args.index % 2 === 0);
+        args.view.context.odd = (args.index % 2 !== 0);
+        args.view.context.third = (args.index % 3 === 0);
+        args.view.context.header = ((args.index + 1) % this.vocablists.length === 1);
+        args.view.context.footer = (args.index + 1 === this.vocablists.length);
     }
 
 
