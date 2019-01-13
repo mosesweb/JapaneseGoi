@@ -6,9 +6,20 @@
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
         
-        <Label class="h3 p-15" [text]="user?.name" textWrap="true"></Label> 
-        <Label class="h3 p-15" [text]="user?.email" textWrap="true"></Label> 
-        <Label class="h3 p-15" text="Hello my lists!" textWrap="true"></Label> 
+        <Label class="h3 p-15" [text]="user.name" textWrap="true"></Label> 
+        <Label class="h3 p-15" [text]="user.profileImageURL" textWrap="true"></Label> 
+
+        <TextField 
+            id="newListTitle"
+            hint="My cool list" 
+           text='Title"' 
+           secure="false"
+           returnKeyType="done" 
+           autocorrect="false"
+           maxLength="50"
+           class="input input-border"></TextField>
+
+           <Button class="btn btn-primary btn-active" id="CreateListButton" text="Create" (tap)="onTap($event)"></Button>
 
         <ListView [items]="vocablists" class="list-group">
                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">

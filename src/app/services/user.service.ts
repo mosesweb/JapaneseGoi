@@ -11,14 +11,23 @@ import {
   HttpRequestOptions,
   HttpResponse
 } from 'tns-core-modules/http';
+
 import { searchResponse, DataEntity, JapaneseEntity } from '../model/searchResponse.model';
 import { searchResponseProxy } from '../model/searchResponseProxy';
 import { searchResponseItemClient } from '../model/searchResponseItemClient';
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
+const firebase2 = require("nativescript-plugin-firebase/app");
 
 @Injectable()
 export class UserService {
+     
+  
+  addVocabList = (title: string, uid: string): any => {
+      const listsCollection = firebase2.firestore().collection("vocablists");
+      listsCollection.add({title: title, uid: uid });
+
+    }
   clientItemsList: Array<searchResponseItemClient>
 
   constructor()
