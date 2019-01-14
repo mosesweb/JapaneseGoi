@@ -7,7 +7,7 @@ import { ClientWord } from "./ClientWord.model";
 export class VocabList {
 title: string;
  uid: string;
- listid: string;
+ listid: string = null;
  itemcolor: string;
  words: Array<ClientWord>
 
@@ -15,7 +15,7 @@ title: string;
  {
      this.title = title;
      this.uid = uid;
-     this.listid = listid == null ? this.listid : Guid.newGuid();
+     this.listid = listid;
      this.itemcolor = "white";
      this.words = new Array<ClientWord>();
  }

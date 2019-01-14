@@ -107,7 +107,7 @@ export class MylistComponent implements OnInit {
           .get()
           .then(querySnapshot => {
             console.log("go:)");
-          this.vocablists$ = of(( querySnapshot.docs.map(doc => new VocabList(doc.data().title, "", doc.data().listId !== undefined ? doc.data().listId : null))));
+          this.vocablists$ = of(( querySnapshot.docs.map(doc => new VocabList(doc.data().title, "", doc.data().listId))));
           });
 
 
@@ -121,7 +121,7 @@ export class MylistComponent implements OnInit {
               this.vocablists = [];
               snapshot.forEach(docSnap => 
                 {
-                    this.vocablists.push(new VocabList(docSnap.data().title, "", docSnap.data().listId === undefined ? null : docSnap.data().listId));
+                    this.vocablists.push(new VocabList(docSnap.data().title, "", docSnap.data().listId));
                 });
               subscriber.next(this.vocablists);
           });
@@ -140,10 +140,14 @@ export class MylistComponent implements OnInit {
         if(this.vocablists.length > 0)
         {
             args.view.backgroundColor = "green";
-
-            this.userService.setlistChoiceWithListId(this.vocablists[args.index]);
-            this.globalListChoice = this.userService.getlistChoice();
-            this.globalListChoiceId = this.userService.getlistChoiceId();
+            const source = from(this.vocablists$);
+            source.subscribe(val => 
+                {
+                    this.userService.setlistChoiceWithListId(val[args.index]);
+                    this.globalListChoice = this.userService.getlistChoice();
+                    this.globalListChoiceId = this.userService.getlistChoiceId();
+                }
+            )
 
         }
         

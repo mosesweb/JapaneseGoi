@@ -28,6 +28,7 @@
                     <ng-template let-dataitem="item" let-i="index" let-odd="odd" let-CurrentSelected="CurrentSelected" let-header="header" let-footer="footer">
                         <GridLayout [class.odd]="odd" [class.CurrentSelected]="CurrentSelected" [class.header]="header" [class.footer]="footer" class="list-group-item">
                             <Label [text]="dataitem.title" android:class="label-item"></Label>
+
                         </GridLayout>
                     </ng-template>
                 </ListView>

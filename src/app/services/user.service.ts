@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, from } from 'rxjs';
 import { User } from '../model/user.model';
 const appSettings = require("application-settings");
 import {
@@ -16,6 +16,8 @@ import { searchResponse, DataEntity, JapaneseEntity } from '../model/searchRespo
 import { searchResponseProxy } from '../model/searchResponseProxy';
 import { searchResponseItemClient } from '../model/searchResponseItemClient';
 import { VocabList } from '../model/vocabList.model';
+import { Guid } from '../model/Guid';
+import { map } from 'rxjs/operators';
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
 const firebase2 = require("nativescript-plugin-firebase/app");
@@ -42,7 +44,7 @@ export class UserService {
     if(listchoice.title !== undefined)
     appSettings.setString("listChoice", listchoice.title);
 
-    if(listchoice.listid !== undefined)
+    if(listchoice.listid !== undefined && listchoice.listid != null)
     appSettings.setString("listChoiceId", listchoice.listid);
 
     const listChoice = appSettings.getString("listChoice", "");
@@ -60,12 +62,18 @@ export class UserService {
 
     addVocabList = (vocablist: VocabList, uid: string): any => {
       const listsCollection = firebase2.firestore().collection("vocablists");
+      console.log(Guid.newGuid);
       listsCollection.add({title: vocablist.title, listId: vocablist.listid, uid: uid });
     }
     clientItemsList: Array<searchResponseItemClient>
 
   constructor()
   {
+
+        
+
+    // Subscribe to begin listening for async result
+    
 
     
     this.clientItemsList = [];
@@ -95,7 +103,7 @@ export class UserService {
 
         querySnapshot.forEach(doc => {
             this.vocablists.push(
-                new VocabList(doc.data().title, "")
+                new VocabList(doc.data().title, "", doc.data().listId)
             );
         });
         callback(of(this.vocablists));
