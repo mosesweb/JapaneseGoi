@@ -39,7 +39,10 @@ export class UserService {
   }
   setlistChoiceWithListId = (listchoice : VocabList) : void =>
   {
+    if(listchoice.title !== undefined)
     appSettings.setString("listChoice", listchoice.title);
+
+    if(listchoice.listid !== undefined)
     appSettings.setString("listChoiceId", listchoice.listid);
 
     const listChoice = appSettings.getString("listChoice", "");

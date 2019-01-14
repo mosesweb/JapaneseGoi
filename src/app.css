@@ -43,9 +43,9 @@ Image {
     text-align: left;
     vertical-align: center;
 }
-.even
+.CurrentSelected
 {
-    background-color: rgb(19, 98, 124);
+    background-color: green;
     color: whitesmoke;
     text-align: left;
     vertical-align: center;

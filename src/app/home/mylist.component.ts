@@ -21,6 +21,7 @@ import { getViewById, View } from "tns-core-modules/ui/core/view/view";
 import { Observable, from, of } from "rxjs";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { NavigationExtras, Router } from "@angular/router";
+import { ClientWord } from "../model/ClientWord.model";
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 const view = require("ui/core/view");
@@ -42,6 +43,9 @@ export class MylistComponent implements OnInit {
     _listTitle = "";
     userView = new Observable();
     globalListChoice: string;
+    vocablists$: Observable<Array<VocabList>>;
+    globalListChoiceId: string = '';
+;
 
 
     ngOnInit(): void {
@@ -61,14 +65,21 @@ export class MylistComponent implements OnInit {
         error(err) { console.error('Error: ' + err); },
         complete() { console.log('Completed'); }
         });
+
+        this.firestoreCollectionObservable();
+
         
+
     }
     onSetupItemView(args: SetupItemViewArgs) {
-        args.view.context.even = (args.index % 2 === 0);
-        args.view.context.odd = (args.index % 2 !== 0);
-        args.view.context.third = (args.index % 3 === 0);
-        args.view.context.header = ((args.index + 1) % this.vocablists.length === 1);
-        args.view.context.footer = (args.index + 1 === this.vocablists.length);
+        let indexOfCurrentSelected = this.vocablists.findIndex(v => v.title == this.userService.getlistChoice());
+        args.view.context.CurrentSelected = (args.index == indexOfCurrentSelected)
+        // args.view.context.even = (args.index % 2 === 0);
+        // args.view.context.odd = (args.index % 2 !== 0);
+        // args.view.context.third = (args.index % 3 === 0);
+        // args.view.context.header = ((args.index + 1) % this.vocablists.length === 1);
+        // args.view.context.footer = (args.index + 1 === this.vocablists.length);
+
     }
 
 
@@ -80,43 +91,62 @@ export class MylistComponent implements OnInit {
         alert("Tapped " + this.counter + " times!");
         let newList = new VocabList(this._listTitle, this.user.uid);
         this.userService.addVocabList(newList, this.user.uid);
+
     }
 
-    loadLists = (user: User) : void =>
+    loadLists = (user: User | null = null) : void =>
     {
         const vocablistCollection = firebase2.firestore().collection("vocablists");
-                    
-        // "Gimme all lists from this user
-        const query = vocablistCollection
-        .where("uid", "==", user.uid);
+        const wordsCollection = firebase2.firestore().collection("wordsInList");
+        // "Gimme all cities in California with a population below 550000"
+          // "Gimme all lists from this user
+          const query = vocablistCollection
+          .where("uid", "==", user.uid);
+  
+          query
+          .get()
+          .then(querySnapshot => {
+            console.log("go:)");
+          this.vocablists$ = of(( querySnapshot.docs.map(doc => new VocabList(doc.data().title, "", doc.data().listId !== undefined ? doc.data().listId : null))));
+          });
 
-        query
-        .get()
-        .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-            this.vocablists.push(
-                new VocabList(doc.data().title, "")
-            );
-        });
-        });
 
-        console.log('thiis many ' + this.vocablists.length);
+       
     }
+    firestoreCollectionObservable(): void {
+        this.vocablists$ = Observable.create(subscriber => {
+          const colRef: firestore.CollectionReference = firebase2.firestore().collection("vocablists");
+
+          colRef.onSnapshot((snapshot: firestore.QuerySnapshot) => {
+              this.vocablists = [];
+              snapshot.forEach(docSnap => 
+                {
+                    this.vocablists.push(new VocabList(docSnap.data().title, "", docSnap.data().listId === undefined ? null : docSnap.data().listId));
+                });
+              subscriber.next(this.vocablists);
+          });
+        });
+      }
         
     constructor(private userService: UserService) {
         this.vocablists = [];
         this.globalListChoice = this.userService.getlistChoice();
+        this.globalListChoiceId = this.userService.getlistChoiceId();
+
 
     }
      onItemTap(args: ItemEventData) {
         const index = args.index;
         if(this.vocablists.length > 0)
         {
+            args.view.backgroundColor = "green";
+
             this.userService.setlistChoiceWithListId(this.vocablists[args.index]);
             this.globalListChoice = this.userService.getlistChoice();
+            this.globalListChoiceId = this.userService.getlistChoiceId();
+
         }
-        else
-            alert("cant add no items in list!");
+        
     }
 }
 

@@ -136,6 +136,7 @@ export class HomeComponent implements OnInit {
                 }
             }
         });
+        
         this.users$ = this.userService.getAllUsers();
         this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();
