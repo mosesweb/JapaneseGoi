@@ -43,7 +43,11 @@ export class UserService {
     .then(querySnapshot => {
       querySnapshot.forEach(doc => {
         
-        let wordList :  Array<ClientWord> = doc.data().words.map(w => <ClientWord> {japanese_reading: w.japanese_reading});
+        let wordList :  Array<ClientWord> = []; 
+
+        if(doc.data().words !== undefined) 
+        wordList = doc.data().words.map(w => <ClientWord> {japanese_reading: w.japanese_reading});
+
         wordList.push(<ClientWord>{japanese_reading: word});
         
         vocablistCollection.doc(doc.id).set(
@@ -54,7 +58,6 @@ export class UserService {
             words: wordList
           });
       });
-      console.log('setted?');
 
     });
 
@@ -141,6 +144,7 @@ export class UserService {
     }
   search = (searchtag : string, callback: (n: Observable<Array<DataEntity>>) => any) : void => 
   {
+    this.clientItemsList = [];
     if(searchtag != "")
     {
       getJSON("https://jisho.org/api/v1/search/words?keyword=" + searchtag).then((r: any) => 
