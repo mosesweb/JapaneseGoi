@@ -102,16 +102,23 @@ export class MylistComponent implements OnInit {
           // "Gimme all lists from this user
           const query = vocablistCollection
           .where("uid", "==", user.uid);
-  
+          
           query
           .get()
           .then(querySnapshot => {
             console.log("go:)");
-          this.vocablists$ = of(( querySnapshot.docs.map(doc => new VocabList(doc.data().title, "", doc.data().listId))));
-          });
+            // this.vocablists$ = of(( querySnapshot.docs.map(doc => new VocabList(doc.data().title, "", doc.data().listId))));
+            this.vocablists$ = of(( querySnapshot.docs.map
+                (
+                    doc => 
+                    <VocabList>
+                    {
+                    title: doc.data().title, 
+                    uid: doc.data().uid, 
+                    listid: doc.data().listId})));
 
+                });
 
-       
     }
     firestoreCollectionObservable(): void {
         this.vocablists$ = Observable.create(subscriber => {

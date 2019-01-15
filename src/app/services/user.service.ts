@@ -18,6 +18,7 @@ import { searchResponseItemClient } from '../model/searchResponseItemClient';
 import { VocabList } from '../model/vocabList.model';
 import { Guid } from '../model/Guid';
 import { map } from 'rxjs/operators';
+import { ClientWord } from '../model/ClientWord.model';
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
 const firebase2 = require("nativescript-plugin-firebase/app");
@@ -29,8 +30,34 @@ export class UserService {
   insertIntoList = (listId: string, word: string) : void =>
   {
     
-    const wordsCollection = firebase2.firestore().collection("wordsInList");
-    wordsCollection.add({listId: listId, word: word});
+    const vocablistCollection = firebase2.firestore().collection("vocablists");
+    const query = vocablistCollection
+    .where("listId", "==", listId);
+    console.log('setted? ' + listId);
+    
+    let wordList :  Array<ClientWord> = [];
+    wordList.push(<ClientWord>{japanese_reading: word});
+
+    query
+    .get()
+    .then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        
+        let wordList :  Array<ClientWord> = doc.data().words.map(w => <ClientWord> {japanese_reading: w.japanese_reading});
+        wordList.push(<ClientWord>{japanese_reading: word});
+        
+        vocablistCollection.doc(doc.id).set(
+          {
+            title: doc.data().title,
+            listId: doc.data().listId,
+            uid: doc.data().uid,
+            words: wordList
+          });
+      });
+      console.log('setted?');
+
+    });
+
     
   }
   setlistChoice = (listchoice : string) : void =>
@@ -63,7 +90,10 @@ export class UserService {
     addVocabList = (vocablist: VocabList, uid: string): any => {
       const listsCollection = firebase2.firestore().collection("vocablists");
       console.log(Guid.newGuid);
-      listsCollection.add({title: vocablist.title, listId: vocablist.listid, uid: uid });
+      listsCollection.add({
+        title: vocablist.title, 
+        listId: Guid.newGuid(), 
+        uid: uid });
     }
     clientItemsList: Array<searchResponseItemClient>
 

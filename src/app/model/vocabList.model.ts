@@ -15,7 +15,7 @@ title: string;
  {
      this.title = title;
      this.uid = uid;
-     this.listid = listid;
+     this.listid = listid;  
      this.itemcolor = "white";
      this.words = new Array<ClientWord>();
  }
