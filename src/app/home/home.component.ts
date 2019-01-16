@@ -15,7 +15,7 @@ import {
 import { DataEntity } from "../model/searchResponse.model";
 import { searchResponseItemClient } from "../model/searchResponseItemClient";
 import { VocabList } from "../model/vocabList.model";
-import { map } from "rxjs/operators";
+import { map, filter } from "rxjs/operators";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 
@@ -126,47 +126,25 @@ export class HomeComponent implements OnInit {
         this.responseItems$ = of([]);
 
     }
-    ngOnInit(): void {
-        firebase.init({
-            onAuthStateChanged: (data) => { // optional but useful to immediately re-logon the user when he re-visits your app
-                console.log(data.loggedIn ? "Logged in to firebase" : "Logged out from firebase");
-                if (data.loggedIn) {
-                    console.log(data);
-                    this.user = data.user as User;
-                    this.user.points = 0;    
-                }
-            }
+    getUser(): void {
+        this.userService.getUser()
+        
+        .subscribe((u) => {
+        if(u !== null && u !== undefined)
+        console.log("skoja");    
+        console.log(u);
+            this.user = u ;
         });
+      }
+
+    ngOnInit(): void {
+        
+        this.getUser();
         
         this.users$ = this.userService.getAllUsers();
         this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();
         this.globalListChoiceId = this.userService.getlistChoiceId();
-
-        let gotData = false; 
-        firebase.getCurrentUser().then(data => data == null ? gotData = false : gotData = true);
-        
-        if(gotData)
-        {
-            this.showlogin = false;
-            const currentUserData = firebase.getCurrentUser();
-            from(currentUserData).subscribe(u => console.log(u));
-            const userdata = from(currentUserData);
-            const userObs = userdata.pipe(map((val: User) => this.user = val));
-            userObs.subscribe(val => 
-            {
-                if(val != null)
-                {
-                    this.userService.getUserLists(val, (result) => {
-                        this.usersLists$ = result;
-                        result.subscribe(r => console.log('length: ' + r.length));
-                    });
-                }
-    
-            })
-        }
-        else
-            this.showlogin = true;
 
     }
 

@@ -25,13 +25,19 @@
 
 
             <ListView [items]="vocablists$ | async" (itemTap)="onItemTap($event)" (setupItemView)="onSetupItemView($event)" class="list-group">
-                    <ng-template let-dataitem="item" let-i="index" let-odd="odd" let-CurrentSelected="CurrentSelected" let-header="header" let-footer="footer">
-                        <GridLayout [class.odd]="odd" [class.CurrentSelected]="CurrentSelected" [class.header]="header" [class.footer]="footer" class="list-group-item">
+                    <!-- <ng-template let-dataitem="item" let-i="index" let-selectedItem="selectedItem">
+                        <GridLayout [class.selectedItem]="selectedItem" class="list-group-item">
                             <Label [text]="dataitem?.title" android:class="label-item"></Label>
-
+                            <Label text="hej" android:class="label-item"></Label>
                         </GridLayout>
+                    </ng-template> -->
+                    <ng-template tkTemplateKey="green" let-dataitem="item">
+                        <StackLayout orientation="vertical" class="list-group-item"> 
+                            <Label [text]="dataitem?.title" android:class="label-item"></Label>
+                            <Label [nsRouterLink]="['/home/singlelist']" (tap)="viewMore($event)" text="LIST DETAILS" android:class="label-item"></Label>
+                        </StackLayout>
                     </ng-template>
-                </ListView>
+            </ListView>
     </StackLayout>
 
 </GridLayout>  

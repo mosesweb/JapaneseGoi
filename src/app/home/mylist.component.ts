@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { NativeScriptRouterModule } from "nativescript-angular/router";
+import { NativeScriptRouterModule, RouterExtensions } from "nativescript-angular/router";
 import { Button } from "tns-core-modules/ui/button";
 import { fromObject, fromObjectRecursive, PropertyChangeData, EventData } from "tns-core-modules/data/observable";
 import { User } from "../model/user.model";
@@ -135,7 +135,8 @@ export class MylistComponent implements OnInit {
         });
       }
         
-    constructor(private userService: UserService) {
+    constructor(private userService: UserService,
+        private routerExtensions: RouterExtensions) {
         this.vocablists = [];
         this.globalListChoice = this.userService.getlistChoice();
         this.globalListChoiceId = this.userService.getlistChoiceId();
@@ -148,6 +149,7 @@ export class MylistComponent implements OnInit {
         {
             args.view.backgroundColor = "green";
             const source = from(this.vocablists$);
+
             source.subscribe(val => 
                 {
                     this.userService.setlistChoiceWithListId(val[args.index]);
@@ -159,5 +161,8 @@ export class MylistComponent implements OnInit {
         }
         
     }
+    public viewMore = (args : any) : void => 
+      {
+      }
 }
 

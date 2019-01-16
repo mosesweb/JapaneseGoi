@@ -5,6 +5,7 @@ import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
 import { MylistComponent } from "./mylist.component";
+import { SinglelistComponent } from "./singlelist.component";
 
 @NgModule({
     imports: [
@@ -14,7 +15,8 @@ import { MylistComponent } from "./mylist.component";
     ],
     declarations: [
         HomeComponent,
-        MylistComponent
+        MylistComponent,
+        SinglelistComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA
@@ -22,5 +24,4 @@ import { MylistComponent } from "./mylist.component";
 })
 export class HomeModule {
 
-    public thinginmodule: string
  }

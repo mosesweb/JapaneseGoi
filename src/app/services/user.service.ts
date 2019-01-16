@@ -17,7 +17,7 @@ import { searchResponseProxy } from '../model/searchResponseProxy';
 import { searchResponseItemClient } from '../model/searchResponseItemClient';
 import { VocabList } from '../model/vocabList.model';
 import { Guid } from '../model/Guid';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { ClientWord } from '../model/ClientWord.model';
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
@@ -25,6 +25,18 @@ const firebase2 = require("nativescript-plugin-firebase/app");
 
 @Injectable()
 export class UserService {
+  public loggedIn: Boolean = false;
+
+  getUser(): Observable<User> {
+    if (this.loggedIn) 
+    {
+      const userdata = from(firebase.getCurrentUser());
+      const example = userdata.pipe(map((val: User) => val));
+      return example;
+    }
+    else
+    return;    
+  }
   public globalListChoice: string;
 
   insertIntoList = (listId: string, word: string) : void =>
@@ -102,12 +114,20 @@ export class UserService {
 
   constructor()
   {
-
-        
-
     // Subscribe to begin listening for async result
-    
-
+    firebase.init({
+      onAuthStateChanged: (data)  => { // optional but useful to immediately re-logon the user when he re-visits your app
+        console.log(data.loggedIn ? "Logged in to firebase" : "Logged out from firebase");
+        if (data.loggedIn) {
+          this.loggedIn = true;
+          console.log("user's email address: " + (data.user.email ? data.user.email : "N/A"));
+        }
+        else
+        {
+          this.loggedIn = false;
+        }
+      }
+    });
     
     this.clientItemsList = [];
     this.vocablists = [];
