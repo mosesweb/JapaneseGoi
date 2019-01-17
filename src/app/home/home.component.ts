@@ -127,20 +127,17 @@ export class HomeComponent implements OnInit {
 
     }
     getUser(): void {
-        this.userService.getUser()
-        
-        .subscribe((u) => {
-        if(u !== null && u !== undefined)
-        console.log("skoja");    
-        console.log(u);
-            this.user = u ;
-        });
+        if(this.userService.getUser() != null)
+        {
+            this.userService.getUser().subscribe((u) => { 
+                this.user = u;
+            });
+        }
       }
 
     ngOnInit(): void {
-        
         this.getUser();
-        
+
         this.users$ = this.userService.getAllUsers();
         this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();

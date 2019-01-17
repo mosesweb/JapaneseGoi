@@ -10,7 +10,7 @@ import { SinglelistComponent } from "./singlelist.component";
 const routes: Routes = [
     { path: "", component: HomeComponent },
     { path: "mylists", component: MylistComponent },
-    { path: "singlelist", component: SinglelistComponent },
+    { path: "singlelist/:id", component: SinglelistComponent },
 ];
 
 @NgModule({

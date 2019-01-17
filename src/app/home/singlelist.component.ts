@@ -20,7 +20,7 @@ import { VocabList } from "../model/vocabList.model";
 import { getViewById, View } from "tns-core-modules/ui/core/view/view";
 import { Observable, from, of } from "rxjs";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
-import { NavigationExtras, Router } from "@angular/router";
+import { NavigationExtras, Router, Params, ActivatedRoute } from "@angular/router";
 import { ClientWord } from "../model/ClientWord.model";
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
@@ -35,14 +35,23 @@ export class SinglelistComponent implements OnInit {
     globalListChoice: string;
     globalListChoiceId: string = '';
     currentUser: User;
+    currentList: VocabList;
 
     ngOnInit(): void {
         this.globalListChoice = this.userService.getlistChoice();
         this.globalListChoiceId = this.userService.getlistChoiceId();
-        this.getUser();
+        
+        this.route.params.forEach(
+            (params : Params) => {
+                console.log(params["id"]);
+            }
+         );        
+         
+         this.getUser();
+        
     }
 
-    constructor(private userService: UserService) {
+    constructor(private userService: UserService, private route : ActivatedRoute) {
     }
 
       getUser(): void {

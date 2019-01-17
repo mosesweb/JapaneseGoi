@@ -28,14 +28,10 @@ export class UserService {
   public loggedIn: Boolean = false;
 
   getUser(): Observable<User> {
-    if (this.loggedIn) 
-    {
-      const userdata = from(firebase.getCurrentUser());
-      const example = userdata.pipe(map((val: User) => val));
-      return example;
-    }
-    else
-    return;    
+   
+    const userdata = from(firebase.getCurrentUser());
+    const example = userdata.pipe(map((val: User) => val));
+    return example;
   }
   public globalListChoice: string;
 
@@ -72,8 +68,6 @@ export class UserService {
       });
 
     });
-
-    
   }
   setlistChoice = (listchoice : string) : void =>
   {
@@ -124,7 +118,7 @@ export class UserService {
         }
         else
         {
-          this.loggedIn = false;
+          this.loggedIn= false;
         }
       }
     });

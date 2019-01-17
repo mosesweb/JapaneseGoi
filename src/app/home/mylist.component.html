@@ -34,7 +34,7 @@
                     <ng-template tkTemplateKey="green" let-dataitem="item">
                         <StackLayout orientation="vertical" class="list-group-item"> 
                             <Label [text]="dataitem?.title" android:class="label-item"></Label>
-                            <Label [nsRouterLink]="['/home/singlelist']" (tap)="viewMore($event)" text="LIST DETAILS" android:class="label-item"></Label>
+                            <Label [nsRouterLink]="['/home/singlelist', dataitem?.listid]" (tap)="viewMore($event)" text="LIST DETAILS" android:class="label-item"></Label>
                         </StackLayout>
                     </ng-template>
             </ListView>
