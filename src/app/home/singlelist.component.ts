@@ -45,6 +45,7 @@ export class SinglelistComponent implements OnInit {
         
         this.route.params.forEach(
             (params : Params) => {
+                console.log("param id: " + params["id"]);
                 this.loadLists(null, params["id"]);
             }
          );        
@@ -53,16 +54,16 @@ export class SinglelistComponent implements OnInit {
     loadLists = (user: User | null = null, listId: string) : void =>
     {
         const vocablistCollection = firebase2.firestore().collection("vocablists");
-        const wordsCollection = firebase2.firestore().collection("wordsInList");
           const query = vocablistCollection
           .where("listId", "==", listId);
           
           query
           .get()
           .then(querySnapshot => {
-            console.log("go:)");
-            this.vocablists$ =
-     
+            this.wordsInList$ = of(
+                querySnapshot.docs[0].data().words.map(w => <ClientWord> {japanese_reading: w.japanese_reading})
+            );
+           this.vocablists$ = 
                 of(( querySnapshot.docs.map
                 (
                     doc => 
@@ -70,10 +71,16 @@ export class SinglelistComponent implements OnInit {
                     {
                         title: doc.data().title, 
                         uid: doc.data().uid, 
-                        listid: doc.data().listId
-                        //words: doc.data().words.map((w : ClientWord) => <ClientWord> {japanese_reading: "test japanese reading"})
-                    })));
-                });
+                        listid: doc.data().listId,
+                        words: doc.data().words.map((w : any) => <ClientWord> {japanese_reading: "test japanese reading"})
+                    }
+                    )));
+                    this.vocablists$.subscribe(l => console.log("LENGTH: " + l[0].words.length));
+                    this.wordsInList$.subscribe(l => console.log("LENGTH WORDS: " + l.length));
+
+                    
+                    }
+                );
     }
 
     constructor(private userService: UserService, private route : ActivatedRoute) {

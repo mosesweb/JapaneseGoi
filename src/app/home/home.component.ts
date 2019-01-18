@@ -18,6 +18,7 @@ import { VocabList } from "../model/vocabList.model";
 import { map, filter } from "rxjs/operators";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
+import { ActivatedRoute, Router } from "@angular/router";
 
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
@@ -121,7 +122,7 @@ export class HomeComponent implements OnInit {
               }
           );
     }
-    constructor(private userService: UserService) {
+    constructor(private userService: UserService, private router : Router) {
         // Use the component constructor to inject providers.
         this.responseItems$ = of([]);
     }
@@ -139,6 +140,11 @@ export class HomeComponent implements OnInit {
         this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();
         this.globalListChoiceId = this.userService.getlistChoiceId();
+
+        //test purpose
+        //this.router.navigateByUrl('/home/singlelist/:3b688d95-d5df-4b2f-ac5c-4f0ee9da5347');
+        this.router.navigate(['/home/singlelist/', '3b688d95-d5df-4b2f-ac5c-4f0ee9da5347']);
+        
     }
 
     public selectedIndexChanged(args) {

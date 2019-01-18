@@ -11,10 +11,10 @@
         <Label class="h3 p-15" [text]="globalListChoiceId" textWrap="true"></Label> 
 
 
-            <ListView [items]="vocablists$ | async"  class="list-group">
+            <ListView [items]="wordsInList$ | async"  class="list-group">
                     <ng-template tkTemplateKey="green" let-dataitem="item">
                         <StackLayout orientation="vertical" class="list-group-item"> 
-                            <Label [text]="dataitem.title" android:class="label-item"></Label>
+                            <Label [text]="dataitem.japanese_reading" android:class="label-item"></Label>
                         </StackLayout>
                     </ng-template>
             </ListView>
