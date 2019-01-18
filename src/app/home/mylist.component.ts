@@ -49,37 +49,13 @@ export class MylistComponent implements OnInit {
 
 
     ngOnInit(): void {
-        
-        // Create an Observable out of a promise
-        const userdata = from(firebase.getCurrentUser());
-        
-        const example = userdata.pipe(map((val: User) => this.user = val));
-        const subscribe = example.subscribe((val: User) => this.loadLists(val));
-
-        // Subscribe to begin listening for async result
-        userdata.subscribe({
-        next(response) { 
-            console.log('below..');
-            this.user = of(response); 
-        },
-        error(err) { console.error('Error: ' + err); },
-        complete() { console.log('Completed'); }
-        });
-
+        // Create an Observable out of a promise        
+        this.loadLists(this.userService.UserFromService);
         this.firestoreCollectionObservable();
-
-        
-
     }
     onSetupItemView(args: SetupItemViewArgs) {
         let indexOfCurrentSelected = this.vocablists.findIndex(v => v.title == this.userService.getlistChoice());
-        args.view.context.CurrentSelected = (args.index == indexOfCurrentSelected)
-        // args.view.context.even = (args.index % 2 === 0);
-        // args.view.context.odd = (args.index % 2 !== 0);
-        // args.view.context.third = (args.index % 3 === 0);
-        // args.view.context.header = ((args.index + 1) % this.vocablists.length === 1);
-        // args.view.context.footer = (args.index + 1 === this.vocablists.length);
-
+        args.view.context.CurrentSelected = (args.index == indexOfCurrentSelected);
     }
 
 
@@ -89,13 +65,14 @@ export class MylistComponent implements OnInit {
         
         this.counter++;
         alert("Tapped " + this.counter + " times!");
-        let newList = new VocabList(this._listTitle, this.user.uid);
-        this.userService.addVocabList(newList, this.user.uid);
+        let newList = new VocabList(this._listTitle, this.userService.UserFromService.uid);
+        this.userService.addVocabList(newList, this.userService.UserFromService.uid);
 
     }
 
     loadLists = (user: User | null = null) : void =>
     {
+        console.log("parameter " + user.uid);
         const vocablistCollection = firebase2.firestore().collection("vocablists");
         const wordsCollection = firebase2.firestore().collection("wordsInList");
         // "Gimme all cities in California with a population below 550000"

@@ -34,12 +34,10 @@ const view = require("ui/core/view");
 export class SinglelistComponent implements OnInit {
     globalListChoice: string;
     globalListChoiceId: string = '';
-    currentUser: User;
     currentList: VocabList;
     wordsInList$: Observable<Array<ClientWord>>;
     vocablists: Array<VocabList>;
     vocablists$: Observable<Array<VocabList>>;
-
 
     ngOnInit(): void {
         this.globalListChoice = this.userService.getlistChoice();
@@ -48,20 +46,14 @@ export class SinglelistComponent implements OnInit {
         this.route.params.forEach(
             (params : Params) => {
                 this.loadLists(null, params["id"]);
-
             }
          );        
-         
-         this.getUser();
-        
     }
 
     loadLists = (user: User | null = null, listId: string) : void =>
     {
         const vocablistCollection = firebase2.firestore().collection("vocablists");
         const wordsCollection = firebase2.firestore().collection("wordsInList");
-        // "Gimme all cities in California with a population below 550000"
-          // "Gimme all lists from this user
           const query = vocablistCollection
           .where("listId", "==", listId);
           
@@ -69,7 +61,6 @@ export class SinglelistComponent implements OnInit {
           .get()
           .then(querySnapshot => {
             console.log("go:)");
-            // this.vocablists$ = of(( querySnapshot.docs.map(doc => new VocabList(doc.data().title, "", doc.data().listId))));
             this.vocablists$ =
      
                 of(( querySnapshot.docs.map
@@ -79,11 +70,10 @@ export class SinglelistComponent implements OnInit {
                     {
                         title: doc.data().title, 
                         uid: doc.data().uid, 
-                        listid: doc.data().listId,
-                        words: doc.data().words.map((w : ClientWord) => <ClientWord> {japanese_reading: "test japanese reading"})
+                        listid: doc.data().listId
+                        //words: doc.data().words.map((w : ClientWord) => <ClientWord> {japanese_reading: "test japanese reading"})
                     })));
                 });
-
     }
 
     constructor(private userService: UserService, private route : ActivatedRoute) {
@@ -91,14 +81,10 @@ export class SinglelistComponent implements OnInit {
     
     getWordsInList(): void {
 
-      }
-      getUser(): void {
-        this.userService.getUser()            
-        .subscribe(u => this.currentUser = u);
-      }
-      public viewMore = (args : any) : void => 
-      {
-        alert("hej");
-      }
+    }
+    public viewMore = (args : any) : void => 
+    {
+    alert("hej");
+    }
 }
 

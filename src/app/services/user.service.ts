@@ -120,6 +120,8 @@ export class UserService {
         else
         {
           this.UserFromService = null;
+          console.log('not logged in');
+
         }
       }
     });
