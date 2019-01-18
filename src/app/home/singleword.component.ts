@@ -39,7 +39,8 @@ export class SinglewordComponent implements OnInit {
     vocablists: Array<VocabList>;
     vocablists$: Observable<Array<VocabList>>;
     listName$: Observable<string>;
-    wordName$: Observable<string>;
+    wordName$: Observable<ClientWord>;
+    fakeArray = new Array(12);
 
     ngOnInit(): void {
         this.globalListChoice = this.userService.getlistChoice();
@@ -66,7 +67,17 @@ export class SinglewordComponent implements OnInit {
                 {
                     // todo map this and print it nicely
                     if(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId).length > 0)
-                    this.wordName$ = of(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId)[0].english);
+                    {
+                        const dobj: any = querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId)[0];
+                        this.wordName$ = of(<ClientWord> {
+                            english: dobj.english, 
+                            japanese_reading: dobj.japanese_reading,
+                            japanese_word: dobj.japanese_word,
+                            all_variations: dobj.all_variations,
+                            senses: dobj.senses
+                         });
+                         this.wordName$.subscribe(w => console.log(w.senses.length));
+                    }
                 }                    
             }
         );

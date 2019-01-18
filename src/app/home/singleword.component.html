@@ -9,7 +9,23 @@
             <Label class="h3 p-15" [text]="globalListChoice" textWrap="true"></Label> 
             <Label class="h3 p-15" [text]="globalListChoiceId" textWrap="true"></Label> 
     
-            <Label class="h3 p-15" [text]="wordName$ | async" textWrap="true"></Label> 
+            <Label class="h3 p-15" [text]="(wordName$ | async)?.english" textWrap="true"></Label>
+            <Label class="h3 p-15" [text]="(wordName$ | async)?.japanese_word" textWrap="true"></Label> 
+            <Label class="h3 p-15" [text]="(wordName$ | async)?.japanese_reading" textWrap="true"></Label> 
+
+            <Label text="All meanings:"></Label>
+            <ng-container *ngFor = "let s of (wordName$ | async)?.senses">
+                    <ng-container *ngFor = "let a of s?.english_definitions">
+                            <Label [text]="a"></Label>
+                    </ng-container>    
+            </ng-container>
+
+            <Label text="Other variations:"></Label>
+            <ng-container *ngFor = "let v of (wordName$ | async)?.all_variations">
+                    <Label [text]="v.japanese_word"></Label>
+                    <Label [text]="v.japanese_reading"></Label>
+            </ng-container>
+
         </StackLayout>
     
     </GridLayout>  

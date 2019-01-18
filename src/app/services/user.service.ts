@@ -63,9 +63,9 @@ export class UserService {
         wordList = doc.data().words.map(w => <ClientWord> {
           japanese_reading: w.japanese_reading,
           japanese_word: w.japanese_word,
-          english: word.senses[0].english_definitions.join(', '),
-          senses: senses,
-          all_variations: all_variations,
+          english: w.senses[0] !== undefined ? w.senses[0].english_definitions.join(', ') : "",
+          senses: w.senses !== undefined ? w.senses : null,
+          all_variations: w.all_variations !== undefined ? w.all_variations : null,
           word_id: w.word_id
         });
 
@@ -151,7 +151,6 @@ export class UserService {
         {
           this.UserFromService = null;
           console.log('not logged in');
-
         }
       }
     });
@@ -216,7 +215,7 @@ export class UserService {
         clientItem.MainJapaneseWord = value.japanese[0].word;
         clientItem.MainJapaneseReading = value.japanese[0].reading;
         clientItem.English = value.senses[0].english_definitions.join(', ');
-
+        
         value.japanese.forEach((japaneseEntity: JapaneseEntity) =>
         { 
           if(japaneseEntity.reading !== undefined && japaneseEntity.reading != null && japaneseEntity.reading != "")
