@@ -120,6 +120,7 @@ export class MylistComponent implements OnInit {
                 });
 
     }
+    
     firestoreCollectionObservable(): void {
         this.vocablists$ = Observable.create(subscriber => {
           const colRef: firestore.CollectionReference = firebase2.firestore().collection("vocablists");

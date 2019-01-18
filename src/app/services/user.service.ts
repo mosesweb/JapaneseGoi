@@ -23,10 +23,11 @@ const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
 const firebase2 = require("nativescript-plugin-firebase/app");
 
+
 @Injectable()
 export class UserService {
   public loggedIn: Boolean = false;
-
+  public UserFromService : User
   getUser(): Observable<User> {
    
     const userdata = from(firebase.getCurrentUser());
@@ -113,12 +114,12 @@ export class UserService {
       onAuthStateChanged: (data)  => { // optional but useful to immediately re-logon the user when he re-visits your app
         console.log(data.loggedIn ? "Logged in to firebase" : "Logged out from firebase");
         if (data.loggedIn) {
-          this.loggedIn = true;
-          console.log("user's email address: " + (data.user.email ? data.user.email : "N/A"));
+          this.UserFromService = data.user;
+          console.log(this.UserFromService.name + ' nice');
         }
         else
         {
-          this.loggedIn= false;
+          this.UserFromService = null;
         }
       }
     });

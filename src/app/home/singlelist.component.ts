@@ -36,6 +36,10 @@ export class SinglelistComponent implements OnInit {
     globalListChoiceId: string = '';
     currentUser: User;
     currentList: VocabList;
+    wordsInList$: Observable<Array<ClientWord>>;
+    vocablists: Array<VocabList>;
+    vocablists$: Observable<Array<VocabList>>;
+
 
     ngOnInit(): void {
         this.globalListChoice = this.userService.getlistChoice();
@@ -43,7 +47,8 @@ export class SinglelistComponent implements OnInit {
         
         this.route.params.forEach(
             (params : Params) => {
-                console.log(params["id"]);
+                this.loadLists(null, params["id"]);
+
             }
          );        
          
@@ -51,9 +56,42 @@ export class SinglelistComponent implements OnInit {
         
     }
 
-    constructor(private userService: UserService, private route : ActivatedRoute) {
+    loadLists = (user: User | null = null, listId: string) : void =>
+    {
+        const vocablistCollection = firebase2.firestore().collection("vocablists");
+        const wordsCollection = firebase2.firestore().collection("wordsInList");
+        // "Gimme all cities in California with a population below 550000"
+          // "Gimme all lists from this user
+          const query = vocablistCollection
+          .where("listId", "==", listId);
+          
+          query
+          .get()
+          .then(querySnapshot => {
+            console.log("go:)");
+            // this.vocablists$ = of(( querySnapshot.docs.map(doc => new VocabList(doc.data().title, "", doc.data().listId))));
+            this.vocablists$ =
+     
+                of(( querySnapshot.docs.map
+                (
+                    doc => 
+                    <VocabList>
+                    {
+                        title: doc.data().title, 
+                        uid: doc.data().uid, 
+                        listid: doc.data().listId,
+                        words: doc.data().words.map((w : ClientWord) => <ClientWord> {japanese_reading: "test japanese reading"})
+                    })));
+                });
+
     }
 
+    constructor(private userService: UserService, private route : ActivatedRoute) {
+    }
+    
+    getWordsInList(): void {
+
+      }
       getUser(): void {
         this.userService.getUser()            
         .subscribe(u => this.currentUser = u);

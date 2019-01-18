@@ -124,7 +124,6 @@ export class HomeComponent implements OnInit {
     constructor(private userService: UserService) {
         // Use the component constructor to inject providers.
         this.responseItems$ = of([]);
-
     }
     getUser(): void {
         if(this.userService.getUser() != null)
@@ -136,13 +135,10 @@ export class HomeComponent implements OnInit {
       }
 
     ngOnInit(): void {
-        this.getUser();
-
         this.users$ = this.userService.getAllUsers();
         this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();
         this.globalListChoiceId = this.userService.getlistChoiceId();
-
     }
 
     public selectedIndexChanged(args) {
