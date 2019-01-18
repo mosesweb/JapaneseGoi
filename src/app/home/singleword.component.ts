@@ -65,7 +65,7 @@ export class SinglewordComponent implements OnInit {
                 if(querySnapshot.docs[0] != null)
                 {
                     // todo map this and print it nicely
-                    if(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId) > 0)
+                    if(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId).length > 0)
                     this.wordName$ = of(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId)[0].english);
                 }                    
             }

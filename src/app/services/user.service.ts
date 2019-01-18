@@ -63,6 +63,9 @@ export class UserService {
         wordList = doc.data().words.map(w => <ClientWord> {
           japanese_reading: w.japanese_reading,
           japanese_word: w.japanese_word,
+          english: word.senses[0].english_definitions.join(', '),
+          senses: senses,
+          all_variations: all_variations,
           word_id: w.word_id
         });
 
