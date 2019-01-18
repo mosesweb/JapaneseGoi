@@ -19,6 +19,7 @@ import { VocabList } from '../model/vocabList.model';
 import { Guid } from '../model/Guid';
 import { map, filter } from 'rxjs/operators';
 import { ClientWord } from '../model/ClientWord.model';
+import { Sense } from '../model/sense.model';
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
 const firebase2 = require("nativescript-plugin-firebase/app");
@@ -36,16 +37,20 @@ export class UserService {
   }
   public globalListChoice: string;
 
-  insertIntoList = (listId: string, word: string) : void =>
+  insertIntoList = (listId: string, word: searchResponseItemClient) : void =>
   {
-    
+    console.log("THIS IS THE THING");
+    console.log(word);
     const vocablistCollection = firebase2.firestore().collection("vocablists");
     const query = vocablistCollection
     .where("listId", "==", listId);
     console.log('setted? ' + listId);
     
     let wordList :  Array<ClientWord> = [];
-    wordList.push(<ClientWord>{japanese_reading: word});
+    wordList.push(<ClientWord>{
+      japanese_reading: word.MainJapaneseReading,
+      japanese_word: word.MainJapaneseWord
+    });
 
     query
     .get()
@@ -55,9 +60,31 @@ export class UserService {
         let wordList :  Array<ClientWord> = []; 
 
         if(doc.data().words !== undefined) 
-        wordList = doc.data().words.map(w => <ClientWord> {japanese_reading: w.japanese_reading});
+        wordList = doc.data().words.map(w => <ClientWord> {
+          japanese_reading: w.japanese_reading,
+          japanese_word: w.japanese_word,
+          word_id: w.word_id
+        });
 
-        wordList.push(<ClientWord>{japanese_reading: word});
+         let senses: Sense[] = word.senses.map(s => <Sense> {
+          english_definitions: s.english_definitions,
+          parts_of_speech: s.parts_of_speech
+        });
+
+        let all_variations: Japanese[] = word.japanese.map(j => <Japanese> {
+          japanese_word: j.word,
+          japanese_reading: j.reading
+        });
+
+        wordList.push(<ClientWord>
+        {
+            japanese_reading: word.MainJapaneseReading, 
+            japanese_word: word.MainJapaneseWord,
+            english: word.senses[0].english_definitions.join(', '),
+            senses: senses,
+            all_variations: all_variations,
+            word_id: Guid.newGuid()
+        });
         
         vocablistCollection.doc(doc.id).set(
           {
@@ -185,6 +212,7 @@ export class UserService {
         
         clientItem.MainJapaneseWord = value.japanese[0].word;
         clientItem.MainJapaneseReading = value.japanese[0].reading;
+        clientItem.English = value.senses[0].english_definitions.join(', ');
 
         value.japanese.forEach((japaneseEntity: JapaneseEntity) =>
         { 
@@ -197,6 +225,7 @@ export class UserService {
         })
         clientItem.AllJapaneseReading = japanese_reading;
         clientItem.AllJapaneseWord = japanese_word;
+
 
         this.clientItemsList.push(clientItem);
       })

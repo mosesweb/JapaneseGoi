@@ -19,7 +19,8 @@
 
         <ListView (itemTap)="wordClick($event)" [items]="responseItems$ | async" class="list-group">
                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-                    <StackLayout [class.odd]="odd" [class.even]="even">
+                    <StackLayout [class.odd]="odd" [class.even]="even" class="list-group-item">
+                        <Label [text]='item.English'></Label>
                        <Label [text]='item.MainJapaneseWord'></Label>
                        <!-- <Label [text]='"index: " + i'></Label>-->
                         <Label [text]='item.MainJapaneseReading'></Label>

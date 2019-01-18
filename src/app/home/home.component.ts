@@ -142,8 +142,7 @@ export class HomeComponent implements OnInit {
         this.globalListChoiceId = this.userService.getlistChoiceId();
 
         //test purpose
-        //this.router.navigateByUrl('/home/singlelist/:3b688d95-d5df-4b2f-ac5c-4f0ee9da5347');
-        this.router.navigate(['/home/singlelist/', '3b688d95-d5df-4b2f-ac5c-4f0ee9da5347']);
+        // this.router.navigate(['/home/singlelist/', '3b688d95-d5df-4b2f-ac5c-4f0ee9da5347']);
         
     }
 
@@ -159,7 +158,7 @@ export class HomeComponent implements OnInit {
         {
             if(val.length > 0)
             {
-                this.userService.insertIntoList(this.userService.getlistChoiceId(), val[args.index].MainJapaneseReading);
+                this.userService.insertIntoList(this.userService.getlistChoiceId(), val[args.index]);
             }
         });
     }

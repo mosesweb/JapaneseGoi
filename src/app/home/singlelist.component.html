@@ -10,10 +10,13 @@
         <Label class="h3 p-15" [text]="globalListChoice" textWrap="true"></Label> 
         <Label class="h3 p-15" [text]="globalListChoiceId" textWrap="true"></Label> 
 
+        <Label class="h3 p-15" [text]="listName$ | async" textWrap="true"></Label> 
 
             <ListView [items]="wordsInList$ | async"  class="list-group">
                     <ng-template tkTemplateKey="green" let-dataitem="item">
                         <StackLayout orientation="vertical" class="list-group-item"> 
+                            <Label [text]="dataitem.english" android:class="label-item" [nsRouterLink]="['/home/singleword', dataitem?.listid, dataitem?.word_id]"></Label>
+                            <Label [text]="dataitem.japanese_word" android:class="label-item"></Label>
                             <Label [text]="dataitem.japanese_reading" android:class="label-item"></Label>
                         </StackLayout>
                     </ng-template>

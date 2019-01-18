@@ -17,6 +17,7 @@ export interface searchResponseItemClient extends DataEntity
 {
     AllJapaneseWord?: string,
     AllJapaneseReading?: string,
+    English?: string
 
     MainJapaneseWord?: string,
     MainJapaneseReading?: string

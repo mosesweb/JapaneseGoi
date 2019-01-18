@@ -1,0 +1,15 @@
+<ActionBar class="action-bar" [nsRouterLink]="['']">
+        <Label class="action-bar-title" text="Home hell yeahhh"></Label>
+    </ActionBar>
+    
+    <GridLayout class="page">
+        <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
+            
+            <Label class="h3 p-15" [text]="userService.UserFromService?.name" textWrap="true"></Label> 
+            <Label class="h3 p-15" [text]="globalListChoice" textWrap="true"></Label> 
+            <Label class="h3 p-15" [text]="globalListChoiceId" textWrap="true"></Label> 
+    
+            <Label class="h3 p-15" [text]="wordName$ | async" textWrap="true"></Label> 
+        </StackLayout>
+    
+    </GridLayout>  

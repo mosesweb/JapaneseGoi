@@ -6,6 +6,7 @@ import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
 import { MylistComponent } from "./mylist.component";
 import { SinglelistComponent } from "./singlelist.component";
+import { SinglewordComponent } from "./singleword.component";
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import { SinglelistComponent } from "./singlelist.component";
     declarations: [
         HomeComponent,
         MylistComponent,
-        SinglelistComponent
+        SinglelistComponent,
+        SinglewordComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

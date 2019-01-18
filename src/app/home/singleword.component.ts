@@ -27,11 +27,11 @@ const firebase2 = require("nativescript-plugin-firebase/app");
 const view = require("ui/core/view");
 
 @Component({
-    selector: "Singlelist",
+    selector: "Singleword",
     moduleId: module.id,
-    templateUrl: "./singlelist.component.html"
+    templateUrl: "./singleword.component.html"
 })
-export class SinglelistComponent implements OnInit {
+export class SinglewordComponent implements OnInit {
     globalListChoice: string;
     globalListChoiceId: string = '';
     currentList: VocabList;
@@ -39,6 +39,7 @@ export class SinglelistComponent implements OnInit {
     vocablists: Array<VocabList>;
     vocablists$: Observable<Array<VocabList>>;
     listName$: Observable<string>;
+    wordName$: Observable<string>;
 
     ngOnInit(): void {
         this.globalListChoice = this.userService.getlistChoice();
@@ -46,69 +47,34 @@ export class SinglelistComponent implements OnInit {
         
         this.route.params.forEach(
             (params : Params) => {
-                console.log("param id: " + params["id"]);
-                this.loadLists(null, params["id"]);
+                console.log("param id: " + params["listid"] + ' - ' + params["wordid"]);
+                this.loadWord(null, params["listid"], params["wordid"]);
             }
          );        
     }
 
-    loadLists = (user: User | null = null, listId: string) : void =>
+    loadWord = (user: User | null = null, listId: string, wordId: string) : void =>
     {
         const vocablistCollection = firebase2.firestore().collection("vocablists");
           const query = vocablistCollection
-          .where("listId", "==", listId);
+          .where("listId", "==", listId)
           
           query
           .get()
           .then(querySnapshot => {
-            if(querySnapshot.docs[0] != null)
-            {
-                this.listName$ = of('Viewing list: ' + querySnapshot.docs[0].data().title);
-                if(querySnapshot.docs[0].data().words.length > 0)
+                if(querySnapshot.docs[0] != null)
                 {
-                    this.wordsInList$ = of(
-                        querySnapshot.docs[0].data().words
-                        .map(w => <ClientWord> {
-                            japanese_reading: w.japanese_reading,
-                            japanese_word: w.japanese_word,
-                            senses: w.senses,
-                            all_variations: w.all_variations,
-                            english: w.english,
-                            word_id: w.word_id,
-                            listid: querySnapshot.docs[0].data().listId // could be done prettier..
-                        })
-                    );
-                }
+                    // todo map this and print it nicely
+                    if(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId) > 0)
+                    this.wordName$ = of(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId)[0].english);
+                }                    
             }
-            //    this.vocablists$ = 
-        //         of(( querySnapshot.docs.map
-        //         (
-        //             doc => 
-        //             <VocabList>
-        //             {
-        //                 title: doc.data().title, 
-        //                 uid: doc.data().uid, 
-        //                 listid: doc.data().listId,
-        //                 words: doc.data().words.map((w : any) => <ClientWord> {japanese_reading: "test japanese reading"})
-        //             }
-        //             )));
-                    // this.vocablists$.subscribe(l => console.log("LENGTH: " + l[0].words.length));
-                    this.wordsInList$.subscribe(l => console.log("LENGTH WORDS: " + l.length));
-
-                    
-                    }
-                );
+        );
     }
 
     constructor(private userService: UserService, private route : ActivatedRoute) {
     }
     
-    getWordsInList(): void {
-
-    }
-    public viewMore = (args : any) : void => 
-    {
-    alert("hej");
-    }
+    
 }
 
