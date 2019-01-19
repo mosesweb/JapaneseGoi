@@ -22,6 +22,7 @@ import { Observable, from, of } from "rxjs";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { NavigationExtras, Router } from "@angular/router";
 import { ClientWord } from "../model/ClientWord.model";
+import { v } from "@angular/core/src/render3";
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 const view = require("ui/core/view");
@@ -63,11 +64,12 @@ export class MylistComponent implements OnInit {
     onTap(args: EventData) {
         let button = <Button>args.object;
         
-        this.counter++;
-        alert("Tapped " + this.counter + " times!");
         let newList = new VocabList(this._listTitle, this.userService.UserFromService.uid);
-        this.userService.addVocabList(newList, this.userService.UserFromService.uid);
-
+        
+        this.userService.addVocabList(newList, this.userService.UserFromService.uid, (n) =>
+        {
+            this.vocablists$.subscribe(o => o.push(n));
+        });
     }
 
     loadLists = (user: User | null = null) : void =>

@@ -127,13 +127,19 @@ export class UserService {
   } 
     vocablists: Array<VocabList>;
 
-    addVocabList = (vocablist: VocabList, uid: string): any => {
+    addVocabList = (vocablist: VocabList, uid: string, callback: (n: VocabList) => any): any => {
       const listsCollection = firebase2.firestore().collection("vocablists");
       console.log(Guid.newGuid);
-      listsCollection.add({
-        title: vocablist.title, 
-        listId: Guid.newGuid(), 
-        uid: uid });
+      const guid = Guid.newGuid();
+        listsCollection.add(
+          {
+            title: vocablist.title, 
+            listId: guid, 
+            uid: uid });
+        
+            let AddedVo = new VocabList(vocablist.title, uid, guid);
+
+        callback(AddedVo);
     }
     clientItemsList: Array<searchResponseItemClient>
 
@@ -215,7 +221,7 @@ export class UserService {
         clientItem.MainJapaneseWord = value.japanese[0].word;
         clientItem.MainJapaneseReading = value.japanese[0].reading;
         clientItem.English = value.senses[0].english_definitions.join(', ');
-        
+
         value.japanese.forEach((japaneseEntity: JapaneseEntity) =>
         { 
           if(japaneseEntity.reading !== undefined && japaneseEntity.reading != null && japaneseEntity.reading != "")
