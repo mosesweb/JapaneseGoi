@@ -12,7 +12,7 @@
 
         <TextField 
             id="newListTitle"
-            hint="My cool list" 
+            hint="My list name" 
            text='Title"'
            [(ngModel)]="_listTitle" 
            secure="false"
@@ -24,7 +24,7 @@
            <Button class="btn btn-primary btn-active" id="CreateListButton" text="Create" (tap)="onTap($event)"></Button>
 
 
-            <ListView [items]="vocablists$ | async" (itemTap)="onItemTap($event)" (setupItemView)="onSetupItemView($event)" class="list-group">
+            <ListView [items]="vocablists$ | async" (itemTap)="onItemTap($event)" (setupItemView)="onSetupItemView($event)" class="list-group" HorizontalContentAlignment="Stretch">
                     <!-- <ng-template let-dataitem="item" let-i="index" let-selectedItem="selectedItem">
                         <GridLayout [class.selectedItem]="selectedItem" class="list-group-item">
                             <Label [text]="dataitem?.title" android:class="label-item"></Label>
@@ -32,10 +32,17 @@
                         </GridLayout>
                     </ng-template> -->
                     <ng-template tkTemplateKey="green" let-dataitem="item">
-                        <StackLayout orientation="vertical" class="list-group-item"> 
+                            <GridLayout class="threads-list-wrapper" height="100" rows="*" columns="*, *">
+                                <Label col="0" stretch="none" android:class="label-item" class="listTitle" [text]="dataitem?.title"></Label>
+                                <StackLayout col="1" >
+                                    <Label [nsRouterLink]="['/home/singlelist', dataitem?.listid]" (tap)="viewMore($event)" class="listDetails" text="DETAILS" android:class="label-item"></Label>
+                                </StackLayout>
+                            </GridLayout>
+
+                        <!-- <StackLayout orientation="vertical" class="list-group-item"> 
                             <Label [text]="dataitem?.title" android:class="label-item"></Label>
                             <Label [nsRouterLink]="['/home/singlelist', dataitem?.listid]" (tap)="viewMore($event)" text="LIST DETAILS" android:class="label-item"></Label>
-                        </StackLayout>
+                        </StackLayout> -->
                     </ng-template>
             </ListView>
     </StackLayout>

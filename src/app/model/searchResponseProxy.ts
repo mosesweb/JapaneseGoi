@@ -273,7 +273,8 @@ export class SensesEntityProxy {
     }
     if (d.see_also === undefined) {
       d.see_also = null;
-    }
+    } 
+    d.antonyms = null;
     checkArray(d.antonyms, field + ".antonyms");
     if (d.antonyms) {
       for (let i = 0; i < d.antonyms.length; i++) {
@@ -331,9 +332,9 @@ export class SensesEntityProxy {
     this.parts_of_speech = d.parts_of_speech;
     this.links = d.links;
     this.tags = d.tags;
-    this.restrictions = null;
+    this.restrictions = null; //hardcoded
     this.see_also = d.see_also;
-    this.antonyms = d.antonyms;
+    this.antonyms = null; //hardcored
     this.source = d.source;
     this.info = d.info;
     this.sentences = d.sentences;

@@ -66,3 +66,34 @@ Image {
     text-align: left;
     vertical-align: center;
 }
+.SelectedEditingList
+{
+    padding:10px;
+    background: #cef3ce;
+    text-align: center;
+}
+.boldText{   
+    font-weight: bold;
+}
+.listTitle {
+font-size: 25px;
+}
+.listDetails {
+    background:#cef3ce;
+    padding: 10px;
+}
+.listPlay {
+    background:#cef3ce;
+    padding: 10px;
+    margin-left: 5px;
+}
+.threads-list-wrapper
+{
+    padding: 30px;
+}
+    
+.threads-list-wrapper > Image {
+    height: 64;
+    width: 64;
+    margin-right: 15;
+}
