@@ -253,23 +253,34 @@ export class UserService {
     let posts: Array<VocabList> = [];
     return new Observable(observer => {
       const vocablistCollection = firebase2.firestore().collection("vocablists");
-
       const unsubscribe = vocablistCollection.onSnapshot(querySnapshot => {
-        querySnapshot.forEach(function(doc) {
-          posts.push
-          (new VocabList(
-            doc.data().title, 
-            "", 
-            doc.data().listId));
-        });
+        console.log(querySnapshot.docs[0].data().title);
+         querySnapshot.docs.map(doc => 
+          posts.push(<VocabList>
+          {
+            title: doc.data().title, 
+            uid: doc.data().uid, 
+            listid: doc.data().listId,
+            words: doc.data().words !== undefined ? doc.data().words.map(w => <ClientWord> {
+              japanese_reading: w.japanese_reading,
+              japanese_word: w.japanese_word,
+              senses: w.senses,
+              all_variations: w.all_variations,
+              english: w.english,
+              word_id: w.word_id,
+              listid: querySnapshot.docs[0].data().listId // could be done prettier..
+          }) : []
+          })
+        );
   
           observer.next(posts);
-        });
   
       return () => {
         unsubscribe();
-      };
+      }
     });
-  }
-  
+  });
 }
+}
+
+
