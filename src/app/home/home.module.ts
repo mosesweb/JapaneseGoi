@@ -7,6 +7,7 @@ import { HomeComponent } from "./home.component";
 import { MylistComponent } from "./mylist.component";
 import { SinglelistComponent } from "./singlelist.component";
 import { SinglewordComponent } from "./singleword.component";
+import { playQuizComponent } from "./playQuiz.component";
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import { SinglewordComponent } from "./singleword.component";
         HomeComponent,
         MylistComponent,
         SinglelistComponent,
-        SinglewordComponent
+        SinglewordComponent,
+        playQuizComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

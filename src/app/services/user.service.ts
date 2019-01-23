@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, from } from 'rxjs';
+import { Observable, of, from, pipe } from 'rxjs';
 import { User } from '../model/user.model';
 const appSettings = require("application-settings");
 import {
@@ -247,4 +247,29 @@ export class UserService {
     }
     return ;;
   }
+
+  // return new observer holding the vocab lists!
+  getVocabListsByListId(token: string) {
+    let posts: Array<VocabList> = [];
+    return new Observable(observer => {
+      const vocablistCollection = firebase2.firestore().collection("vocablists");
+
+      const unsubscribe = vocablistCollection.onSnapshot(querySnapshot => {
+        querySnapshot.forEach(function(doc) {
+          posts.push
+          (new VocabList(
+            doc.data().title, 
+            "", 
+            doc.data().listId));
+        });
+  
+          observer.next(posts);
+        });
+  
+      return () => {
+        unsubscribe();
+      };
+    });
+  }
+  
 }

@@ -6,11 +6,10 @@
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
         
-        <Label class="h3 p-15" [text]="userService.UserFromService?.name" textWrap="true"></Label> 
-        <Label class="h3 p-15" [text]="globalListChoice" textWrap="true"></Label> 
-        <Label class="h3 p-15" [text]="globalListChoiceId" textWrap="true"></Label> 
-
+        <Label class="h3 p-15" [text]="userService.UserFromService?.name" textWrap="true"></Label>
         <Label class="h3 p-15" [text]="listName$ | async" textWrap="true"></Label> 
+        <Label [text]="listId + ' hmm'"></Label>
+        <Button text="Practice" [nsRouterLink]="['/home/playquiz', listId]" pageTransition="slide" clearHistory="true"></Button>
 
             <ListView [items]="wordsInList$ | async"  class="list-group">
                     <ng-template tkTemplateKey="green" let-dataitem="item">

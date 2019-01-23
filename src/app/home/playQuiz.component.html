@@ -1,0 +1,23 @@
+<ActionBar class="action-bar" [nsRouterLink]="['']">
+    <Label class="action-bar-title" text="Home hell yeahhh"></Label>
+</ActionBar>
+
+
+<GridLayout class="page">
+    <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
+        <Label class="h3 p-15" [text]="listName$ | async" textWrap="true"></Label> 
+        <Label text="Question 1: What is "></Label>
+        <Label [text]="firstWord?.english"></Label>
+
+        <ListView [items]="posts" class="list-group">
+            <ng-template tkTemplateKey="green" let-dataitem="item">
+                <StackLayout orientation="vertical" class="list-group-item"> 
+                    <Label [text]="dataitem.title" android:class="label-item"></Label>
+        
+                </StackLayout>
+            </ng-template>
+    </ListView>
+
+    </StackLayout>
+
+</GridLayout>  

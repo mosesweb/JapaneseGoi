@@ -18,7 +18,7 @@ import {
     UserMetadata} from "nativescript-plugin-firebase"
 import { VocabList } from "../model/vocabList.model";
 import { getViewById, View } from "tns-core-modules/ui/core/view/view";
-import { Observable, from, of } from "rxjs";
+import { Observable, from, of, Observer } from "rxjs";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { NavigationExtras, Router, Params, ActivatedRoute } from "@angular/router";
 import { ClientWord } from "../model/ClientWord.model";
@@ -27,33 +27,51 @@ const firebase2 = require("nativescript-plugin-firebase/app");
 const view = require("ui/core/view");
 
 @Component({
-    selector: "Singlelist",
+    selector: "playQuiz",
     moduleId: module.id,
-    templateUrl: "./singlelist.component.html"
+    templateUrl: "./playQuiz.component.html"
 })
-export class SinglelistComponent implements OnInit {
-    globalListChoice: string;
-    globalListChoiceId: string = '';
-    currentList: VocabList;
+export class playQuizComponent implements OnInit {
+    
+    listid: string;
+    vocabularyList: VocabList[];
     wordsInList$: Observable<Array<ClientWord>>;
-    vocablists: Array<VocabList>;
-    vocablists$: Observable<Array<VocabList>>;
     listName$: Observable<string>;
-    listId: string
+    postsObserver: Observable<any>;
+    posts: VocabList[];
 
+    firstWord: ClientWord;
+
+    constructor(private userService: UserService, private route : ActivatedRoute) {
+    }
     ngOnInit(): void {
-        this.globalListChoice = this.userService.getlistChoice();
-        this.globalListChoiceId = this.userService.getlistChoiceId();
-        
+          
         this.route.params.forEach(
             (params : Params) => {
-                console.log("param id: " + params["id"]);
-                this.loadLists(null, params["id"]);
-                this.listId = params["id"];
+                this.listid = params["listid"];
+                this.loadLists(this.userService.UserFromService, this.listid);
             }
-         );        
+         ); 
+         this.getFirstQuestion();  
+         
+         this.postsObserver = this.userService.getVocabListsByListId(this.listid);
+         this.postsObserver
+            .subscribe({
+                next: posts => {
+                this.posts = posts;
+                },
+                error(error) { console.log(error); }, // optional
+        });
     }
 
+    getFirstQuestion = (): void =>
+    {
+        // this.wordsInList$.subscribe(
+        // list => this.firstWord = <ClientWord>{ english: list[0].english });
+    }
+
+  
+    
     loadLists = (user: User | null = null, listId: string) : void =>
     {
         const vocablistCollection = firebase2.firestore().collection("vocablists");
@@ -65,7 +83,7 @@ export class SinglelistComponent implements OnInit {
           .then(querySnapshot => {
                 if(querySnapshot.docs[0] != null)
                 {
-                    this.listName$ = of('Viewing list: ' + querySnapshot.docs[0].data().title);
+                    this.listName$ = of('Taking quiz: ' + querySnapshot.docs[0].data().title);
                     if(querySnapshot.docs[0].data().words.length > 0)
                     {
                         this.wordsInList$ = of(
@@ -86,15 +104,4 @@ export class SinglelistComponent implements OnInit {
         );
     }
 
-    constructor(private userService: UserService, private route : ActivatedRoute) {
-    }
-    
-    getWordsInList(): void {
-
-    }
-    public viewMore = (args : any) : void => 
-    {
-    alert("hej");
-    }
 }
-
