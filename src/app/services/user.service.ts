@@ -249,7 +249,7 @@ export class UserService {
   }
 
   // return new observer holding the vocab lists!
-  getVocabListsByListId(token: string) {
+  getAllVocabLists(token: string) {
     let posts: Array<VocabList> = [];
     return new Observable(observer => {
       const vocablistCollection = firebase2.firestore().collection("vocablists");
@@ -280,6 +280,38 @@ export class UserService {
       }
     });
   });
+}
+
+ // return new observer holding the vocab lists!
+ getVocabListById(listid: string) {
+  let post: VocabList;
+  return new Observable(observer => {
+    const vocablistCollection = firebase2.firestore().collection("vocablists").where("listId", "==", listid);
+    const unsubscribe = vocablistCollection.onSnapshot(querySnapshot => {
+       querySnapshot.docs.map(doc => 
+        post = <VocabList>
+        {
+          title: doc.data().title, 
+          uid: doc.data().uid, 
+          listid: doc.data().listId,
+          words: doc.data().words !== undefined ? doc.data().words.map(w => <ClientWord> {
+            japanese_reading: w.japanese_reading,
+            japanese_word: w.japanese_word,
+            senses: w.senses,
+            all_variations: w.all_variations,
+            english: w.english,
+            word_id: w.word_id,
+            listid: querySnapshot.docs[0].data().listId // could be done prettier..
+        }) : []
+        });
+
+        observer.next(post);
+
+    return () => {
+      unsubscribe();
+    }
+  });
+});
 }
 }
 

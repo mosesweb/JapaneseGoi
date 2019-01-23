@@ -6,17 +6,20 @@
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
         <Label class="h3 p-15" [text]="listName$ | async" textWrap="true"></Label> 
-        <Label text="Question 1: What is "></Label>
-        <Label [text]="firstWord?.english"></Label>
+        <Label [text]="'Question ' + (currentQuestionIndex+1) + ' : What is...'"></Label>
+        <Label [text]="post?.words[currentQuestionIndex]?.english"></Label>
 
-        <ListView [items]="posts" class="list-group">
+        <!-- <ListView [items]="posts" class="list-group">
             <ng-template tkTemplateKey="green" let-dataitem="item">
                 <StackLayout orientation="vertical" class="list-group-item"> 
                     <Label [text]="dataitem.title" android:class="label-item"></Label>
         
                 </StackLayout>
             </ng-template>
-    </ListView>
+    </ListView> -->
+
+    <Button class="btn btn-primary btn-active" id="NextButton" text="Answer" (tap)="onTap($event)"></Button>
+
 
     </StackLayout>
 

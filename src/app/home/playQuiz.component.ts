@@ -38,7 +38,8 @@ export class playQuizComponent implements OnInit {
     wordsInList$: Observable<Array<ClientWord>>;
     listName$: Observable<string>;
     postsObserver: Observable<any>;
-    posts: VocabList[];
+    post: VocabList;
+    currentQuestionIndex: number = 0;
 
     firstWord: ClientWord;
 
@@ -49,59 +50,31 @@ export class playQuizComponent implements OnInit {
         this.route.params.forEach(
             (params : Params) => {
                 this.listid = params["listid"];
-                this.loadLists(this.userService.UserFromService, this.listid);
             }
          ); 
-         this.getFirstQuestion();  
          
-         this.postsObserver = this.userService.getVocabListsByListId(this.listid);
+         this.postsObserver = this.userService.getVocabListById(this.listid);
          this.postsObserver
             .subscribe({
-                next: posts => {
-                this.posts = posts;
+                next: post => {
+                this.post = post;
                 },
                 error(error) { console.log(error); }, // optional
         });
+        this.getFirstQuestion();  
+
     }
 
     getFirstQuestion = (): void =>
     {
-        // this.wordsInList$.subscribe(
-        // list => this.firstWord = <ClientWord>{ english: list[0].english });
+        this.firstWord = this.post.words[0];
     }
 
-  
-    
-    loadLists = (user: User | null = null, listId: string) : void =>
-    {
-        const vocablistCollection = firebase2.firestore().collection("vocablists");
-          const query = vocablistCollection
-          .where("listId", "==", listId);
-          
-          query
-          .get()
-          .then(querySnapshot => {
-                if(querySnapshot.docs[0] != null)
-                {
-                    this.listName$ = of('Taking quiz: ' + querySnapshot.docs[0].data().title);
-                    if(querySnapshot.docs[0].data().words.length > 0)
-                    {
-                        this.wordsInList$ = of(
-                            querySnapshot.docs[0].data().words
-                            .map(w => <ClientWord> {
-                                japanese_reading: w.japanese_reading,
-                                japanese_word: w.japanese_word,
-                                senses: w.senses,
-                                all_variations: w.all_variations,
-                                english: w.english,
-                                word_id: w.word_id,
-                                listid: querySnapshot.docs[0].data().listId // could be done prettier..
-                            })
-                        );
-                    }
-                }
-            }
-        );
+    onTap(args: EventData) {
+        let button = <Button>args.object;
+        if(this.currentQuestionIndex < (this.post.words.length -1 ))
+            this.currentQuestionIndex++;
+        
     }
 
 }
