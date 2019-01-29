@@ -6,8 +6,16 @@
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
         <Label class="h3 p-15" [text]="listName$ | async" textWrap="true"></Label> 
-        <Label [text]="'Question ' + (currentQuestionIndex+1) + ' : What is...'"></Label>
-        <Label [text]="post?.words[currentQuestionIndex]?.english"></Label>
+        <!-- <Label [text]="post?.words[currentQuestionIndex]?.english"></Label> -->
+
+        <Label class="h3 p-15 MainQuestion" textWrap="true" [nsRouterLink]="['/home/singlelist', globalListChoiceId]">
+            <FormattedString>
+                <Span [text]="'Question ' + (currentQuestionIndex+1) + ': What is '"></Span>
+                <Span class="boldText" [text]="post?.words[currentQuestionIndex]?.english"></Span>
+
+                <Span text=" in japanese?"></Span>
+            </FormattedString>
+        </Label> 
 
         <!-- <ListView [items]="posts" class="list-group">
             <ng-template tkTemplateKey="green" let-dataitem="item">
@@ -18,7 +26,10 @@
             </ng-template>
     </ListView> -->
 
-    <Button class="btn btn-primary btn-active" id="NextButton" text="Answer" (tap)="onTap($event)"></Button>
+    <Button class="btn btn-primary btn-active" id="Option1" [text]="getRandomOptions()[0]" (tap)="onTap($event)"></Button>
+    <Button class="btn btn-primary btn-active" id="Option2" [text]="getRandomOptions()[1]" (tap)="onTap($event)"></Button>
+    <Button class="btn btn-primary btn-active" id="Option3" [text]="getRandomOptions()[2]" (tap)="onTap($event)"></Button>
+    <Button class="btn btn-primary btn-active" id="Option3" [text]="getRandomOptions()[3]" (tap)="onTap($event)"></Button>
 
 
     </StackLayout>

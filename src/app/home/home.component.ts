@@ -19,7 +19,8 @@ import { map, filter } from "rxjs/operators";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { ActivatedRoute, Router } from "@angular/router";
-
+import { registerElement } from 'nativescript-angular/element-registry';
+import { FilterSelect } from 'nativescript-filter-select';
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 
@@ -45,6 +46,8 @@ export class HomeComponent implements OnInit {
     globalListChoiceId: string;
 
     public searchPhrase: string;
+    postsObserver: Observable<any>;
+    userVocabularyLists: any;
 
     onSubmit = (args: any) =>  {
         let searchBar = <SearchBar>args.object;
@@ -125,6 +128,7 @@ export class HomeComponent implements OnInit {
     constructor(private userService: UserService, private router : Router) {
         // Use the component constructor to inject providers.
         this.responseItems$ = of([]);
+
     }
     getUser(): void {
         if(this.userService.getUser() != null)
@@ -136,19 +140,36 @@ export class HomeComponent implements OnInit {
       }
 
     ngOnInit(): void {
+
         this.users$ = this.userService.getAllUsers();
         this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();
         this.globalListChoiceId = this.userService.getlistChoiceId();
 
-        //test purpose
-        // this.router.navigate(['/home/singlelist/', '3b688d95-d5df-4b2f-ac5c-4f0ee9da5347']);
-        
+        this.postsObserver = this.userService.getAllVocabLists("");
+        this.postsObserver
+           .subscribe({
+               next: post => {
+               this.userVocabularyLists = post;
+               },
+               error(error) { console.log(error); },
+       });
+       this.getSelectedItem();
+       registerElement('FilterSelect', () => FilterSelect);
+
+    }
+    public getSelectedItem = (): void => 
+    {
+        // return this.userVocabularyLists.find(v => v.listid == this.userService.getlistChoiceId());
     }
 
     public selectedIndexChanged(args) {
         let picker = <ListPicker>args.object;
         this.picked = this.usersLists$[picker.selectedIndex];
+    }
+    public onitemselected = (args:any ) => {
+        if(args.selected !== undefined)
+        this.userService.setlistChoiceWithListId(args.selected);
     }
     wordClick(args: ItemEventData) {
         const index = args.index;

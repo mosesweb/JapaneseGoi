@@ -45,6 +45,19 @@ export class playQuizComponent implements OnInit {
 
     constructor(private userService: UserService, private route : ActivatedRoute) {
     }
+
+    getRandomOptions = () =>
+    {
+        const list = [];
+        const list2 = [];
+
+        this.post.words.forEach((val : ClientWord) =>
+        {
+                list.push(val.japanese_reading);
+                list2.push(val.japanese_reading);
+        });
+        return list;
+    }
     ngOnInit(): void {
           
         this.route.params.forEach(
@@ -72,9 +85,38 @@ export class playQuizComponent implements OnInit {
 
     onTap(args: EventData) {
         let button = <Button>args.object;
+
+        if(this.japaneseReadingIsCorrect(button.text))
+            alert("correct");
+        else
+            alert("wrong");
+
         if(this.currentQuestionIndex < (this.post.words.length -1 ))
             this.currentQuestionIndex++;
-        
     }
 
+    japaneseReadingIsCorrect = (incomingJapaneseReadingGuess : string) => 
+    {
+        if(this.post.words[this.currentQuestionIndex].japanese_reading == incomingJapaneseReadingGuess)
+            return true;
+        return false;
+    }
+    shuffle(array) {
+        var currentIndex = array.length, temporaryValue, randomIndex;
+      
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+      
+          // Pick a remaining element...
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+      
+          // And swap it with the current element.
+          temporaryValue = array[currentIndex];
+          array[currentIndex] = array[randomIndex];
+          array[randomIndex] = temporaryValue;
+        }
+      
+        return array;
+      }
 }

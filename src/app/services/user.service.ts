@@ -248,7 +248,7 @@ export class UserService {
     return ;;
   }
 
-  // return new observer holding the vocab lists!
+  // return all vocabulary lists
   getAllVocabLists(token: string) {
     let posts: Array<VocabList> = [];
     return new Observable(observer => {
@@ -282,7 +282,7 @@ export class UserService {
   });
 }
 
- // return new observer holding the vocab lists!
+ // get one vocabulary list
  getVocabListById(listid: string) {
   let post: VocabList;
   return new Observable(observer => {

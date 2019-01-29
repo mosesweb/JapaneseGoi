@@ -7,32 +7,40 @@
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
         <!-- >> button-tap-event-html -->
         <!-- <Button class="btn btn-primary btn-active" id="button" text="getAuthToken" (tap)="onTap($event)"></Button> -->
-        <Button id="login-button" *ngIf="userService.UserFromService == null" text="Login" (tap)="LoginNow()"></Button>
-        <Button id="logout-button" *ngIf="userService.UserFromService != null" text="Logout" (tap)="logoutNow()"></Button>
+        <Button class="btn btn-primary" id="login-button" *ngIf="userService.UserFromService == null" text="Login" (tap)="LoginNow()"></Button>
+        <Button class="btn btn-primary" id="logout-button" *ngIf="userService.UserFromService != null" text="Logout" (tap)="logoutNow()"></Button>
         <Label class="h3 p-15" *ngIf="userService.UserFromService != null" [text]="userService.UserFromService?.name" textWrap="true"></Label> 
-        <Button text="My lists" *ngIf="userService.UserFromService != null" [nsRouterLink]="['mylists']" pageTransition="slide" clearHistory="true"></Button>
-
-        <Label class="h3 p-15 SelectedEditingList" textWrap="true" [nsRouterLink]="['/home/singlelist', globalListChoiceId]">
-            <FormattedString>
-                <Span text="Selected list: "></Span>
-                <Span class="boldText" [text]="globalListChoice"></Span>
-            </FormattedString>
-        </Label> 
-
+        <Button class="btn btn-primary" text="My lists" *ngIf="userService.UserFromService != null" [nsRouterLink]="['mylists']" pageTransition="slide" clearHistory="true"></Button>
         
-        <SearchBar hint="Search hint" [text]="searchPhrase" (textChange)="onTextChanged($event)" (submit)="onSubmit($event)" 
-            color="white" textFieldBackgroundColor="red" textFieldHintColor="white"></SearchBar>
+        <FilterSelect 
+            height="100"
+            [items]="userVocabularyLists"
+            (change)="onitemselected($event)"
+            hint="Select vocabulary list" 
+            modal_title="item" 
+            search_param="title" 
+            primary_key="listid"
+            multiple="false"
+            render="label"
+            >
+        </FilterSelect>
 
+            <SearchBar hint="Search hint" [text]="searchPhrase" (textChange)="onTextChanged($event)" (submit)="onSubmit($event)" 
+            ></SearchBar>
+    
         <ListView (itemTap)="wordClick($event)" [items]="responseItems$ | async" class="list-group">
                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                     <StackLayout [class.odd]="odd" [class.even]="even" class="list-group-item">
                         <Label [text]='item.English'></Label>
-                       <Label [text]='item.MainJapaneseWord'></Label>
-                       <!-- <Label [text]='"index: " + i'></Label>-->
+                        <Label [text]='item.MainJapaneseWord'></Label>
+                        <!-- <Label [text]='"index: " + i'></Label>-->
                         <Label [text]='item.MainJapaneseReading'></Label>
                     </StackLayout>
                 </ng-template>
             </ListView>
+
+        
+     
 
         <!-- << button-tap-event-html -->
     </StackLayout>
