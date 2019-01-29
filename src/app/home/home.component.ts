@@ -64,6 +64,7 @@ export class HomeComponent implements OnInit {
     {
         console.log("logingout..");    
         firebase.logout();
+        this.userService.UserFromService = null;
         this.user = null;
     }
 

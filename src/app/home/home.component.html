@@ -1,5 +1,20 @@
 <ActionBar class="action-bar">
     <Label class="action-bar-title" text="Home hell yeahhh"></Label>
+  <ActionItem 
+      ios.systemIcon="16" 
+      ios.position="right"
+      *ngIf="userService.UserFromService != null" 
+      text="Logout" 
+      (tap)="logoutNow()"
+      android.position="popup"></ActionItem>
+      <ActionItem 
+      ios.systemIcon="16" 
+      ios.position="right"
+      text="Login" 
+      (tap)="LoginNow()"
+      android.position="popup"
+      *ngIf="userService.UserFromService == null"
+      ></ActionItem>
 </ActionBar>
 
 
@@ -7,8 +22,8 @@
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
         <!-- >> button-tap-event-html -->
         <!-- <Button class="btn btn-primary btn-active" id="button" text="getAuthToken" (tap)="onTap($event)"></Button> -->
-        <Button class="btn btn-primary" id="login-button" *ngIf="userService.UserFromService == null" text="Login" (tap)="LoginNow()"></Button>
-        <Button class="btn btn-primary" id="logout-button" *ngIf="userService.UserFromService != null" text="Logout" (tap)="logoutNow()"></Button>
+        <!-- <Button class="btn btn-primary" id="login-button" *ngIf="userService.UserFromService == null" text="Login" (tap)="LoginNow()"></Button> -->
+        <!-- <Button class="btn btn-primary" id="logout-button" *ngIf="userService.UserFromService != null" text="Logout" (tap)="logoutNow()"></Button> -->
         <Label class="h3 p-15" *ngIf="userService.UserFromService != null" [text]="userService.UserFromService?.name" textWrap="true"></Label> 
         <Button class="btn btn-primary" text="My lists" *ngIf="userService.UserFromService != null" [nsRouterLink]="['mylists']" pageTransition="slide" clearHistory="true"></Button>
         
