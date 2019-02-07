@@ -17,12 +17,18 @@ import { searchResponseItemClient } from "../model/searchResponseItemClient";
 import { VocabList } from "../model/vocabList.model";
 import { map, filter } from "rxjs/operators";
 import { ListPicker } from "tns-core-modules/ui/list-picker";
-import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
+import { ItemEventData, ListView } from "tns-core-modules/ui/list-view/list-view";
 import { ActivatedRoute, Router } from "@angular/router";
 import { registerElement } from 'nativescript-angular/element-registry';
 import { FilterSelect } from 'nativescript-filter-select';
+import { setCssFileName } from "tns-core-modules/application/application";
+import { Page } from "tns-core-modules/ui/page";
+
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
+const frame = require('ui/frame');
+
+setCssFileName("app.css");
 
 @Component({
     selector: "Home",
@@ -50,10 +56,15 @@ export class HomeComponent implements OnInit {
     userVocabularyLists: any;
 
     onSubmit = (args: any) =>  {
+
         let searchBar = <SearchBar>args.object;
-        this.userService.search(searchBar.text, (result) => {
-            this.responseItems$ = result;
-        });
+        const rootFrame = frame.topmost().currentPage;
+        const page = rootFrame.currentPage;
+
+        // this.userService.search(searchBar.text, (result) => {
+        //     this.responseItems$ = result;
+        // });
+        this.responseItems$ = this.userService.searchWord(searchBar.text);
     }
     public onTextChanged(args) {
         let searchBar = <SearchBar>args.object;
@@ -128,7 +139,7 @@ export class HomeComponent implements OnInit {
     }
     constructor(private userService: UserService, private router : Router) {
         // Use the component constructor to inject providers.
-        this.responseItems$ = of([]);
+        // this.responseItems$ = of([]);
 
     }
     getUser(): void {
@@ -181,6 +192,20 @@ export class HomeComponent implements OnInit {
             if(val.length > 0)
             {
                 this.userService.insertIntoList(this.userService.getlistChoiceId(), val[args.index]);
+            }
+        });
+    }
+    wordClickSimple = (indexNum : number) => {
+        const index = indexNum;
+        let list;
+        console.log("yeah here..");
+        const userObs = this.responseItems$.pipe();
+        userObs.subscribe(val => 
+        {
+            if(val.length > 0)
+            {
+                console.log("go " + indexNum);
+                this.userService.insertIntoList(this.userService.getlistChoiceId(), val[indexNum]);
             }
         });
     }

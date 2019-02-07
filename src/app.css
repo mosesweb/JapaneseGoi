@@ -191,3 +191,7 @@ FilterSelect.disabled{
 FilterSelect.disabled{
     background-color:#ccc;
 }
+
+.list-group-item {
+    color: black !important;
+}

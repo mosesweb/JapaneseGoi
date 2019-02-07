@@ -43,7 +43,9 @@
             <SearchBar hint="Search hint" [text]="searchPhrase" (textChange)="onTextChanged($event)" (submit)="onSubmit($event)" 
             ></SearchBar>
     
-        <ListView (itemTap)="wordClick($event)" [items]="responseItems$ | async" class="list-group">
+
+
+            <ListView (itemTap)="wordClick($event)" [items]="responseItems$ | async" class="list-group">
                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                     <StackLayout [class.odd]="odd" [class.even]="even" class="list-group-item">
                         <Label [text]='item.English'></Label>
@@ -53,6 +55,13 @@
                     </StackLayout>
                 </ng-template>
             </ListView>
+            <!-- <Label text="Other variations:"></Label>
+            <ng-container *ngFor = "let v of (responseItems$ | async); let i = index;">
+                <Label [text]="i"></Label>    
+                <Label style="background:#eaeaea;" (tap)="wordClickSimple(i)" textWrap="true" [text]='v?.English'></Label>
+                <Label textWrap="true" [text]='v?.MainJapaneseWord'></Label>
+                <Label textWrap="true" [text]='v?.MainJapaneseReading'></Label>     
+            </ng-container> -->
 
         
      

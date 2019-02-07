@@ -17,9 +17,11 @@ import { searchResponseProxy } from '../model/searchResponseProxy';
 import { searchResponseItemClient } from '../model/searchResponseItemClient';
 import { VocabList } from '../model/vocabList.model';
 import { Guid } from '../model/Guid';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, catchError } from 'rxjs/operators';
 import { ClientWord } from '../model/ClientWord.model';
 import { Sense } from '../model/sense.model';
+import { HttpClient  } from '@angular/common/http';
+
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
 const firebase2 = require("nativescript-plugin-firebase/app");
@@ -143,7 +145,7 @@ export class UserService {
     }
     clientItemsList: Array<searchResponseItemClient>
 
-  constructor()
+  constructor(private http: HttpClient)
   {
     // Subscribe to begin listening for async result
     firebase.init({
@@ -246,6 +248,33 @@ export class UserService {
       });
     }
     return ;;
+  }
+  private handleError<T> (operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+   
+      // TODO: send the error to remote logging infrastructure
+      console.error(error); // log to console instead
+   
+      // TODO: better job of transforming error for user consumption
+      // this.log(`${operation} failed: ${error.message}`);
+   
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
+  }
+
+  searchWord = (searchtag: string): Observable<searchResponseItemClient[]> => 
+  {
+    return this.http.get<searchResponseProxy>("https://jisho.org/api/v1/search/words?keyword=" + searchtag)
+      .pipe(
+        map(result => 
+          result.data.map(srpi => <searchResponseItemClient> { 
+          MainJapaneseWord: srpi.japanese[0].word,
+          MainJapaneseReading: srpi.japanese[0].reading,
+          English: srpi.senses[0].english_definitions.join(', ') 
+        })),
+        catchError(this.handleError('searchWord', []))
+      );
   }
 
   // return all vocabulary lists
