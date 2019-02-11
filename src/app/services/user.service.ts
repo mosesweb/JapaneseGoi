@@ -271,18 +271,6 @@ export class UserService {
 
   searchWord = (searchtag: string): Observable<Array<searchResponseItemClient>> => 
   {
-    const test$ = this.http.get<searchResponseProxy>("https://jisho.org/api/v1/search/words?keyword=" + searchtag)
-    .pipe(
-      map(result => 
-        result.data.map(srpi => <searchResponseItemClient> { 
-        MainJapaneseWord: srpi.japanese[0].word,
-        MainJapaneseReading: srpi.japanese[0].reading,
-        English: srpi.senses[0].english_definitions.join(', ') 
-      })),
-      catchError(this.handleError('searchWord', []))
-    );
-    test$.subscribe(console.log);
-
     return this.http.get<searchResponseProxy>("https://jisho.org/api/v1/search/words?keyword=" + searchtag)
       .pipe(
         map(result => 

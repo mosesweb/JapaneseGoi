@@ -5,6 +5,9 @@ const firebaseAuth = require("nativescript-plugin-firebase");
 import { registerElement } from 'nativescript-angular/element-registry';
 import { FilterSelect } from 'nativescript-filter-select';
 
+registerElement('FilterSelect', () => FilterSelect);
+
+
 @Component({
     moduleId: module.id,
     selector: "ns-app",
