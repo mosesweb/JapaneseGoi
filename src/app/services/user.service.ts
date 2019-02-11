@@ -289,7 +289,8 @@ export class UserService {
           result.data.map(srpi => <searchResponseItemClient> { 
           MainJapaneseWord: srpi.japanese[0].word,
           MainJapaneseReading: srpi.japanese[0].reading,
-          English: srpi.senses[0].english_definitions.join(', ') 
+          English: srpi.senses[0].english_definitions.join(', '),
+          senses: srpi.senses !== undefined ? srpi.senses : null
         })),
         catchError(this.handleError('searchWord', []))
       );
