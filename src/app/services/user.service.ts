@@ -70,16 +70,22 @@ export class UserService {
           all_variations: w.all_variations !== undefined ? w.all_variations : null,
           word_id: w.word_id
         });
-
-         let senses: Sense[] = word.senses.map(s => <Sense> {
-          english_definitions: s.english_definitions,
-          parts_of_speech: s.parts_of_speech
-        });
-
-        let all_variations: Japanese[] = word.japanese.map(j => <Japanese> {
-          japanese_word: j.word,
-          japanese_reading: j.reading
-        });
+        let senses: Sense[];
+        if(word.senses !== undefined)
+          {
+          senses = word.senses.map(s => <Sense> {
+            english_definitions: s.english_definitions,
+            parts_of_speech: s.parts_of_speech
+          });
+        }
+        let all_variations: Japanese[];
+        if(word.japanese !== undefined)
+        {
+           all_variations = word.japanese.map(j => <Japanese> {
+            japanese_word: j.word,
+            japanese_reading: j.reading
+          });
+        }
 
         wordList.push(<ClientWord>
         {
@@ -263,8 +269,20 @@ export class UserService {
     };
   }
 
-  searchWord = (searchtag: string): Observable<searchResponseItemClient[]> => 
+  searchWord = (searchtag: string): Observable<Array<searchResponseItemClient>> => 
   {
+    const test$ = this.http.get<searchResponseProxy>("https://jisho.org/api/v1/search/words?keyword=" + searchtag)
+    .pipe(
+      map(result => 
+        result.data.map(srpi => <searchResponseItemClient> { 
+        MainJapaneseWord: srpi.japanese[0].word,
+        MainJapaneseReading: srpi.japanese[0].reading,
+        English: srpi.senses[0].english_definitions.join(', ') 
+      })),
+      catchError(this.handleError('searchWord', []))
+    );
+    test$.subscribe(console.log);
+
     return this.http.get<searchResponseProxy>("https://jisho.org/api/v1/search/words?keyword=" + searchtag)
       .pipe(
         map(result => 
