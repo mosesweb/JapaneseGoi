@@ -167,7 +167,6 @@ export class HomeComponent implements OnInit {
                error(error) { console.log(error); },
        });
        this.getSelectedItem();
-       registerElement('FilterSelect', () => FilterSelect);
 
     }
     public getSelectedItem = (): void => 

@@ -22,6 +22,7 @@ import { Observable, from, of } from "rxjs";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { NavigationExtras, Router, Params, ActivatedRoute } from "@angular/router";
 import { ClientWord } from "../model/ClientWord.model";
+import { Sense } from "../model/sense.model";
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 const view = require("ui/core/view");
@@ -41,6 +42,7 @@ export class SinglewordComponent implements OnInit {
     listName$: Observable<string>;
     wordName$: Observable<ClientWord>;
     fakeArray = new Array(12);
+    englishDefinitions$: Observable<Array<string>>;
 
     ngOnInit(): void {
         this.globalListChoice = this.userService.getlistChoice();
@@ -77,6 +79,13 @@ export class SinglewordComponent implements OnInit {
                             senses: dobj.senses
                          });
                          this.wordName$.subscribe(w => console.log(w.senses.length));
+                         let list: Array<string> = [];
+                         this.wordName$.subscribe(w => console.log(w.senses.forEach((x: Sense) => {
+                            list.push(x.english_definitions.join(', '));
+                        })));
+                        list.shift();
+                        this.englishDefinitions$ = of(list);
+
                     }
                 }                    
             }

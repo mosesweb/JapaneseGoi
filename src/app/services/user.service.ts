@@ -278,7 +278,8 @@ export class UserService {
           MainJapaneseWord: srpi.japanese[0].word,
           MainJapaneseReading: srpi.japanese[0].reading,
           English: srpi.senses[0].english_definitions.join(', '),
-          senses: srpi.senses !== undefined ? srpi.senses : null
+          senses: srpi.senses !== undefined ? srpi.senses : null,
+          japanese: srpi.japanese !== undefined ? srpi.japanese : null
         })),
         catchError(this.handleError('searchWord', []))
       );
