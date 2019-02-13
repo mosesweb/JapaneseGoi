@@ -22,6 +22,7 @@ import { Observable, from, of, Observer } from "rxjs";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
 import { NavigationExtras, Router, Params, ActivatedRoute } from "@angular/router";
 import { ClientWord } from "../model/ClientWord.model";
+import { QuizWord } from "../model/QuizWord.model";
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 const view = require("ui/core/view");
@@ -42,6 +43,9 @@ export class playQuizComponent implements OnInit {
     currentQuestionIndex: number = 0;
 
     firstWord: ClientWord;
+    options: ClientWord[] = [];
+    optionsPerQuestion: Array<QuizWord>;
+    currentQuestionLevel: number = 0;
 
     constructor(private userService: UserService, private route : ActivatedRoute) {
     }
@@ -50,14 +54,76 @@ export class playQuizComponent implements OnInit {
     {
         const list = [];
         const list2 = [];
+        let array = [];
 
         this.post.words.forEach((val : ClientWord) =>
         {
+                let arrsize = (this.post.words.length / 4);
+
                 list.push(val.japanese_reading);
                 list2.push(val.japanese_reading);
         });
         return list;
+        
     }
+    getOptionsOne = ( words: ClientWord[] = this.options): Array<QuizWord>=>
+    {
+        let usedIndexes: number[] = [];
+        let options: ClientWord[] = [];
+
+        let totalwords: number = words.length;
+        let questions: number = 4;
+        let optionsSize: number = words.length / questions;
+        
+        let arrayOfArrays: Array<QuizWord> = [];
+        for (let i= 0 ; i < words.length; i += optionsSize) {
+           // arrayOfArrays.push(words.slice(i, i+optionsSize));
+        }
+        let list: Array<QuizWord> = words.map( 
+            (a) => {
+                return new QuizWord(
+                    a.japanese_reading,
+                    a.japanese_word,
+                    a.english
+                );
+            }
+            );
+            list.forEach((q: QuizWord)  => {
+                q.setOptions(words);
+            });
+
+            console.log("run and..");
+            console.log(list);
+        return list;
+
+
+        // options.push(words[this.currentQuestionIndex]);
+        // usedIndexes.push(this.currentQuestionIndex);
+
+        // var num1 = this.generateRandom(0, words.length, []);
+        // options.push(words[num1]);
+
+        // var num2   = this.generateRandom(0, words.length, [num1]);
+        // options.push(words[num2]);
+
+        // var num3 = this.generateRandom(0, words.length, [num1, num2]);
+        // options.push(words[num3]);
+
+
+        // let newarr = [];
+        // options.forEach(o => {
+        //     newarr.push(o);
+        // })
+    }
+    generateRandom (min : number, max : number, numbers : number[]) {
+        let num = Math.floor(Math.random() * (max - min + 1)) + min;
+        return (num === this.currentQuestionIndex || numbers.find(e => e == num)) ? 
+        this.generateRandom(min, max, numbers) : num;
+
+        // var test = generateRandom(1, 20)
+
+    }
+    
     ngOnInit(): void {
           
         this.route.params.forEach(
@@ -71,16 +137,10 @@ export class playQuizComponent implements OnInit {
             .subscribe({
                 next: post => {
                 this.post = post;
+                this.optionsPerQuestion = this.getOptionsOne(post.words);
                 },
                 error(error) { console.log(error); }, // optional
         });
-        this.getFirstQuestion();  
-
-    }
-
-    getFirstQuestion = (): void =>
-    {
-        this.firstWord = this.post.words[0];
     }
 
     onTap(args: EventData) {
@@ -92,7 +152,11 @@ export class playQuizComponent implements OnInit {
             alert("wrong");
 
         if(this.currentQuestionIndex < (this.post.words.length -1 ))
+        {
             this.currentQuestionIndex++;
+            this.currentQuestionLevel++;
+            this.optionsPerQuestion = this.getOptionsOne(this.post.words);
+        }
     }
 
     japaneseReadingIsCorrect = (incomingJapaneseReadingGuess : string) => 
