@@ -1,31 +1,17 @@
 import { Component, OnInit } from "@angular/core";
-import { NativeScriptRouterModule, RouterExtensions } from "nativescript-angular/router";
+import { RouterExtensions } from "nativescript-angular/router";
 import { Button } from "tns-core-modules/ui/button";
-import { fromObject, fromObjectRecursive, PropertyChangeData, EventData } from "tns-core-modules/data/observable";
+import { EventData } from "tns-core-modules/data/observable";
 import { User } from "../model/user.model";
 import { UserService } from "../services/user.service";
-import { getBoolean, setBoolean } from "tns-core-modules/application-settings";
-import { SearchBar } from "tns-core-modules/ui/search-bar";
-import { ChangeDetectionStrategy } from "@angular/core";
 import { SetupItemViewArgs } from "nativescript-angular/directives";
-import { TextField } from "tns-core-modules/ui/text-field";
-import { map } from 'rxjs/operators';
+import { ItemEventData } from "tns-core-modules/ui/list-view";
 
 import { 
-    firestore, 
-    User as firebaseUser, 
-    login as firebaseLogin,
-    UserMetadata} from "nativescript-plugin-firebase"
+    firestore} from "nativescript-plugin-firebase"
 import { VocabList } from "../model/vocabList.model";
-import { getViewById, View } from "tns-core-modules/ui/core/view/view";
 import { Observable, from, of } from "rxjs";
-import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
-import { NavigationExtras, Router } from "@angular/router";
-import { ClientWord } from "../model/ClientWord.model";
-import { v } from "@angular/core/src/render3";
-const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
-const view = require("ui/core/view");
 
 @Component({
     selector: "Mylist",
@@ -62,7 +48,6 @@ export class MylistComponent implements OnInit {
 
 
     onTap(args: EventData) {
-        let button = <Button>args.object;
         
         let newList = new VocabList(this._listTitle, this.userService.UserFromService.uid);
         
@@ -76,7 +61,6 @@ export class MylistComponent implements OnInit {
     {
         console.log("parameter " + user.uid);
         const vocablistCollection = firebase2.firestore().collection("vocablists");
-        const wordsCollection = firebase2.firestore().collection("wordsInList");
         // "Gimme all cities in California with a population below 550000"
           // "Gimme all lists from this user
           const query = vocablistCollection
@@ -115,8 +99,7 @@ export class MylistComponent implements OnInit {
         });
       }
         
-    constructor(private userService: UserService,
-        private routerExtensions: RouterExtensions) {
+    constructor(private userService: UserService) {
         this.vocablists = [];
         this.globalListChoice = this.userService.getlistChoice();
         this.globalListChoiceId = this.userService.getlistChoiceId();
@@ -124,7 +107,6 @@ export class MylistComponent implements OnInit {
 
     }
      onItemTap(args: ItemEventData) {
-        const index = args.index;
         if(this.vocablists.length > 0)
         {
             args.view.backgroundColor = "green";
@@ -141,7 +123,7 @@ export class MylistComponent implements OnInit {
         }
         
     }
-    public viewMore = (args : any) : void => 
+    public viewMore = () : void => 
       {
       }
 }

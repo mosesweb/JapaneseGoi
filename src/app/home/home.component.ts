@@ -49,11 +49,12 @@ export class HomeComponent implements OnInit {
     usersLists$: Observable<Array<VocabList>>;
 
     globalListChoice: string;
+    globalListChoiceText: string;
     globalListChoiceId: string;
 
     public searchPhrase: string;
     postsObserver: Observable<any>;
-    userVocabularyLists: any;
+    userVocabularyLists: Array<VocabList>;
 
     onSubmit = (args: any) =>  {
 
@@ -156,6 +157,7 @@ export class HomeComponent implements OnInit {
         this.users$ = this.userService.getAllUsers();
         this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();
+        this.globalListChoiceText = (this.userService.getlistChoice() === undefined || this.userService.getlistChoice() == "") ? "Selected Vocabulary List" : this.userService.getlistChoice(); 
         this.globalListChoiceId = this.userService.getlistChoiceId();
 
         this.postsObserver = this.userService.getAllVocabLists("");

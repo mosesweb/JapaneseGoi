@@ -4,7 +4,6 @@ import { QuizOption } from "./QuizOption.model";
 
 export class QuizWord extends ClientWord {
   
-    public test2: string = "hej";
     constructor(
         public japanese_reading: string, //a.japanese_reading,
         public japanese_word: string, //a.japanese_word,

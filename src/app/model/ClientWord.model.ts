@@ -1,9 +1,7 @@
 import { Sense } from "./sense.model";
 
 export class ClientWord {
-    public test(): any {
-        console.log("TEST");
-    }
+
     public japanese_reading: string;
     japanese_word: string;
     english: string;

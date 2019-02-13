@@ -27,11 +27,11 @@
         <Label class="h3 p-15" *ngIf="userService.UserFromService != null" [text]="userService.UserFromService?.name" textWrap="true"></Label> 
         <Button class="btn btn-primary" text="My lists" *ngIf="userService.UserFromService != null" [nsRouterLink]="['mylists']" pageTransition="slide" clearHistory="true"></Button>
         
-        <FilterSelect 
+        <FilterSelect *ngIf="userVocabularyLists" 
             height="100"
             [items]="userVocabularyLists"
             (change)="onitemselected($event)"
-            hint="Select vocabulary list" 
+            [hint]="globalListChoiceText" 
             modal_title="item" 
             search_param="title" 
             primary_key="listid"
@@ -39,6 +39,7 @@
             render="label"
             >
         </FilterSelect>
+
 
             <SearchBar hint="Search hint" [text]="searchPhrase" (textChange)="onTextChanged($event)" (submit)="onSubmit($event)" 
             ></SearchBar>

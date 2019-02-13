@@ -154,7 +154,20 @@ export class UserService {
   constructor(private http: HttpClient)
   {
     
-    
+    firebase.init({
+      onAuthStateChanged: (data)  => { // optional but useful to immediately re-logon the user when he re-visits your app
+      console.log(data.loggedIn ? "Logged in to firebase" : "Logged out from firebase");
+      if (data.loggedIn) {
+          this.UserFromService = data.user;
+          console.log(this.UserFromService.name + ' nice');
+      }
+      else
+      {
+          this.UserFromService = null;
+          console.log('not logged in');
+      }
+      }
+  });
     this.clientItemsList = [];
     this.vocablists = [];
   }
