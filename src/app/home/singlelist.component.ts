@@ -65,7 +65,7 @@ export class SinglelistComponent implements OnInit {
           .then(querySnapshot => {
                 if(querySnapshot.docs[0] != null)
                 {
-                    this.listName$ = of('Viewing list: ' + querySnapshot.docs[0].data().title);
+                    this.listName$ = of('List: ' + querySnapshot.docs[0].data().title);
                     if(querySnapshot.docs[0].data().words.length > 0)
                     {
                         this.wordsInList$ = of(

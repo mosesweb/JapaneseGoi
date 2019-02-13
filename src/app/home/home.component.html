@@ -44,7 +44,7 @@
             <SearchBar hint="Search hint" [text]="searchPhrase" (textChange)="onTextChanged($event)" (submit)="onSubmit($event)" 
             ></SearchBar>
     
-            <ListView (itemTap)="wordClick($event)" *ngIf="responseItems$ | async; else loading" [items]="responseItems$ | async" class="list-group">
+            <ListView height="700" (itemTap)="wordClick($event)" *ngIf="responseItems$ | async; else loading" [items]="responseItems$ | async" class="list-group">
                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                     <StackLayout [class.odd]="odd" [class.even]="even" class="list-group-item">
                         <Label [text]='item.English'></Label>

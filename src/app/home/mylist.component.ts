@@ -6,6 +6,7 @@ import { User } from "../model/user.model";
 import { UserService } from "../services/user.service";
 import { SetupItemViewArgs } from "nativescript-angular/directives";
 import { ItemEventData } from "tns-core-modules/ui/list-view";
+import * as dialogs from "tns-core-modules/ui/dialogs";
 
 import { 
     firestore} from "nativescript-plugin-firebase"
@@ -49,12 +50,26 @@ export class MylistComponent implements OnInit {
 
     onTap(args: EventData) {
         
-        let newList = new VocabList(this._listTitle, this.userService.UserFromService.uid);
-        
-        this.userService.addVocabList(newList, this.userService.UserFromService.uid, (n) =>
-        {
-            this.vocablists$.subscribe(o => o.push(n));
+        dialogs.prompt({
+            title: "New vocabulary list",
+            message: "Create a brand new vocabulary list",
+            cancelButtonText: "Cancel",
+            defaultText: "List name",
+            okButtonText: "Create",
+            inputType: dialogs.inputType.text
+        }).then(r => {
+            if(r.result && r.text != "")
+            {
+                console.log("Result: " + r.result + ", text: " + r.text);
+                let newList = new VocabList(r.text, this.userService.UserFromService.uid);
+                this.userService.addVocabList(newList, this.userService.UserFromService.uid, (n) =>
+                {
+                    this.vocablists$.subscribe(o => o.push(n));
+                });
+            }
         });
+
+     
     }
 
     loadLists = (user: User | null = null) : void =>
