@@ -43,6 +43,7 @@ export class SinglewordComponent implements OnInit {
     wordName$: Observable<ClientWord>;
     fakeArray = new Array(12);
     englishDefinitions$: Observable<Array<string>>;
+    wordId: any;
 
     ngOnInit(): void {
         this.globalListChoice = this.userService.getlistChoice();
@@ -52,10 +53,16 @@ export class SinglewordComponent implements OnInit {
             (params : Params) => {
                 console.log("param id: " + params["listid"] + ' - ' + params["wordid"]);
                 this.loadWord(null, params["listid"], params["wordid"]);
+                this.wordId = params["wordid"];
             }
          );        
     }
+    delete = () : void => 
+    {
+     console.log("going to delete: " + this.wordId); 
+     // todo complete this method
 
+    }
     loadWord = (user: User | null = null, listId: string, wordId: string) : void =>
     {
         const vocablistCollection = firebase2.firestore().collection("vocablists");

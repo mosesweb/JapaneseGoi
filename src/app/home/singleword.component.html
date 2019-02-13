@@ -1,5 +1,12 @@
 <ActionBar class="action-bar" [nsRouterLink]="['']">
         <Label class="action-bar-title" text="Home hell yeahhh"></Label>
+      <ActionItem 
+          ios.systemIcon="16" 
+          ios.position="right"
+          *ngIf="userService.UserFromService != null" 
+          text="Delete word" 
+          (tap)="delete()"
+          android.position="popup"></ActionItem>
     </ActionBar>
     
     <GridLayout class="page">

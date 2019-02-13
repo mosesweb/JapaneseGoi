@@ -54,6 +54,26 @@ export class SinglelistComponent implements OnInit {
          );        
     }
 
+    delete = () : void => 
+    {
+     console.log("going to delete: " + this.listId); 
+     const vocablistCollection = firebase2.firestore().collection("vocablists");
+     const query = vocablistCollection
+     .where("listId", "==", this.listId);
+     
+     query
+     .get()
+     .then(querySnapshot => {
+           if(querySnapshot.docs[0] != null)
+           {
+                console.log("deleting..." + querySnapshot.docs[0].data().title);
+                const docid = querySnapshot.docs[0].id;
+                vocablistCollection.doc(docid).delete();
+           }
+     });
+
+    }
+
     loadLists = (user: User | null = null, listId: string) : void =>
     {
         const vocablistCollection = firebase2.firestore().collection("vocablists");
