@@ -44,6 +44,10 @@ export class SinglewordComponent implements OnInit {
     fakeArray = new Array(12);
     englishDefinitions$: Observable<Array<string>>;
     wordId: any;
+    singleWord: ClientWord;
+    wordObserver: Observable<any>;
+    listId: any;
+    englishdefinitions: any;
 
     ngOnInit(): void {
         this.globalListChoice = this.userService.getlistChoice();
@@ -54,15 +58,37 @@ export class SinglewordComponent implements OnInit {
                 console.log("param id: " + params["listid"] + ' - ' + params["wordid"]);
                 this.loadWord(null, params["listid"], params["wordid"]);
                 this.wordId = params["wordid"];
+                this.listId = params["listid"];
+
             }
-         );        
+         );
+         
+         this.wordObserver = this.userService.getWordById(this.wordId, this.listId);
+         this.wordObserver
+            .subscribe({
+                next: wordpost => {
+                this.singleWord = wordpost;
+                    this.englishdefinitions = [];
+                        this.singleWord.senses.forEach((x: Sense) => {
+                        this.englishdefinitions.push(x.english_definitions.join(', '));
+                    })
+                },
+                error(error) { console.log(error); }, // optional
+        });
     }
     delete = () : void => 
     {
-     console.log("going to delete: " + this.wordId); 
+     console.log("going to delete!!: " + this.wordId); 
+     this.singleWord = null;
+     this.englishdefinitions = [];
+     this.userService.deleteWordById(this.wordId, this.listId);
      // todo complete this method
 
     }
+    getWordById = (listId: string): void =>
+    {
+    }
+
     loadWord = (user: User | null = null, listId: string, wordId: string) : void =>
     {
         const vocablistCollection = firebase2.firestore().collection("vocablists");

@@ -15,18 +15,18 @@
             <!-- <Label class="h3 p-15" [text]="userService.UserFromService?.name" textWrap="true"></Label>  -->
             <!-- <Label class="h3 p-15" [text]="globalListChoice" textWrap="true"></Label>  -->
             <!-- <Label class="h3 p-15" [text]="globalListChoiceId" textWrap="true"></Label>  -->
-    
-           
+            <label class="h1" *ngIf="!singleWord; else wordExists" text="Word has been deleted"></label>
+            <ng-template #wordExists>
             <Label class="h1">
                 <FormattedString>
-                    <Span [text]="(wordName$ | async)?.japanese_word"></Span> 
-                    <Span *ngIf="(wordName$ | async)?.japanese_reading" [text]="'[' + (wordName$ | async)?.japanese_reading + ']'"></Span> 
+                    <Span *ngIf="singleWord.japanese_word" [text]="singleWord?.japanese_word"></Span> 
+                    <Span *ngIf="singleWord.japanese_reading" [text]="'[' + singleWord?.japanese_reading + ']'"></Span> 
                 </FormattedString>
             </Label>
-            <Label class="h1" [text]="(wordName$ | async)?.english"></Label>
+            <Label class="h1" [text]="singleWord?.english"></Label>
 
-            <Label class="h3" text="More meanings" *ngIf="(englishDefinitions$ | async).length > 0"></Label>
-            <ListView *ngIf="(englishDefinitions$ | async).length > 0; else loading" [items]="(englishDefinitions$ | async)" class="list-group">
+            <Label class="h3" text="More meanings" *ngIf="englishdefinitions.length > 0"></Label>
+            <ListView *ngIf="englishdefinitions.length > 0; else loading" [items]="englishdefinitions" class="list-group">
                 <ng-template let-item="item" let-i="index">
                         <StackLayout class="list-group-item">
                                 <Label [text]="item"></Label>
@@ -34,19 +34,9 @@
                 </ng-template>
                 <ng-template #loading><Label text="loading..."></Label></ng-template>
             </ListView>
-<!-- 
-            <ng-container *ngFor = "let s of (wordName$ | async)?.senses">
-                    <ng-container *ngFor = "let a of s?.english_definitions">
-                            <Label [text]="a"></Label>
-                    </ng-container>    
-            </ng-container> -->
 
-            <Label class="h3" text="Other forms" *ngIf="(wordName$ | async)?.all_variations; else loading"></Label>
-            <!-- <ng-container *ngFor = "let v of (wordName$ | async)?.all_variations">
-                    <Label [text]="v.japanese_word"></Label>
-                    <Label [text]="v.japanese_reading"></Label>
-            </ng-container> -->
-            <ListView *ngIf="(wordName$ | async)?.all_variations; else loading" [items]="(wordName$ | async)?.all_variations" class="list-group">
+            <Label class="h3" text="Other forms" *ngIf="singleWord?.all_variations; else loading"></Label>
+            <ListView *ngIf="singleWord?.all_variations; else loading" [items]="singleWord?.all_variations" class="list-group">
                 <ng-template let-item="item" let-i="index">
                     <StackLayout class="list-group-item">
                         <Label [text]="item.japanese_word"></Label>
@@ -55,7 +45,7 @@
                 </ng-template>
                 <ng-template #loading><Label text="loading..."></Label></ng-template>
             </ListView>
-            
+        </ng-template>
         </StackLayout>
     
     </GridLayout>  

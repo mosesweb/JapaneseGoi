@@ -349,6 +349,52 @@ export class UserService {
   });
 });
 }
+
+ getWordById(wordId: string, listId: string) {
+   console.log("got inside..");
+   console.log("wid: " + wordId);
+   console.log("lid: " + listId);
+  let word: ClientWord = new ClientWord("");
+  return new Observable(observer => {
+    const vocablistCollection = firebase2.firestore().collection("vocablists").where("listId", "==", listId);
+
+
+    const unsubscribe = vocablistCollection.onSnapshot(querySnapshot => {
+      const dobj: any = querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId)[0];
+      if(dobj !== undefined)
+      {
+        word.english = dobj.english; 
+        word.japanese_reading = dobj.japanese_reading;
+        word.japanese_word = dobj.japanese_word;
+        word.all_variations = dobj.all_variations;
+        word.senses = dobj.senses;
+      }
+      else
+        word.english = "DELETED WORD";
+
+      observer.next(word);
+
+    return () => {
+      unsubscribe();
+    }
+  });
+});
+}
+deleteWordById = (wordId: string, listId: string) => {
+  console.log("got inside..");
+  console.log("wid: " + wordId);
+  console.log("lid: " + listId);
+  const vocablistCollectionPure = firebase2.firestore().collection("vocablists");
+   const vocablistCollection = firebase2.firestore().collection("vocablists").where("listId", "==", listId);
+   vocablistCollection.onSnapshot(querySnapshot => {
+      const docid = querySnapshot.docs[0].id;
+      console.log(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId)[0]);
+      vocablistCollectionPure.doc(docid).update({
+      words: querySnapshot.docs[0].data().words.filter(w => w.word_id != wordId)
+        // words: firebase2.firestore().FieldValue().arrayRemove(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId)[0])
+      })
+});
+}
 }
 
 
