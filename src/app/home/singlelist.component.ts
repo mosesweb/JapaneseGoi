@@ -10,6 +10,7 @@ import { ChangeDetectionStrategy } from "@angular/core";
 import { SetupItemViewArgs } from "nativescript-angular/directives";
 import { TextField } from "tns-core-modules/ui/text-field";
 import { map } from 'rxjs/operators';
+import * as dialogs from "tns-core-modules/ui/dialogs";
 
 import { 
     firestore, 
@@ -40,6 +41,7 @@ export class SinglelistComponent implements OnInit {
     vocablists$: Observable<Array<VocabList>>;
     listName$: Observable<string>;
     listId: string
+    postsObserver: Observable<any>;
 
     ngOnInit(): void {
         this.globalListChoice = this.userService.getlistChoice();
@@ -49,29 +51,19 @@ export class SinglelistComponent implements OnInit {
             (params : Params) => {
                 console.log("param id: " + params["id"]);
                 this.loadLists(null, params["id"]);
+                this.userService.getVocabListById(params["id"]);
+                
                 this.listId = params["id"];
             }
          );        
-    }
-
-    delete = () : void => 
-    {
-     console.log("going to delete: " + this.listId); 
-     const vocablistCollection = firebase2.firestore().collection("vocablists");
-     const query = vocablistCollection
-     .where("listId", "==", this.listId);
-     
-     query
-     .get()
-     .then(querySnapshot => {
-           if(querySnapshot.docs[0] != null)
-           {
-                console.log("deleting..." + querySnapshot.docs[0].data().title);
-                const docid = querySnapshot.docs[0].id;
-                vocablistCollection.doc(docid).delete();
-           }
-     });
-
+         this.postsObserver = this.userService.getVocabListById(this.listId);
+                this.postsObserver
+                    .subscribe({
+                        next: post => {
+                        this.currentList = post;
+                        },
+                        error(error) { console.log(error); }, // optional
+                });
     }
 
     loadLists = (user: User | null = null, listId: string) : void =>
@@ -105,6 +97,47 @@ export class SinglelistComponent implements OnInit {
             }
         );
     }
+
+    delete = () : void => 
+    {
+     console.log("going to delete: " + this.listId); 
+     const vocablistCollection = firebase2.firestore().collection("vocablists");
+     const query = vocablistCollection
+     .where("listId", "==", this.listId);
+     
+     query
+     .get()
+     .then(querySnapshot => {
+           if(querySnapshot.docs[0] != null)
+           {
+                console.log("deleting..." + querySnapshot.docs[0].data().title);
+                const docid = querySnapshot.docs[0].id;
+                vocablistCollection.doc(docid).delete();
+                this.currentList = null;
+           }
+     });
+
+    }
+    edit = () : void => 
+    {
+        dialogs.prompt({
+            title: "Edit vocabulary list",
+            cancelButtonText: "Cancel",
+            defaultText:  this.currentList.title,
+            okButtonText: "Update",
+            inputType: dialogs.inputType.text
+        }).then(r => {
+            if(r.result && r.text != "")
+            {
+                console.log("Result: " + r.result + ", text: " + r.text);
+
+                this.userService.updateListNameById(this.listId, r.text);
+                this.currentList.title = r.text;
+            }
+        });
+
+    }
+   
 
     constructor(private userService: UserService, private route : ActivatedRoute) {
     }

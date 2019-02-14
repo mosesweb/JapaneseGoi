@@ -1,5 +1,12 @@
 <ActionBar class="action-bar" [nsRouterLink]="['']">
     <Label class="action-bar-title" text="Home hell yeahhh"></Label>
+    <ActionItem 
+    ios.systemIcon="16" 
+    ios.position="right"
+    *ngIf="userService.UserFromService != null" 
+    text="Edit list" 
+    (tap)="edit()"
+    android.position="popup"></ActionItem>
   <ActionItem 
       ios.systemIcon="16" 
       ios.position="right"
@@ -12,10 +19,13 @@
 
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
-        <Label class="h1 p-15" [text]="listName$ | async" textWrap="true"></Label> 
+        <label class="h1" *ngIf="!currentList; else listExists" text="List has been deleted"></label>
+        <ng-template #listExists>
+
+        <Label class="h1 p-15" [text]="currentList.title" textWrap="true"></Label> 
         <Button text="Practice" [nsRouterLink]="['/home/playquiz', listId]" pageTransition="slide" clearHistory="true"></Button>
 
-            <ListView [items]="wordsInList$ | async"  class="list-group">
+            <ListView [items]="currentList.words"  class="list-group">
                     <ng-template tkTemplateKey="green" let-dataitem="item">
                         <StackLayout orientation="vertical" class="list-group-item"> 
                             <Label [text]="dataitem.english" android:class="label-item" [nsRouterLink]="['/home/singleword', dataitem?.listid, dataitem?.word_id]"></Label>
@@ -24,6 +34,7 @@
                         </StackLayout>
                     </ng-template>
             </ListView>
+        </ng-template>
     </StackLayout>
 
 </GridLayout>  

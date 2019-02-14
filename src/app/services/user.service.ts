@@ -395,6 +395,21 @@ deleteWordById = (wordId: string, listId: string) => {
       })
 });
 }
+updateListNameById = (listId: string, listTitle: string) => {
+  console.log("lid: " + listId);
+  const vocablistCollectionPure = firebase2.firestore().collection("vocablists");
+   const vocablistCollection = firebase2.firestore().collection("vocablists").where("listId", "==", listId);
+   vocablistCollection.onSnapshot(querySnapshot => {
+      const docid = querySnapshot.docs[0].id;
+      if(listTitle != "" && listTitle != null)
+      {
+        vocablistCollectionPure.doc(docid).update({
+        title: listTitle
+          // words: firebase2.firestore().FieldValue().arrayRemove(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId)[0])
+        })
+      }
+});
+}
 }
 
 
