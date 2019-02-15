@@ -16,6 +16,8 @@ registerElement('FilterSelect', () => FilterSelect);
     templateUrl: "app.component.html"
 })
 export class AppComponent implements OnInit { 
+
+  shouldFireBaseInit: boolean = true;
   constructor(private UserService: UserService)
   {
     
@@ -50,25 +52,29 @@ applicationOn(resumeEvent, (args: ApplicationEventData) => {
   if (args.android) {
       // For Android applications, args.android is an android activity class.
       console.log("RESUMEVENT Activity: " + args.android);
+      this.shouldFireBaseInit = false;
   } else if (args.ios) {
       // For iOS applications, args.ios is UIApplication.
       console.log("UIApplication: " + args.ios);
   }
 });
-
-  firebase.init({
-    onAuthStateChanged: (data)  => { // optional but useful to immediately re-logon the user when he re-visits your app
-    console.log(data.loggedIn ? "Logged in to firebase" : "Logged out from firebase");
-    if (data.loggedIn) {
-        this.UserService.UserFromService = data.user;
-        console.log(this.UserService.UserFromService.name + ' nice');
-    }
-    else
-    {
-        this.UserService.UserFromService = null;
-        console.log('not logged in');
-    }
-    }
-  });
+  if(this.shouldFireBaseInit)
+  {
+    firebase.init({
+      onAuthStateChanged: (data)  => { // optional but useful to immediately re-logon the user when he re-visits your app
+      console.log(data.loggedIn ? "Logged in to firebase" : "Logged out from firebase");
+      if (data.loggedIn) {
+          this.UserService.UserFromService = data.user;
+          console.log(this.UserService.UserFromService.name + ' nice');
+      }
+      else
+      {
+          this.UserService.UserFromService = null;
+          console.log('not logged in');
+      }
+      }
+    });
+}
   }
+  
 }
