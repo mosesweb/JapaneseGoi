@@ -55,7 +55,8 @@ export class HomeComponent implements OnInit {
     public searchPhrase: string;
     postsObserver: Observable<any>;
     userVocabularyLists: Array<VocabList>;
-
+    DisplaynoResultFound: boolean = false;
+    showLoading: boolean = true;
     onSubmit = (args: any) =>  {
 
         let searchBar = <SearchBar>args.object;
@@ -66,6 +67,7 @@ export class HomeComponent implements OnInit {
         //     this.responseItems$ = result;
         // });
         this.responseItems$ = this.userService.searchWord(searchBar.text);
+        
     }
     public onTextChanged(args) {
         let searchBar = <SearchBar>args.object;
@@ -153,11 +155,10 @@ export class HomeComponent implements OnInit {
       }
 
     ngOnInit(): void {
-
         this.users$ = this.userService.getAllUsers();
         this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();
-        this.globalListChoiceText = (this.userService.getlistChoice() === undefined || this.userService.getlistChoice() == "") ? "Selected Vocabulary List" : this.userService.getlistChoice(); 
+        this.globalListChoiceText = (this.userService.getlistChoice() === undefined || this.userService.getlistChoice() == "" || this.userService.getlistChoice() == null) ? "Selected Vocabulary List" : this.userService.getlistChoice(); 
         this.globalListChoiceId = this.userService.getlistChoiceId();
 
         this.postsObserver = this.userService.getAllVocabLists("");

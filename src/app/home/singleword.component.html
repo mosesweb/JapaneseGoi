@@ -1,5 +1,5 @@
 <ActionBar class="action-bar" [nsRouterLink]="['']">
-        <Label class="action-bar-title" text="Home hell yeahhh"></Label>
+        <Label class="action-bar-title" text="JapaneseStudy"></Label>
       <ActionItem 
           ios.systemIcon="16" 
           ios.position="right"
@@ -25,7 +25,7 @@
             </Label>
             <Label class="h1" [text]="singleWord?.english"></Label>
 
-            <Label class="h3" text="More meanings" *ngIf="englishdefinitions.length > 0"></Label>
+            <Label class="h3" text="All meanings" *ngIf="englishdefinitions.length > 0"></Label>
             <ListView *ngIf="englishdefinitions.length > 0; else loading" [items]="englishdefinitions" class="list-group">
                 <ng-template let-item="item" let-i="index">
                         <StackLayout class="list-group-item">
@@ -35,7 +35,7 @@
                 <ng-template #loading><Label text="loading..."></Label></ng-template>
             </ListView>
 
-            <Label class="h3" text="Other forms" *ngIf="singleWord?.all_variations; else loading"></Label>
+            <Label class="h3" text="Japanese forms" *ngIf="singleWord?.all_variations; else loading"></Label>
             <ListView *ngIf="singleWord?.all_variations; else loading" [items]="singleWord?.all_variations" class="list-group">
                 <ng-template let-item="item" let-i="index">
                     <StackLayout class="list-group-item">

@@ -42,8 +42,8 @@ export class MylistComponent implements OnInit {
         this.firestoreCollectionObservable();
     }
     onSetupItemView(args: SetupItemViewArgs) {
-        let indexOfCurrentSelected = this.vocablists.findIndex(v => v.title == this.userService.getlistChoice());
-        args.view.context.CurrentSelected = (args.index == indexOfCurrentSelected);
+        // let indexOfCurrentSelected = this.vocablists.findIndex(v => v.title == this.userService.getlistChoice());
+        // args.view.context.CurrentSelected = (args.index == indexOfCurrentSelected);
     }
 
 
@@ -122,20 +122,7 @@ export class MylistComponent implements OnInit {
 
     }
      onItemTap(args: ItemEventData) {
-        if(this.vocablists.length > 0)
-        {
-            args.view.backgroundColor = "green";
-            const source = from(this.vocablists$);
-
-            source.subscribe(val => 
-                {
-                    this.userService.setlistChoiceWithListId(val[args.index]);
-                    this.globalListChoice = this.userService.getlistChoice();
-                    this.globalListChoiceId = this.userService.getlistChoiceId();
-                }
-            )
-
-        }
+       
         
     }
     public viewMore = () : void => 

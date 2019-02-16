@@ -60,7 +60,8 @@ export class UserService {
       querySnapshot.forEach(doc => {
         
         let wordList :  Array<ClientWord> = []; 
-
+        if(doc.data() !== undefined)
+        {
         if(doc.data().words !== undefined) 
         wordList = doc.data().words.map(w => <ClientWord> {
           japanese_reading: w.japanese_reading,
@@ -86,6 +87,7 @@ export class UserService {
             japanese_reading: j.reading
           });
         }
+      
 
         wordList.push(<ClientWord>
         {
@@ -104,8 +106,9 @@ export class UserService {
             uid: doc.data().uid,
             words: wordList
           });
+        }  
       });
-
+    
     });
   }
   setlistChoice = (listchoice : string) : void =>
@@ -116,12 +119,21 @@ export class UserService {
   }
   setlistChoiceWithListId = (listchoice : VocabList) : void =>
   {
-    if(listchoice.title !== undefined)
-    appSettings.setString("listChoice", listchoice.title);
+    if(listchoice == null)
+    {
+      console.log("set null on listchoice");
+      appSettings.setString("listChoice", "");
+      appSettings.setString("listChoiceId", "");
+    }
+    else
+    {
+      if(listchoice.title !== undefined)
+      appSettings.setString("listChoice", listchoice.title);
 
-    if(listchoice.listid !== undefined && listchoice.listid != null)
-    appSettings.setString("listChoiceId", listchoice.listid);
-
+      if(listchoice.listid !== undefined)
+      appSettings.setString("listChoiceId", listchoice.listid);
+    }
+  
     const listChoice = appSettings.getString("listChoice", "");
     this.globalListChoice = listChoice;
   }
@@ -276,8 +288,9 @@ export class UserService {
     return new Observable(observer => {
       const vocablistCollection = firebase2.firestore().collection("vocablists");
       const unsubscribe = vocablistCollection.onSnapshot(querySnapshot => {
-        console.log(querySnapshot.docs[0].data().title);
-         querySnapshot.docs.map(doc => 
+        if(querySnapshot.docs !== undefined)
+        { 
+        querySnapshot.docs.map(doc => 
           posts.push(<VocabList>
           {
             title: doc.data().title, 
@@ -296,7 +309,7 @@ export class UserService {
         );
   
           observer.next(posts);
-  
+        }
       return () => {
         unsubscribe();
       }

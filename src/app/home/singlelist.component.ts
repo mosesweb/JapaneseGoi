@@ -114,6 +114,7 @@ export class SinglelistComponent implements OnInit {
                 const docid = querySnapshot.docs[0].id;
                 vocablistCollection.doc(docid).delete();
                 this.currentList = null;
+                this.userService.setlistChoiceWithListId(null);
            }
      });
 
