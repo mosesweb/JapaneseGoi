@@ -22,10 +22,10 @@
         <label class="h1" *ngIf="!currentList; else listExists" text="List has been deleted"></label>
         <ng-template #listExists>
 
-        <Label class="h1 p-15" [text]="currentList.title" textWrap="true"></Label> 
+        <Label class="h1 p-15" [text]="currentList?.title" textWrap="true"></Label> 
         <Button text="Practice" [nsRouterLink]="['/home/playquiz', listId]" pageTransition="slide" clearHistory="true"></Button>
 
-            <ListView [items]="currentList.words"  class="list-group">
+            <ListView [items]="currentList?.words"  class="list-group">
                     <ng-template tkTemplateKey="green" let-dataitem="item">
                         <StackLayout orientation="vertical" class="list-group-item"> 
                             <Label [text]="dataitem.english" android:class="label-item" [nsRouterLink]="['/home/singleword', dataitem?.listid, dataitem?.word_id]"></Label>

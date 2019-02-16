@@ -19,6 +19,7 @@
                             </GridLayout>
                     </ng-template>
             </ListView>
+            <Label *ngIf="(vocablists$ | async)?.length == 0" text="You don't have any vocabulary lists as of yet"></Label>
     </StackLayout>
 
 </GridLayout>  

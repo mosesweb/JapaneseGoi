@@ -49,10 +49,7 @@ export class SinglelistComponent implements OnInit {
         
         this.route.params.forEach(
             (params : Params) => {
-                console.log("param id: " + params["id"]);
-                this.loadLists(null, params["id"]);
-                this.userService.getVocabListById(params["id"]);
-                
+                console.log("param id: " + params["id"]);                
                 this.listId = params["id"];
             }
          );        
@@ -66,37 +63,7 @@ export class SinglelistComponent implements OnInit {
                 });
     }
 
-    loadLists = (user: User | null = null, listId: string) : void =>
-    {
-        const vocablistCollection = firebase2.firestore().collection("vocablists");
-          const query = vocablistCollection
-          .where("listId", "==", listId);
-          
-          query
-          .get()
-          .then(querySnapshot => {
-                if(querySnapshot.docs[0] != null)
-                {
-                    this.listName$ = of('List: ' + querySnapshot.docs[0].data().title);
-                    if(querySnapshot.docs[0].data().words.length > 0)
-                    {
-                        this.wordsInList$ = of(
-                            querySnapshot.docs[0].data().words
-                            .map(w => <ClientWord> {
-                                japanese_reading: w.japanese_reading,
-                                japanese_word: w.japanese_word,
-                                senses: w.senses,
-                                all_variations: w.all_variations,
-                                english: w.english,
-                                word_id: w.word_id,
-                                listid: querySnapshot.docs[0].data().listId // could be done prettier..
-                            })
-                        );
-                    }
-                }
-            }
-        );
-    }
+   
 
     delete = () : void => 
     {

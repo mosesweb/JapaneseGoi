@@ -321,6 +321,12 @@ export class UserService {
  getVocabListById(listid: string) {
   let post: VocabList;
   return new Observable(observer => {
+    if(listid === undefined || listid == null)
+    {
+      return () => {
+        unsubscribe();
+      }
+    }
     const vocablistCollection = firebase2.firestore().collection("vocablists").where("listId", "==", listid);
     const unsubscribe = vocablistCollection.onSnapshot(querySnapshot => {
        querySnapshot.docs.map(doc => 
@@ -341,7 +347,6 @@ export class UserService {
         });
 
         observer.next(post);
-
     return () => {
       unsubscribe();
     }
@@ -399,14 +404,17 @@ updateListNameById = (listId: string, listTitle: string) => {
   const vocablistCollectionPure = firebase2.firestore().collection("vocablists");
    const vocablistCollection = firebase2.firestore().collection("vocablists").where("listId", "==", listId);
    vocablistCollection.onSnapshot(querySnapshot => {
+      if(querySnapshot.docs[0] !== undefined)
+      {  
       const docid = querySnapshot.docs[0].id;
-      if(listTitle != "" && listTitle != null)
-      {
-        vocablistCollectionPure.doc(docid).update({
-        title: listTitle
-          // words: firebase2.firestore().FieldValue().arrayRemove(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId)[0])
-        })
+        if(listTitle != "" && listTitle != null)
+        {
+          vocablistCollectionPure.doc(docid).update({
+          title: listTitle
+            // words: firebase2.firestore().FieldValue().arrayRemove(querySnapshot.docs[0].data().words.filter(w => w.word_id == wordId)[0])
+          })
       }
+    }
 });
 }
 }
