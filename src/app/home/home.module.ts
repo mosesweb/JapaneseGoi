@@ -8,6 +8,7 @@ import { MylistComponent } from "./mylist.component";
 import { SinglelistComponent } from "./singlelist.component";
 import { SinglewordComponent } from "./singleword.component";
 import { playQuizComponent } from "./playQuiz.component";
+import { mainMenuComponent } from "../menu/Mainmenu.component";
 
 @NgModule({
     imports: [
@@ -20,8 +21,10 @@ import { playQuizComponent } from "./playQuiz.component";
         MylistComponent,
         SinglelistComponent,
         SinglewordComponent,
-        playQuizComponent
+        playQuizComponent,
+        mainMenuComponent
     ],
+    exports: [mainMenuComponent],
     schemas: [
         NO_ERRORS_SCHEMA
     ]

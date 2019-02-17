@@ -23,6 +23,9 @@ import { registerElement } from 'nativescript-angular/element-registry';
 import { FilterSelect } from 'nativescript-filter-select';
 import { setCssFileName } from "tns-core-modules/application/application";
 import { Page } from "tns-core-modules/ui/page";
+import { MainNavigation } from "../model/navigation/mainNavigation.model";
+import { SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view";
+import { alert } from "tns-core-modules/ui/dialogs";
 
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
@@ -57,6 +60,10 @@ export class HomeComponent implements OnInit {
     userVocabularyLists: Array<VocabList>;
     DisplaynoResultFound: boolean = false;
     showLoading: boolean = true;
+    
+    public tabSelectedIndex: number;
+    public tabSelectedIndexResult: string;
+
     onSubmit = (args: any) =>  {
 
         let searchBar = <SearchBar>args.object;
@@ -69,6 +76,7 @@ export class HomeComponent implements OnInit {
         this.responseItems$ = this.userService.searchWord(searchBar.text);
         
     }
+    currentroute: ActivatedRoute;
     public onTextChanged(args) {
         let searchBar = <SearchBar>args.object;
         console.log("SearchBar text changed! New value: " + searchBar.text);
@@ -140,9 +148,14 @@ export class HomeComponent implements OnInit {
               }
           );
     }
-    constructor(private userService: UserService, private router : Router) {
+    constructor(private userService: UserService, private router : Router,
+        private currentRoute: ActivatedRoute) {
         // Use the component constructor to inject providers.
         // this.responseItems$ = of([]);
+        this.router = router;
+        this.currentroute = currentRoute;
+        this.tabSelectedIndex = 0;
+        this.tabSelectedIndexResult = "Profile Tab (tabSelectedIndex = 0 )";
 
     }
     getUser(): void {
@@ -211,4 +224,5 @@ export class HomeComponent implements OnInit {
             }
         });
     }
+    
 }

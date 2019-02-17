@@ -20,12 +20,16 @@
 
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
+
+           
+         
+
         <!-- >> button-tap-event-html -->
         <!-- <Button class="btn btn-primary btn-active" id="button" text="getAuthToken" (tap)="onTap($event)"></Button> -->
         <!-- <Button class="btn btn-primary" id="login-button" *ngIf="userService.UserFromService == null" text="Login" (tap)="LoginNow()"></Button> -->
         <!-- <Button class="btn btn-primary" id="logout-button" *ngIf="userService.UserFromService != null" text="Logout" (tap)="logoutNow()"></Button> -->
         <Label class="h3 p-15" *ngIf="userService.UserFromService != null" [text]="userService.UserFromService?.name" textWrap="true"></Label> 
-        <Button class="btn btn-primary" text="My lists" *ngIf="userService.UserFromService != null" [nsRouterLink]="['mylists']" pageTransition="slide" clearHistory="true"></Button>
+        <!-- <Button class="btn btn-primary" text="My lists" *ngIf="userService.UserFromService != null" [nsRouterLink]="['mylists']" pageTransition="slide" clearHistory="true"></Button> -->
         
         <FilterSelect *ngIf="userVocabularyLists" 
             height="100"
@@ -57,5 +61,5 @@
                     </ng-template>
                 </ListView>
     </StackLayout>
-
-</GridLayout>  
+    <Mainmenu></Mainmenu>
+</GridLayout>
