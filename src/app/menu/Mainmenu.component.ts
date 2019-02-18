@@ -1,5 +1,5 @@
-import { Component, OnInit } from "@angular/core";
-import { SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view/tab-view";
+import { Component, OnInit, Input } from "@angular/core";
+import { SelectedIndexChangedEventData, TabView } from "tns-core-modules/ui/tab-view/tab-view";
 import { MainNavigation } from "../model/navigation/mainNavigation.model";
 import { Router, ActivatedRoute } from "@angular/router";
 
@@ -9,21 +9,22 @@ import { Router, ActivatedRoute } from "@angular/router";
     templateUrl: "./Mainmenu.component.html"
 })
 export class mainMenuComponent implements OnInit {
+    @Input() selectedIndex: number;
 
-    ngOnInit() {
-    }
 
-    public tabSelectedIndex: number;
+    public tabSelectedIndex: number = 0;
     public tabSelectedIndexResult: string;
     currentroute: ActivatedRoute;
+
+    ngOnInit() {
+        this.tabSelectedIndex = this.selectedIndex;
+    }
 
     constructor(private router : Router,
         private currentRoute: ActivatedRoute)
         {
             this.router = router;
             this.currentroute = currentRoute;
-            this.tabSelectedIndex = 0;
-            this.tabSelectedIndexResult = "Profile Tab (tabSelectedIndex = 0 )";
         }
 
     changeTab() {
@@ -37,6 +38,7 @@ export class mainMenuComponent implements OnInit {
     }
 
     onSelectedIndexChanged(args: SelectedIndexChangedEventData) {
+        console.log(this.currentRoute);
         if (args.oldIndex !== -1) {
             const newIndex = args.newIndex;
             if (newIndex === MainNavigation.Home) {
@@ -48,7 +50,6 @@ export class mainMenuComponent implements OnInit {
             } else if (newIndex === MainNavigation.Profile) {
                 this.tabSelectedIndexResult = "Profile Tab (tabSelectedIndex = 2 )";
             }
-
         }
     }
 }

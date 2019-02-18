@@ -1,4 +1,6 @@
-<TabView androidTabsPosition="bottom" 
+<TabView 
+[(ngModel)]="tabSelectedIndex"
+androidTabsPosition="bottom" 
 (selectedIndexChanged)="onSelectedIndexChanged($event)"
 androidSelectedTabHighlightColor="green"
 >
