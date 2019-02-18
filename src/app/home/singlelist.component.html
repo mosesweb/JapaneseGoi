@@ -1,19 +1,9 @@
 <ActionBar class="action-bar" [nsRouterLink]="['']">
     <Label class="action-bar-title" text="JapaneseStudy"></Label>
-    <ActionItem 
-    ios.systemIcon="16" 
-    ios.position="right"
-    *ngIf="userService.UserFromService != null" 
-    text="Edit list" 
-    (tap)="edit()"
-    android.position="popup"></ActionItem>
-  <ActionItem 
-      ios.systemIcon="16" 
-      ios.position="right"
-      *ngIf="userService.UserFromService != null" 
-      text="Delete list" 
-      (tap)="delete()"
-      android.position="popup"></ActionItem>
+    <ActionItem ios.systemIcon="16" ios.position="right" *ngIf="userService.UserFromService != null" text="Edit list"
+        (tap)="edit()" android.position="popup"></ActionItem>
+    <ActionItem ios.systemIcon="16" ios.position="right" *ngIf="userService.UserFromService != null" text="Delete list"
+        (tap)="delete()" android.position="popup"></ActionItem>
 </ActionBar>
 
 
@@ -22,19 +12,21 @@
         <label class="h1" *ngIf="!currentList; else listExists" text="List has been deleted"></label>
         <ng-template #listExists>
 
-        <Label class="h1 p-15" [text]="currentList?.title" textWrap="true"></Label> 
-        <Button text="Practice" [nsRouterLink]="['/home/playquiz', listId]" pageTransition="slide" clearHistory="true"></Button>
+            <Label class="h1 p-15" [text]="currentList?.title" textWrap="true"></Label>
+            <Button class="btn btn-primary btn-active" text="Practice" [nsRouterLink]="['/home/playquiz', listId]" pageTransition="slide"
+                clearHistory="true"></Button>
 
-            <ListView [items]="currentList?.words"  class="list-group">
-                    <ng-template tkTemplateKey="green" let-dataitem="item">
-                        <StackLayout orientation="vertical" class="list-group-item"> 
-                            <Label [text]="dataitem.english" android:class="label-item" [nsRouterLink]="['/home/singleword', dataitem?.listid, dataitem?.word_id]"></Label>
-                            <Label [text]="dataitem.japanese_word" android:class="label-item"></Label>
-                            <Label [text]="dataitem.japanese_reading" android:class="label-item"></Label>
-                        </StackLayout>
-                    </ng-template>
+            <ListView [items]="currentList?.words" class="list-group">
+                <ng-template tkTemplateKey="green" let-dataitem="item">
+                    <StackLayout orientation="vertical" class="list-group-item">
+                        <Label [text]="dataitem.english" android:class="label-item"
+                            [nsRouterLink]="['/home/singleword', dataitem?.listid, dataitem?.word_id]"></Label>
+                        <Label [text]="dataitem.japanese_word" android:class="label-item"></Label>
+                        <Label [text]="dataitem.japanese_reading" android:class="label-item"></Label>
+                    </StackLayout>
+                </ng-template>
             </ListView>
         </ng-template>
     </StackLayout>
-
-</GridLayout>  
+    <Mainmenu selectedIndex="1"></Mainmenu>
+</GridLayout>

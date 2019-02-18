@@ -1,9 +1,5 @@
-<TabView 
-[(ngModel)]="tabSelectedIndex"
-androidTabsPosition="bottom" 
-(selectedIndexChanged)="onSelectedIndexChanged($event)"
-androidSelectedTabHighlightColor="green"
->
+<TabView [(ngModel)]="tabSelectedIndex" androidTabsPosition="bottom"
+    (selectedIndexChanged)="onSelectedIndexChanged($event)" androidSelectedTabHighlightColor="green">
     <StackLayout *tabItem="{title: 'Home', iconSource: 'res://ic_home'}">
     </StackLayout>
     <StackLayout *tabItem="{title: 'Lists', iconSource: 'res://ic_menu'}">

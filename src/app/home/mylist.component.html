@@ -2,24 +2,25 @@
     <Label class="action-bar-title" text="JapaneseStudy"></Label>
 </ActionBar>
 
-
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
-        
 
-           <Button class="btn btn-primary btn-active" id="CreateListButton" text="Create" (tap)="onTap($event)"></Button>
-            <ListView [items]="vocablists$ | async" (itemTap)="onItemTap($event)" (setupItemView)="onSetupItemView($event)" class="list-group" HorizontalContentAlignment="Stretch">
+        <Button class="btn btn-primary btn-active" id="CreateListButton" text="Create" (tap)="onTap($event)"></Button>
+        <ListView [items]="vocablists$ | async" (itemTap)="onItemTap($event)" (setupItemView)="onSetupItemView($event)"
+            class="list-group" HorizontalContentAlignment="Stretch">
 
-                    <ng-template tkTemplateKey="green" let-dataitem="item">
-                            <GridLayout class="threads-list-wrapper" height="100" rows="*" columns="*, *">
-                                <Label col="0" stretch="none" android:class="label-item" class="listTitle" [text]="dataitem?.title"></Label>
-                                <StackLayout col="1" >
-                                    <Label [nsRouterLink]="['/home/singlelist', dataitem?.listid]" (tap)="viewMore($event)" class="listDetails" text="DETAILS" android:class="label-item"></Label>
-                                </StackLayout>
-                            </GridLayout>
-                    </ng-template>
-            </ListView>
-            <Label *ngIf="(vocablists$ | async)?.length == 0" text="You don't have any vocabulary lists as of yet"></Label>
+            <ng-template tkTemplateKey="green" let-dataitem="item">
+                <GridLayout class="threads-list-wrapper" height="100" rows="*" columns="*, *">
+                    <Label col="0" stretch="none" android:class="label-item" class="listTitle"
+                        [text]="dataitem?.title"></Label>
+                    <StackLayout col="1">
+                        <Label [nsRouterLink]="['/home/singlelist', dataitem?.listid]" (tap)="viewMore($event)"
+                            class="listDetails" text="DETAILS" android:class="label-item"></Label>
+                    </StackLayout>
+                </GridLayout>
+            </ng-template>
+        </ListView>
+        <Label *ngIf="(vocablists$ | async)?.length == 0" text="You don't have any vocabulary lists as of yet"></Label>
     </StackLayout>
     <Mainmenu selectedIndex="1"></Mainmenu>
-</GridLayout>  
+</GridLayout>

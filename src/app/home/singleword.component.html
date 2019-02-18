@@ -1,42 +1,39 @@
 <ActionBar class="action-bar" [nsRouterLink]="['']">
-        <Label class="action-bar-title" text="JapaneseStudy"></Label>
-      <ActionItem 
-          ios.systemIcon="16" 
-          ios.position="right"
-          *ngIf="userService.UserFromService != null" 
-          text="Delete word" 
-          (tap)="delete()"
-          android.position="popup"></ActionItem>
-    </ActionBar>
-    
-    <GridLayout class="page">
-        <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
-            
-            <!-- <Label class="h3 p-15" [text]="userService.UserFromService?.name" textWrap="true"></Label>  -->
-            <!-- <Label class="h3 p-15" [text]="globalListChoice" textWrap="true"></Label>  -->
-            <!-- <Label class="h3 p-15" [text]="globalListChoiceId" textWrap="true"></Label>  -->
-            <label class="h1" *ngIf="!singleWord; else wordExists" text="Word has been deleted"></label>
-            <ng-template #wordExists>
+    <Label class="action-bar-title" text="JapaneseStudy"></Label>
+    <ActionItem ios.systemIcon="16" ios.position="right" *ngIf="userService.UserFromService != null" text="Delete word"
+        (tap)="delete()" android.position="popup"></ActionItem>
+</ActionBar>
+
+<GridLayout class="page">
+    <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
+
+        <!-- <Label class="h3 p-15" [text]="userService.UserFromService?.name" textWrap="true"></Label>  -->
+        <!-- <Label class="h3 p-15" [text]="globalListChoice" textWrap="true"></Label>  -->
+        <!-- <Label class="h3 p-15" [text]="globalListChoiceId" textWrap="true"></Label>  -->
+        <label class="h1" *ngIf="!singleWord; else wordExists" text="Word has been deleted"></label>
+        <ng-template #wordExists>
             <Label class="h1">
                 <FormattedString>
-                    <Span *ngIf="singleWord.japanese_word" [text]="singleWord?.japanese_word"></Span> 
-                    <Span *ngIf="singleWord.japanese_reading" [text]="'[' + singleWord?.japanese_reading + ']'"></Span> 
+                    <Span *ngIf="singleWord.japanese_word" [text]="singleWord?.japanese_word"></Span>
+                    <Span *ngIf="singleWord.japanese_reading" [text]="'[' + singleWord?.japanese_reading + ']'"></Span>
                 </FormattedString>
             </Label>
             <Label class="h1" [text]="singleWord?.english"></Label>
 
             <Label class="h3" text="All meanings" *ngIf="englishdefinitions.length > 0"></Label>
-            <ListView *ngIf="englishdefinitions.length > 0; else loading" [items]="englishdefinitions" class="list-group">
+            <ListView *ngIf="englishdefinitions.length > 0; else loading" [items]="englishdefinitions"
+                class="list-group">
                 <ng-template let-item="item" let-i="index">
-                        <StackLayout class="list-group-item">
-                                <Label [text]="item"></Label>
-                        </StackLayout>
+                    <StackLayout class="list-group-item">
+                        <Label [text]="item"></Label>
+                    </StackLayout>
                 </ng-template>
                 <ng-template #loading><Label text="loading..."></Label></ng-template>
             </ListView>
 
             <Label class="h3" text="Japanese forms" *ngIf="singleWord?.all_variations; else loading"></Label>
-            <ListView *ngIf="singleWord?.all_variations; else loading" [items]="singleWord?.all_variations" class="list-group">
+            <ListView *ngIf="singleWord?.all_variations; else loading" [items]="singleWord?.all_variations"
+                class="list-group">
                 <ng-template let-item="item" let-i="index">
                     <StackLayout class="list-group-item">
                         <Label [text]="item.japanese_word"></Label>
@@ -46,6 +43,6 @@
                 <ng-template #loading><Label text="loading..."></Label></ng-template>
             </ListView>
         </ng-template>
-        </StackLayout>
-    
-    </GridLayout>  
+    </StackLayout>
+    <Mainmenu selectedIndex="1"></Mainmenu>
+</GridLayout>

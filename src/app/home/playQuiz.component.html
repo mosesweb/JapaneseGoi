@@ -5,7 +5,7 @@
 
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
-        <Label class="h3 p-15" [text]="'Playing quiz from: ' + post?.title" textWrap="true"></Label> 
+        <Label class="h3 p-15" [text]="'Playing quiz from: ' + post?.title" textWrap="true"></Label>
         <StackLayout class="hr-light m-10"></StackLayout>
 
         <Label class="h3 p-15 MainQuestion" textWrap="true" [nsRouterLink]="['/home/singlelist', globalListChoiceId]">
@@ -15,12 +15,20 @@
 
                 <Span text=" in japanese?"></Span>
             </FormattedString>
-        </Label> 
+        </Label>
 
-    <Button class="btn btn-primary btn-active" id="Option1" [text]="optionsPerQuestion[currentQuestionIndex]?.options[0].japanese_reading" (tap)="onTap($event)"></Button>
-    <Button class="btn btn-primary btn-active" id="Option2" [text]="optionsPerQuestion[currentQuestionIndex]?.options[1].japanese_reading" (tap)="onTap($event)"></Button>
-    <Button class="btn btn-primary btn-active" id="Option3" [text]="optionsPerQuestion[currentQuestionIndex]?.options[2].japanese_reading" (tap)="onTap($event)"></Button>
-    <Button class="btn btn-primary btn-active" id="Option3" [text]="optionsPerQuestion[currentQuestionIndex]?.options[3].japanese_reading" (tap)="onTap($event)"></Button>
+        <Button class="btn btn-primary btn-active" id="Option1"
+            [text]="optionsPerQuestion[currentQuestionIndex]?.options[0].japanese_reading"
+            (tap)="onTap($event)"></Button>
+        <Button class="btn btn-primary btn-active" id="Option2"
+            [text]="optionsPerQuestion[currentQuestionIndex]?.options[1].japanese_reading"
+            (tap)="onTap($event)"></Button>
+        <Button class="btn btn-primary btn-active" id="Option3"
+            [text]="optionsPerQuestion[currentQuestionIndex]?.options[2].japanese_reading"
+            (tap)="onTap($event)"></Button>
+        <Button class="btn btn-primary btn-active" id="Option3"
+            [text]="optionsPerQuestion[currentQuestionIndex]?.options[3].japanese_reading"
+            (tap)="onTap($event)"></Button>
     </StackLayout>
-
-</GridLayout>  
+    <Mainmenu selectedIndex="1"></Mainmenu>
+</GridLayout>
