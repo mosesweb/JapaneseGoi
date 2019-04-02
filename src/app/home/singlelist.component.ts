@@ -21,8 +21,9 @@ import { VocabList } from "../model/vocabList.model";
 import { getViewById, View } from "tns-core-modules/ui/core/view/view";
 import { Observable, from, of } from "rxjs";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
-import { NavigationExtras, Router, Params, ActivatedRoute } from "@angular/router";
+import { NavigationExtras, Router, Params, ActivatedRoute, Route } from "@angular/router";
 import { ClientWord } from "../model/ClientWord.model";
+import { routerNgProbeToken } from "@angular/router/src/router_module";
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 const view = require("ui/core/view");
@@ -63,7 +64,10 @@ export class SinglelistComponent implements OnInit {
                 });
     }
 
-   
+    addWordsToList = () : void => {
+        this.userService.setlistChoiceWithListId(this.currentList)
+        this.router.navigate(['']);
+    }
 
     delete = () : void => 
     {
@@ -107,7 +111,7 @@ export class SinglelistComponent implements OnInit {
     }
    
 
-    constructor(private userService: UserService, private route : ActivatedRoute) {
+    constructor(private userService: UserService, private route : ActivatedRoute, private router: Router) {
     }
     
     getWordsInList(): void {

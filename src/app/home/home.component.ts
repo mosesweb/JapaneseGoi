@@ -171,7 +171,7 @@ export class HomeComponent implements OnInit {
         this.users$ = this.userService.getAllUsers();
         this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();
-        this.globalListChoiceText = (this.userService.getlistChoice() === undefined || this.userService.getlistChoice() == "" || this.userService.getlistChoice() == null) ? "Selected Vocabulary List" : this.userService.getlistChoice(); 
+        this.globalListChoiceText = (this.userService.getlistChoice() === undefined || this.userService.getlistChoice() == "" || this.userService.getlistChoice() == null) ? "Selected Vocabulary List" : 'Selected list: ' + this.userService.getlistChoice(); 
         this.globalListChoiceId = this.userService.getlistChoiceId();
 
         this.postsObserver = this.userService.getAllVocabLists("");

@@ -25,9 +25,8 @@
         <SearchBar hint="Search on a word" [text]="searchPhrase" (textChange)="onTextChanged($event)"
             (submit)="onSubmit($event)"></SearchBar>
         <Label text="No results" *ngIf="(responseItems$ | async)?.length == 0"></Label>
-        <ng-template #loading><Label text="loading..."></Label></ng-template>
 
-        <ListView height="700" (itemTap)="wordClick($event)" *ngIf="responseItems$ | async; else loading"
+        <ListView height="700" (itemTap)="wordClick($event)"
             [items]="responseItems$ | async" class="list-group">
             <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout [class.odd]="odd" [class.even]="even" class="list-group-item">
