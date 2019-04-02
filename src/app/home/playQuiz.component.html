@@ -1,11 +1,11 @@
 <ActionBar class="action-bar" [nsRouterLink]="['']">
-    <Label class="action-bar-title" text="JapaneseStudy"></Label>
+    <Label class="action-bar-title" [text]="'Playing quiz from: ' + post?.title"></Label>
 </ActionBar>
 
 
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton [visibility]="QuizComplete ? 'collapsed' : 'visible'">
-        <Label class="h3 p-15" [text]="'Playing quiz from: ' + post?.title + ' - ' + QuizComplete" textWrap="true"></Label>
+        <Label class="h3 p-15" [text]="'Previous question: ' + infoAboutPreviousEntry" textWrap="true"></Label>
         <StackLayout class="hr-light m-10"></StackLayout>
         
         <Label class="h3 p-15 MainQuestion" textWrap="true" [nsRouterLink]="['/home/singlelist', globalListChoiceId]">

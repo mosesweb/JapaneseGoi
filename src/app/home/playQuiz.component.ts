@@ -43,6 +43,7 @@ export class playQuizComponent implements OnInit {
     currentQuestionIndex: number = 0;
     QuizComplete: boolean;
 
+    infoAboutPreviousEntry: string = 'Good luck!';
     firstWord: ClientWord;
     options: ClientWord[] = [];
     optionsPerQuestion: Array<QuizWord>;
@@ -149,15 +150,14 @@ export class playQuizComponent implements OnInit {
 
         if(this.japaneseReadingIsCorrect(button.text))
         {
-            alert("correct");
+            this.infoAboutPreviousEntry = "What is "+  this.post.words[this.currentQuestionIndex].english + " in Japanese? Your answer: " + button.text + ". It is correct!"
             this.userService.addAnswerEntry(this.post.words[this.currentQuestionIndex].english, button.text, true, this.listid);
 
         }
         else
         {
+            this.infoAboutPreviousEntry = "What is "+  this.post.words[this.currentQuestionIndex].english + " in Japanese? Your answer: " + button.text + ". It is wrong!"
             this.userService.addAnswerEntry(this.post.words[this.currentQuestionIndex].english, button.text, false, this.listid);
-            alert("wrong");
-
         }
 
         if(this.currentQuestionIndex < (this.post.words.length -1 ))

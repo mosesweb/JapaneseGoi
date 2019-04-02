@@ -13,7 +13,7 @@
         <ng-template #listExists>
 
             <Label class="h1 p-15" [text]="currentList?.title" textWrap="true"></Label>
-            <Button class="btn btn-primary btn-active" text="Practice" [nsRouterLink]="['/home/playquiz', listId]" pageTransition="slide"
+            <Button [isEnabled]="currentList?.words.length > 3 ? 'true' : 'false'" class="btn btn-primary btn-active" text="Practice" [nsRouterLink]="['/home/playquiz', listId]" pageTransition="slide"
                 clearHistory="true"></Button>
                 <Button class="btn btn-primary btn-active" text="Add words" (tap)="addWordsToList()" pageTransition="slide"
                 clearHistory="true"></Button>

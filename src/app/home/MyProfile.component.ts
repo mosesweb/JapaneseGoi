@@ -29,6 +29,13 @@ export class MyProfileComponent implements OnInit {
         this.sortByDueDate();
        return this.userAnswers.reverse();
     }
+    get getAmountofCorrect()  {
+        return this.userAnswers.filter(a => a.correct == true).length;
+    }
+    get getAmountofWrong()  {
+        return this.userAnswers.filter(a => a.correct == false).length;
+
+    }
     private getTime(date?: Date) {
         return date != null ? date.getTime() : 0;
     }

@@ -308,6 +308,7 @@ export class UserService {
     answer.correct = correct;
     answer.question = question;
     answer.listid = listid;
+    answer.userId = this.UserFromService.uid;
     answer.answered = new Date();
     answersCollection.add(answer);
   }
@@ -316,7 +317,7 @@ export class UserService {
   getAllAnswers(token: string) {
     let posts: Array<Answer> = [];
     return new Observable(observer => {
-      const answersCollection = firebase2.firestore().collection("answers");
+      const answersCollection = firebase2.firestore().collection("answers").where("userId", "==", this.UserFromService.uid);
       const unsubscribe = answersCollection.onSnapshot(querySnapshot => {
         if (querySnapshot.docs !== undefined) {
           querySnapshot.docs.map(doc =>
@@ -325,7 +326,7 @@ export class UserService {
                 question: doc.data().question,
                 answer: doc.data().answer,
                 listid: doc.data().listId,
-                userid: doc.data().userid,
+                userId: doc.data().userId,
                 correct: doc.data().correct,
                 answered: doc.data().answered,
                 answeredShort: new Date(doc.data().answered).toDateString()

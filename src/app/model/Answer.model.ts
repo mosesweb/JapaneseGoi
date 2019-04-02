@@ -6,6 +6,7 @@ export class Answer {
     public correct: boolean;
     public answered?: Date;
     public answeredShort?: string;
+    public userId: string;
 
     constructor()
     {
