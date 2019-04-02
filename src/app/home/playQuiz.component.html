@@ -4,7 +4,7 @@
 
 
 <GridLayout class="page">
-    <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
+    <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton [visibility]="QuizComplete ? 'collapsed' : 'visible'">
         <Label class="h3 p-15" [text]="'Playing quiz from: ' + post?.title + ' - ' + QuizComplete" textWrap="true"></Label>
         <StackLayout class="hr-light m-10"></StackLayout>
         
@@ -29,10 +29,9 @@
         <Button class="btn btn-primary btn-active" id="Option3"
             [text]="optionsPerQuestion[currentQuestionIndex]?.options[3].japanese_reading"
             (tap)="onTap($event)"></Button>
-
+    </StackLayout>
+    <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton [visibility]="QuizComplete ? 'visible' : 'collapsed'">
             <label *ngIf="QuizComplete" class="h1" text="Quiz completed!"></label>
-
-
     </StackLayout>
     <Mainmenu selectedIndex="1"></Mainmenu>
 </GridLayout>

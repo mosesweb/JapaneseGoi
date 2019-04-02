@@ -148,19 +148,28 @@ export class playQuizComponent implements OnInit {
         let button = <Button>args.object;
 
         if(this.japaneseReadingIsCorrect(button.text))
+        {
             alert("correct");
+            this.userService.addAnswerEntry(this.post.words[this.currentQuestionIndex].english, button.text, true, this.listid);
+
+        }
         else
+        {
+            this.userService.addAnswerEntry(this.post.words[this.currentQuestionIndex].english, button.text, false, this.listid);
             alert("wrong");
+
+        }
 
         if(this.currentQuestionIndex < (this.post.words.length -1 ))
         {
             this.currentQuestionIndex++;
             this.currentQuestionLevel++;
             this.optionsPerQuestion = this.getOptionsOne(this.post.words);
-            
         }
         else
+        {
             this.QuizComplete = true;
+        }
     }
 
     japaneseReadingIsCorrect = (incomingJapaneseReadingGuess : string) => 

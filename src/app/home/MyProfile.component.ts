@@ -24,10 +24,32 @@ export class MyProfileComponent implements OnInit {
     postsObserver: Observable<any>;
     userAnswers: Array<Answer>;
 
+
+    get userAnswersSorted()  {
+        this.sortByDueDate();
+       return this.userAnswers.reverse();
+    }
+    private getTime(date?: Date) {
+        return date != null ? date.getTime() : 0;
+    }
+    
+    public sortByDueDate(): void {
+        this.userAnswers.sort((a: Answer, b: Answer) => {
+            if(a.answered == null)
+            a.answered = new Date('1999-01-01');
+
+            if(b.answered == null)
+            b.answered = new Date('1999-01-01');
+
+            return this.getTime(a.answered) - this.getTime(b.answered);
+        });
+    }
+
     constructor(private userService: UserService)
     {
 
     }
+
     ngOnInit() {
         this.postsObserver = this.userService.getAllAnswers("");
         this.postsObserver

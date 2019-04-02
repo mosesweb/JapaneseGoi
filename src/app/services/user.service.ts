@@ -30,6 +30,7 @@ const firebase2 = require("nativescript-plugin-firebase/app");
 
 @Injectable()
 export class UserService {
+  
   public loggedIn: Boolean = false;
   public UserFromService: User
   getUser(): Observable<User> {
@@ -299,7 +300,19 @@ export class UserService {
     });
   }
 
-  // return all vocabulary lists
+  // add answer entry
+  addAnswerEntry(question: string, guess: string, correct: boolean, listid: string): any {
+    const answersCollection = firebase2.firestore().collection("answers");
+    let answer: Answer = new Answer();
+    answer.answer = guess;
+    answer.correct = correct;
+    answer.question = question;
+    answer.listid = listid;
+    answer.answered = new Date();
+    answersCollection.add(answer);
+  }
+
+  // return all answers entries
   getAllAnswers(token: string) {
     let posts: Array<Answer> = [];
     return new Observable(observer => {
@@ -318,6 +331,7 @@ export class UserService {
                 answeredShort: new Date(doc.data().answered).toDateString()
               })
           );
+          
           observer.next(posts);
         }
         return () => {

@@ -5,7 +5,7 @@
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
         <label [text]="'Your profile ' + userService.UserFromService?.name"></label>
-        <ListView height="700" [items]="userAnswers" class="list-group">
+        <ListView height="700" [items]="userAnswersSorted" class="list-group">
         <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
             <StackLayout [class.odd]="odd" [class.even]="even" class="list-group-item">
                 <Label [text]="item.answeredShort + ': ' + item.question"></Label>
