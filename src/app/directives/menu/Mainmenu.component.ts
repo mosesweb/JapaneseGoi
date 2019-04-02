@@ -46,7 +46,7 @@ export class mainMenuComponent implements OnInit {
                 this.router.navigate([''], { relativeTo: this.currentRoute })
             } else if (newIndex === MainNavigation.MyLists) {
                 this.tabSelectedIndexResult = "List Tab (tabSelectedIndex = 1 )";
-                this.router.navigate(['mylists'], { relativeTo: this.currentRoute })
+                this.router.navigate(['home/mylists'])
             } else if (newIndex === MainNavigation.Profile) {
                 this.tabSelectedIndexResult = "Profile Tab (tabSelectedIndex = 2 )";
                 this.router.navigate(['myprofile'])

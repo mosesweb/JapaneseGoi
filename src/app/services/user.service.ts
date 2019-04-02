@@ -21,6 +21,7 @@ import { map, filter, catchError } from 'rxjs/operators';
 import { ClientWord } from '../model/ClientWord.model';
 import { Sense } from '../model/sense.model';
 import { HttpClient } from '@angular/common/http';
+import { Answer } from '../model/Answer.model';
 
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
@@ -289,6 +290,34 @@ export class UserService {
               })
           );
 
+          observer.next(posts);
+        }
+        return () => {
+          unsubscribe();
+        }
+      });
+    });
+  }
+
+  // return all vocabulary lists
+  getAllAnswers(token: string) {
+    let posts: Array<Answer> = [];
+    return new Observable(observer => {
+      const answersCollection = firebase2.firestore().collection("answers");
+      const unsubscribe = answersCollection.onSnapshot(querySnapshot => {
+        if (querySnapshot.docs !== undefined) {
+          querySnapshot.docs.map(doc =>
+            posts.push(<Answer>
+              {
+                question: doc.data().question,
+                answer: doc.data().answer,
+                listid: doc.data().listId,
+                userid: doc.data().userid,
+                correct: doc.data().correct,
+                answered: doc.data().answered,
+                answeredShort: new Date(doc.data().answered).toDateString()
+              })
+          );
           observer.next(posts);
         }
         return () => {

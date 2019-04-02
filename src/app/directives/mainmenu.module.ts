@@ -7,9 +7,9 @@ import { HomeModule } from "../home/home.module";
 
 @NgModule({
     imports: [
-        // NativeScriptCommonModule,
+        NativeScriptCommonModule,
         // HomeRoutingModule,
-        // NativeScriptFormsModule
+        NativeScriptFormsModule
     ],
     declarations: [
         mainMenuComponent

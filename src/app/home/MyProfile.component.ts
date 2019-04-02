@@ -12,6 +12,7 @@ import {
     firestore} from "nativescript-plugin-firebase"
 import { VocabList } from "../model/vocabList.model";
 import { Observable, from, of } from "rxjs";
+import { Answer } from "../model/Answer.model";
 const firebase2 = require("nativescript-plugin-firebase/app");
 
 @Component({
@@ -20,7 +21,21 @@ const firebase2 = require("nativescript-plugin-firebase/app");
     templateUrl: "./MyProfile.component.html"
 })
 export class MyProfileComponent implements OnInit {
-    ngOnInit() {
+    postsObserver: Observable<any>;
+    userAnswers: Array<Answer>;
 
+    constructor(private userService: UserService)
+    {
+
+    }
+    ngOnInit() {
+        this.postsObserver = this.userService.getAllAnswers("");
+        this.postsObserver
+           .subscribe({
+               next: post => {
+                    this.userAnswers = post;
+               },
+               error(error) { console.log(error); },
+       });
     }
 }

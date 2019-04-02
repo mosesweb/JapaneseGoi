@@ -17,7 +17,7 @@ import { mainMenuComponent } from "../directives/menu/Mainmenu.component";
         NativeScriptCommonModule,
         HomeRoutingModule,
         NativeScriptFormsModule,
-        // mainmenuModule
+        mainmenuModule
     ],
     declarations: [
         HomeComponent,
@@ -25,9 +25,9 @@ import { mainMenuComponent } from "../directives/menu/Mainmenu.component";
         SinglelistComponent,
         SinglewordComponent,
         playQuizComponent,
-        mainMenuComponent
+        // mainMenuComponent
     ],
-    exports: [mainMenuComponent],
+    // exports: [mainMenuComponent],
     schemas: [
         NO_ERRORS_SCHEMA
     ]
