@@ -39,7 +39,7 @@ Image {
 .odd
 {
     background-color: rgb(19, 98, 124);
-    color: black;
+    color: white !important;
     text-align: left;
     vertical-align: center;
 }
@@ -193,10 +193,14 @@ FilterSelect.disabled{
 }
 
 .list-group-item {
-    color: black !important;
+    color: black;
 }
 .botom-nav {
     tab-active-color: green;
     tab-inactive-color: black;
     tab-background-color: blue;
+}
+.addedWord
+{
+    background:lightgreen;
 }

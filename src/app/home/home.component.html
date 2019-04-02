@@ -22,7 +22,7 @@
             search_param="title" primary_key="listid" multiple="false" render="label">
         </FilterSelect>
 
-        <SearchBar hint="Search hint" [text]="searchPhrase" (textChange)="onTextChanged($event)"
+        <SearchBar hint="Search on a word" [text]="searchPhrase" (textChange)="onTextChanged($event)"
             (submit)="onSubmit($event)"></SearchBar>
         <Label text="No results" *ngIf="(responseItems$ | async)?.length == 0"></Label>
         <ng-template #loading><Label text="loading..."></Label></ng-template>

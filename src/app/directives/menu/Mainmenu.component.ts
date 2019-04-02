@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { SelectedIndexChangedEventData, TabView } from "tns-core-modules/ui/tab-view/tab-view";
-import { MainNavigation } from "../model/navigation/mainNavigation.model";
 import { Router, ActivatedRoute } from "@angular/router";
+import { MainNavigation } from "~/app/model/navigation/mainNavigation.model";
 
 @Component({
     selector: "Mainmenu",
@@ -49,6 +49,8 @@ export class mainMenuComponent implements OnInit {
                 this.router.navigate(['mylists'], { relativeTo: this.currentRoute })
             } else if (newIndex === MainNavigation.Profile) {
                 this.tabSelectedIndexResult = "Profile Tab (tabSelectedIndex = 2 )";
+                this.router.navigate(['myprofile'])
+
             }
         }
     }

@@ -7,6 +7,7 @@ import { MylistComponent } from "./mylist.component";
 import { SinglelistComponent } from "./singlelist.component";
 import { SinglewordComponent } from "./singleword.component";
 import { playQuizComponent } from "./playQuiz.component";
+import { MyProfileComponent } from "./MyProfile.component";
 
 
 const routes: Routes = [
@@ -15,7 +16,6 @@ const routes: Routes = [
     { path: "singlelist/:id", component: SinglelistComponent },
     { path: "singleword/:listid/:wordid", component: SinglewordComponent },
     { path: "playquiz/:listid", component: playQuizComponent }
-
 ];
 
 @NgModule({

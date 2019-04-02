@@ -6,8 +6,8 @@ import { HttpClientModule } from  '@angular/common/http';
 import { AppComponent } from "./app.component";
 import { UserService } from "./services/user.service";
 import { NativescriptBottomNavigationModule} from "nativescript-bottom-navigation/angular";
-import { mainMenuComponent } from "./menu/Mainmenu.component";
 import { BrowserModule } from '@angular/platform-browser';
+import { MyProfileComponent } from "./home/MyProfile.component";
 
 @NgModule({
     bootstrap: [
@@ -17,10 +17,11 @@ import { BrowserModule } from '@angular/platform-browser';
         NativeScriptModule,
         AppRoutingModule,
         HttpClientModule,
-        NativescriptBottomNavigationModule
+        NativescriptBottomNavigationModule,
     ],
     declarations: [
-        AppComponent
+        AppComponent,
+        MyProfileComponent,
     ],
     providers: [UserService],
     schemas: [

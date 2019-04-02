@@ -5,9 +5,9 @@
 
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
-        <Label class="h3 p-15" [text]="'Playing quiz from: ' + post?.title" textWrap="true"></Label>
+        <Label class="h3 p-15" [text]="'Playing quiz from: ' + post?.title + ' - ' + QuizComplete" textWrap="true"></Label>
         <StackLayout class="hr-light m-10"></StackLayout>
-
+        
         <Label class="h3 p-15 MainQuestion" textWrap="true" [nsRouterLink]="['/home/singlelist', globalListChoiceId]">
             <FormattedString>
                 <Span [text]="'Question ' + (currentQuestionIndex+1) + ': What is '"></Span>
@@ -29,6 +29,10 @@
         <Button class="btn btn-primary btn-active" id="Option3"
             [text]="optionsPerQuestion[currentQuestionIndex]?.options[3].japanese_reading"
             (tap)="onTap($event)"></Button>
+
+            <label *ngIf="QuizComplete" class="h1" text="Quiz completed!"></label>
+
+
     </StackLayout>
     <Mainmenu selectedIndex="1"></Mainmenu>
 </GridLayout>

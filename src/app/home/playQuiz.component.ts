@@ -41,6 +41,7 @@ export class playQuizComponent implements OnInit {
     postsObserver: Observable<any>;
     post: VocabList;
     currentQuestionIndex: number = 0;
+    QuizComplete: boolean;
 
     firstWord: ClientWord;
     options: ClientWord[] = [];
@@ -156,7 +157,10 @@ export class playQuizComponent implements OnInit {
             this.currentQuestionIndex++;
             this.currentQuestionLevel++;
             this.optionsPerQuestion = this.getOptionsOne(this.post.words);
+            
         }
+        else
+            this.QuizComplete = true;
     }
 
     japaneseReadingIsCorrect = (incomingJapaneseReadingGuess : string) => 

@@ -199,6 +199,8 @@ export class HomeComponent implements OnInit {
         this.userService.setlistChoiceWithListId(args.selected);
     }
     wordClick(args: ItemEventData) {
+
+        args.view.addCss("addedWord");
         const index = args.index;
         let list;
         const userObs = this.responseItems$.pipe();

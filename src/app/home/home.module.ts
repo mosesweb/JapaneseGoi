@@ -8,13 +8,16 @@ import { MylistComponent } from "./mylist.component";
 import { SinglelistComponent } from "./singlelist.component";
 import { SinglewordComponent } from "./singleword.component";
 import { playQuizComponent } from "./playQuiz.component";
-import { mainMenuComponent } from "../menu/Mainmenu.component";
+import { MyProfileComponent } from "./MyProfile.component";
+import { mainmenuModule } from "../directives/mainmenu.module";
+import { mainMenuComponent } from "../directives/menu/Mainmenu.component";
 
 @NgModule({
     imports: [
         NativeScriptCommonModule,
         HomeRoutingModule,
-        NativeScriptFormsModule
+        NativeScriptFormsModule,
+        // mainmenuModule
     ],
     declarations: [
         HomeComponent,
