@@ -22,6 +22,7 @@ import { ClientWord } from '../model/ClientWord.model';
 import { Sense } from '../model/sense.model';
 import { HttpClient } from '@angular/common/http';
 import { Answer } from '../model/Answer.model';
+import { CompletedQuiz } from '../model/completedQuiz.model';
 
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
@@ -260,7 +261,8 @@ export class UserService {
             MainJapaneseReading: srpi.japanese[0].reading,
             English: srpi.senses[0].english_definitions.join(', '),
             senses: srpi.senses !== undefined ? srpi.senses : null,
-            japanese: srpi.japanese !== undefined ? srpi.japanese : null
+            japanese: srpi.japanese !== undefined ? srpi.japanese : null,
+            Selected: false
           })),
         catchError(this.handleError('searchWord', []))
       );
@@ -341,6 +343,40 @@ export class UserService {
       });
     });
   }
+  // return all completed quizzes
+  getAllCompletedQuizzes(token: string) {
+    let posts: Array<CompletedQuiz> = [];
+    return new Observable(observer => {
+      const answersCollection = firebase2.firestore().collection("completedQuizzes").where("userId", "==", this.UserFromService.uid);
+      const unsubscribe = answersCollection.onSnapshot(querySnapshot => {
+        if (querySnapshot.docs !== undefined) {
+          querySnapshot.docs.map(doc =>
+            posts.push(<CompletedQuiz>
+              {
+                listid: doc.data().listid,
+                completedDate: doc.data().completedDate,
+                completed: doc.data().completed
+              })
+          );
+          
+          observer.next(posts);
+        }
+        return () => {
+          unsubscribe();
+        }
+      });
+    });
+  }
+
+   // add completed entry
+   addCompletedQuizEntry(listid: string): any {
+    const completedCollection = firebase2.firestore().collection("completedQuizzes");
+    let completed: CompletedQuiz = new CompletedQuiz();
+    completed.listid = listid;
+    completed.userId = this.UserFromService.uid;
+    completedCollection.add(completed);
+  }
+
 
   // get one vocabulary list
   getVocabListById(listid: string) {

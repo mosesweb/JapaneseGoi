@@ -200,7 +200,7 @@ FilterSelect.disabled{
     tab-inactive-color: black;
     tab-background-color: blue;
 }
-.addedWord
+.highlight
 {
-    background:lightgreen;
+    background-color: lightgreen;
 }

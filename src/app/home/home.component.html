@@ -1,4 +1,5 @@
-<ActionBar class="action-bar">
+<Page>
+    <ActionBar class="action-bar">
     <Label class="action-bar-title" text="JapaneseStudy"></Label>
     <ActionItem ios.systemIcon="16" ios.position="right" *ngIf="userService.UserFromService != null" text="Logout"
         (tap)="logoutNow()" android.position="popup"></ActionItem>
@@ -27,9 +28,9 @@
         <Label text="No results" *ngIf="(responseItems$ | async)?.length == 0"></Label>
 
         <ListView height="700" (itemTap)="wordClick($event)"
-            [items]="responseItems$ | async" class="list-group">
+            [items]="responseItems$ | async" class="list-group" id="resultList">
             <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-                <StackLayout [class.odd]="odd" [class.even]="even" class="list-group-item">
+                <StackLayout [class.highlight]="item.Selected == true" [class.odd]="odd" [class.even]="even" class="list-group-item">
                     <Label [text]='item.English'></Label>
                     <Label [text]='item.MainJapaneseWord'></Label>
                     <!-- <Label [text]='"index: " + i'></Label>-->
@@ -40,3 +41,4 @@
     </StackLayout>
     <Mainmenu></Mainmenu>
 </GridLayout>
+</Page>

@@ -169,6 +169,7 @@ export class playQuizComponent implements OnInit {
         else
         {
             this.QuizComplete = true;
+            this.userService.addCompletedQuizEntry(this.listid)
         }
     }
 

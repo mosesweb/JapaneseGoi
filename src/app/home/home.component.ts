@@ -23,6 +23,8 @@ import { registerElement } from 'nativescript-angular/element-registry';
 import { FilterSelect } from 'nativescript-filter-select';
 import { setCssFileName } from "tns-core-modules/application/application";
 import { Page } from "tns-core-modules/ui/page";
+import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
+
 import { MainNavigation } from "../model/navigation/mainNavigation.model";
 import { SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view";
 import { alert } from "tns-core-modules/ui/dialogs";
@@ -77,6 +79,7 @@ export class HomeComponent implements OnInit {
         
     }
     currentroute: ActivatedRoute;
+        selectedItem: number;
     public onTextChanged(args) {
         let searchBar = <SearchBar>args.object;
         console.log("SearchBar text changed! New value: " + searchBar.text);
@@ -148,7 +151,7 @@ export class HomeComponent implements OnInit {
               }
           );
     }
-    constructor(private userService: UserService, private router : Router,
+    constructor(private userService: UserService, private router : Router, private _page: Page,
         private currentRoute: ActivatedRoute) {
         // Use the component constructor to inject providers.
         // this.responseItems$ = of([]);
@@ -198,10 +201,29 @@ export class HomeComponent implements OnInit {
         if(args.selected !== undefined)
         this.userService.setlistChoiceWithListId(args.selected);
     }
+    public onPageLoaded(args: EventData): void {
+        console.log("Page Loaded");
+        const page = args.object as Page;
+    }
     wordClick(args: ItemEventData) {
 
-        args.view.addCss("addedWord");
         const index = args.index;
+        //https://github.com/NativeScript/nativescript-angular/issues/1320
+        const listview = <ListView>args.object;
+        args.view._context.selectedItem = (args.index);
+        console.log('item..');
+        listview.items[index].Selected = true;
+        
+
+        console.log(listview.items[index]);
+        console.log(args);
+        const pg = listview.page;
+        console.log("page..?");
+        console.log(pg);
+
+        // WORKAROUND: the bug is that we have to manually refresh the listview on iOS
+        listview.refresh();
+
         let list;
         const userObs = this.responseItems$.pipe();
         userObs.subscribe(val => 
