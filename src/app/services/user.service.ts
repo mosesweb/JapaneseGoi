@@ -279,7 +279,8 @@ export class UserService {
   getAllVocabLists(token: string) {
     let posts: Array<VocabList> = [];
     return new Observable(observer => {
-      const vocablistCollection = firebase2.firestore().collection("vocablists").where("uid", "==", this.UserFromService.uid);
+      
+      const vocablistCollection = firebase2.firestore().collection("vocablists");
       const unsubscribe = vocablistCollection.onSnapshot(querySnapshot => {
         if (querySnapshot.docs !== undefined) {
           querySnapshot.docs.map(doc =>
@@ -353,19 +354,17 @@ export class UserService {
   // return all completed quizzes
   getAllCompletedQuizzes(token: string) {
     let posts: Array<CompletedQuiz> = [];
+    console.log("lets se..");
+    console.log(this.UserFromService);
     return new Observable(observer => {
       const answersCollection = firebase2.firestore().collection("completedQuizzes").where("userId", "==", this.UserFromService.uid);
       const unsubscribe = answersCollection.onSnapshot(querySnapshot => {
         if (querySnapshot.docs !== undefined) {
           querySnapshot.docs.map(doc =>
-            posts.push(<CompletedQuiz>
-              {
-                listid: doc.data().listid,
-                completedDate: doc.data().completedDate,
-                completed: doc.data().completed
-              })
+            posts.push(new CompletedQuiz(doc.data().listid, doc.data().quizName, doc.data().completedDate, doc.data().completed, this.UserFromService.uid))
           );
-          
+
+
           observer.next(posts);
         }
         return () => {
@@ -376,11 +375,10 @@ export class UserService {
   }
 
    // add completed entry
-   addCompletedQuizEntry(listid: string): any {
+   addCompletedQuizEntry(listid: string, quizName: string): any {
     const completedCollection = firebase2.firestore().collection("completedQuizzes");
-    let completed: CompletedQuiz = new CompletedQuiz();
-    completed.listid = listid;
-    completed.userId = this.UserFromService.uid;
+    let completed: CompletedQuiz = new CompletedQuiz(listid, quizName, new Date(), true, this.UserFromService.uid);
+ 
     completedCollection.add(completed);
   }
 
