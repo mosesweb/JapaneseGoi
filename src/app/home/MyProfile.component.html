@@ -6,7 +6,7 @@
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
         <label [text]="'Your profile ' + userService.UserFromService?.email"></label>
         <label class="h2" [text]="'Total quiz taken: ' + (complets$ | async).length"></label>
-        <label class="h2" [text]="'Total correct answers: ' + answers.length"></label>
+        <label class="h2" [text]="'Total correct answers: ' + getAmountofCorrect"></label>
         <label class="h2" [text]="'Total wrong answers: ' + getAmountofWrong"></label>
 
         <ListView height="700" [items]="complets$ | async" class="list-group">

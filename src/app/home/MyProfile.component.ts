@@ -132,7 +132,7 @@ export class MyProfileComponent implements OnInit {
           colRef.onSnapshot((snapshot: firestore.QuerySnapshot) => {
             this.zone.run(() => {
               this.complets = [];
-              snapshot.forEach(docSnap => this.complets.push(<CompletedQuiz>docSnap.data()));
+              snapshot.forEach(docSnap => this.complets.push(new CompletedQuiz(docSnap.data().listid, docSnap.data().quizName, docSnap.data().completedDate, docSnap.data().completed, docSnap.data().userId)));
               subscriber.next(this.complets);
             });
           });
