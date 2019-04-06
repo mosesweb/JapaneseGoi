@@ -31,6 +31,22 @@ const firebase2 = require("nativescript-plugin-firebase/app");
 
 @Injectable()
 export class UserService {
+
+  getTheUser(): void
+  {
+    firebase.init({
+      onAuthStateChanged: (data) => { // optional but useful to immediately re-logon the user when he re-visits your app
+        console.log(data.loggedIn ? "..........Logged in to firebase" : ".........Logged out from firebase");
+        this.UserFromService = data;
+        if (data.loggedIn) {
+          this.UserFromService = data.user;
+          console.log("...........user's email address: " + (data.user.email ? data.user.email : "N/A"));
+        }
+        else
+        this.UserFromService = null;
+      }
+    });
+  }
   
   public loggedIn: Boolean = false;
   public UserFromService: User
@@ -272,7 +288,7 @@ export class UserService {
   getAllVocabLists(token: string) {
     let posts: Array<VocabList> = [];
     return new Observable(observer => {
-      const vocablistCollection = firebase2.firestore().collection("vocablists");
+      const vocablistCollection = firebase2.firestore().collection("vocablists").where("uid", "==", this.UserFromService.uid);
       const unsubscribe = vocablistCollection.onSnapshot(querySnapshot => {
         if (querySnapshot.docs !== undefined) {
           querySnapshot.docs.map(doc =>

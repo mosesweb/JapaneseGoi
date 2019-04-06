@@ -26,7 +26,9 @@ ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     // Subscribe to begin listening for async result
+    this.UserService.getTheUser();
     
+
   
 applicationOn(launchEvent, (args: ApplicationEventData) => {
   if (args.android) {
@@ -58,23 +60,7 @@ applicationOn(resumeEvent, (args: ApplicationEventData) => {
       console.log("UIApplication: " + args.ios);
   }
 });
-  if(this.shouldFireBaseInit)
-  {
-    firebase.init({
-      onAuthStateChanged: (data)  => { // optional but useful to immediately re-logon the user when he re-visits your app
-      console.log(data.loggedIn ? "Logged in to firebase" : "Logged out from firebase");
-      if (data.loggedIn) {
-          this.UserService.UserFromService = data.user;
-          console.log(this.UserService.UserFromService.name + ' nice');
-      }
-      else
-      {
-          this.UserService.UserFromService = null;
-          console.log('not logged in');
-      }
-      }
-    });
-}
+  
   }
   
 }
