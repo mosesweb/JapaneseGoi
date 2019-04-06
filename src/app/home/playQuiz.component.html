@@ -3,45 +3,50 @@
 </ActionBar>
 
 
-<GridLayout class="page">
-    <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton [visibility]="QuizComplete ? 'collapsed' : 'visible'">
+<GridLayout class="page" columns="*, auto" rows="*, auto">
+    <StackLayout row="0" col="0" class="m-15" sdkExampleTitle sdkToggleNavButton
+        [visibility]="QuizComplete ? 'collapsed' : 'visible'">
         <Label class="h3 p-15" [text]="infoAboutPreviousEntry" textWrap="true"></Label>
         <StackLayout class="hr-light m-10"></StackLayout>
 
-        <Label class="h3 p-15 MainQuestion" textWrap="true" [nsRouterLink]="['/home/singlelist', globalListChoiceId]">
-            <FormattedString>
-                <Span [text]="'Question ' + (currentQuestionIndex+1) + ': What is '"></Span>
-                <Span class="boldText" [text]="post?.words[currentQuestionIndex]?.english"></Span>
+        <GridLayout columns="*,*" rows="auto,*,*" width="100%" height="700" backgroundColor="lightgray">
+                <Label col="0" [colSpan]="2" row="0" class="p-15 MainQuestion" textWrap="true"
+                    [nsRouterLink]="['/home/singlelist', globalListChoiceId]">
+                    <FormattedString>
+                        <Span [text]="'Question ' + (currentQuestionIndex+1) + ': What is '"></Span>
+                        <Span class="boldText" [text]="post?.words[currentQuestionIndex]?.english"></Span>
+                        <Span text=" in japanese?"></Span>
+                    </FormattedString>
+                </Label>
 
-                <Span text=" in japanese?"></Span>
-            </FormattedString>
-        </Label>
+            <Button col="0" row="1" class="btn btn-primary btn-active" id="Option2"
+                [text]="optionsPerQuestion[currentQuestionIndex]?.options[1].japanese_reading"
+                (tap)="onTap($event)"></Button>
+            <Button col="1" row="1" class="btn btn-primary btn-active" id="Option3"
+                [text]="optionsPerQuestion[currentQuestionIndex]?.options[2].japanese_reading"
+                (tap)="onTap($event)"></Button>
+            <Button col="0" row="2" class="btn btn-primary btn-active" id="Option3"
+                [text]="optionsPerQuestion[currentQuestionIndex]?.options[3].japanese_reading"
+                (tap)="onTap($event)"></Button>
+            <Button col="1" row="2" class="btn btn-primary btn-active" id="Option1"
+                [text]="optionsPerQuestion[currentQuestionIndex]?.options[0].japanese_reading"
+                (tap)="onTap($event)"></Button>
 
-        <Button class="btn btn-primary btn-active" id="Option1"
-            [text]="optionsPerQuestion[currentQuestionIndex]?.options[0].japanese_reading"
-            (tap)="onTap($event)"></Button>
-        <Button class="btn btn-primary btn-active" id="Option2"
-            [text]="optionsPerQuestion[currentQuestionIndex]?.options[1].japanese_reading"
-            (tap)="onTap($event)"></Button>
-        <Button class="btn btn-primary btn-active" id="Option3"
-            [text]="optionsPerQuestion[currentQuestionIndex]?.options[2].japanese_reading"
-            (tap)="onTap($event)"></Button>
-        <Button class="btn btn-primary btn-active" id="Option3"
-            [text]="optionsPerQuestion[currentQuestionIndex]?.options[3].japanese_reading"
-            (tap)="onTap($event)"></Button>
+        </GridLayout>
     </StackLayout>
-    <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton [visibility]="QuizComplete ? 'visible' : 'collapsed'">
+    <StackLayout row="0" col="0" class="m-15" sdkExampleTitle sdkToggleNavButton
+        [visibility]="QuizComplete ? 'visible' : 'collapsed'">
         <StackLayout>
             <label class="h1" text="Quiz completed!"></label>
             <label class="h3" [text]="statsText"></label>
-            <Button class="btn btn-primary btn-active" id="RetakeQuiz"
-           text="Retake quiz" (tap)="retakeQuiz($event)"></Button>
+            <Button class="btn btn-primary btn-active" id="RetakeQuiz" text="Retake quiz"
+                (tap)="retakeQuiz($event)"></Button>
         </StackLayout>
         <StackLayout>
-
+                <!-- make a gridlayout for this below ... -->
             <label class="h2" text="Correctly answered"></label>
 
-            <ListView [items]="correctWords" class="list-group">
+            <ListView height="300" [items]="correctWords" class="list-group">
                 <ng-template tkTemplateKey="green" let-dataitem="item">
                     <StackLayout orientation="vertical" class="list-group-item">
                         <Label [text]="dataitem.english" android:class="label-item"
@@ -55,7 +60,7 @@
         <StackLayout>
             <label class="h2" text="Mistakenly answered"></label>
 
-            <ListView [items]="mistakeWords" class="list-group">
+            <ListView height="300" [items]="mistakeWords" class="list-group">
                 <ng-template tkTemplateKey="green" let-dataitem="item">
                     <StackLayout orientation="vertical" class="list-group-item">
                         <Label [text]="dataitem.english" android:class="label-item"
@@ -67,5 +72,7 @@
             </ListView>
         </StackLayout>
     </StackLayout>
-    <Mainmenu selectedIndex="1"></Mainmenu>
+    <StackLayout row="1" col="0">
+        <Mainmenu selectedIndex="1"></Mainmenu>
+    </StackLayout>
 </GridLayout>

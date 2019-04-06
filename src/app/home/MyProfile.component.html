@@ -2,8 +2,8 @@
     <Label class="action-bar-title" text="JapaneseStudy"></Label>
 </ActionBar>
 
-<GridLayout class="page">
-    <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
+<GridLayout class="page" columns="*, auto" rows="*, auto">
+    <StackLayout row="0" col="0" class="m-15" sdkExampleTitle sdkToggleNavButton>
         <label [text]="'Your profile ' + userService.UserFromService?.email"></label>
         <label class="h2" [text]="'Total quiz taken: ' + (complets$ | async).length"></label>
         <label class="h2" [text]="'Total correct answers: ' + getAmountofCorrect"></label>
@@ -16,7 +16,6 @@
             </StackLayout>
         </ng-template>
     </ListView>
-
     </StackLayout>
-    <Mainmenu selectedIndex="2"></Mainmenu>
+    <Mainmenu row="1" col="0" selectedIndex="2"></Mainmenu>
 </GridLayout>
