@@ -48,6 +48,14 @@ export class playQuizComponent implements OnInit {
     options: ClientWord[] = [];
     optionsPerQuestion: Array<QuizWord>;
     currentQuestionLevel: number = 0;
+    statsText: string;
+    
+    numberofCorrect: number = 0;
+    numberOfMistakes: number = 0;
+
+    mistakeWords: Array<ClientWord> = [];
+    correctWords: Array<ClientWord> = [];
+
 
     constructor(private userService: UserService, private route : ActivatedRoute) {
     }
@@ -78,6 +86,7 @@ export class playQuizComponent implements OnInit {
         let optionsSize: number = words.length / questions;
         
         let arrayOfArrays: Array<QuizWord> = [];
+        
         for (let i= 0 ; i < words.length; i += optionsSize) {
            // arrayOfArrays.push(words.slice(i, i+optionsSize));
         }
@@ -144,7 +153,16 @@ export class playQuizComponent implements OnInit {
                 error(error) { console.log(error); }, // optional
         });
     }
-
+    retakeQuiz(args: EventData)
+    {
+        this.correctWords = [];
+        this.mistakeWords = [];
+        this.numberOfMistakes = 0;
+        this.numberofCorrect = 0;
+        this.currentQuestionIndex = 0;
+        this.QuizComplete = false;
+        this.infoAboutPreviousEntry = "Good luck!";
+    }
     onTap(args: EventData) {
         let button = <Button>args.object;
 
@@ -152,12 +170,15 @@ export class playQuizComponent implements OnInit {
         {
             this.infoAboutPreviousEntry = "Previous question: What is "+  this.post.words[this.currentQuestionIndex].english + " in Japanese? Your answer: " + button.text + ". It is correct!"
             this.userService.addAnswerEntry(this.post.words[this.currentQuestionIndex].english, button.text, true, this.listid);
-
+            this.numberofCorrect++;
+            this.correctWords.push(this.post.words[this.currentQuestionIndex]);
         }
         else
         {
             this.infoAboutPreviousEntry = "Previous question: What is "+  this.post.words[this.currentQuestionIndex].english + " in Japanese? Your answer: " + button.text + ". It is wrong!"
             this.userService.addAnswerEntry(this.post.words[this.currentQuestionIndex].english, button.text, false, this.listid);
+            this.numberOfMistakes++;
+            this.mistakeWords.push(this.post.words[this.currentQuestionIndex]);
         }
 
         if(this.currentQuestionIndex < (this.post.words.length -1 ))
@@ -169,7 +190,8 @@ export class playQuizComponent implements OnInit {
         else
         {
             this.QuizComplete = true;
-            this.userService.addCompletedQuizEntry(this.listid, this.post.title)
+            this.userService.addCompletedQuizEntry(this.listid, this.post.title, this.mistakeWords, this.correctWords);
+            this.statsText = this.numberofCorrect + ' correct and ' + this.numberOfMistakes + ' mistakes out of ' + this.post.words.length;
         }
     }
 

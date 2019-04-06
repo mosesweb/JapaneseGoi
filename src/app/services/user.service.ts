@@ -352,12 +352,12 @@ export class UserService {
     });
   }
   // return all completed quizzes
-  getAllCompletedQuizzes(token: string) {
+  getAllCompletedQuizzes(token: string, user: User | null = null) {
     let posts: Array<CompletedQuiz> = [];
     console.log("lets se..");
     console.log(this.UserFromService);
     return new Observable(observer => {
-      const answersCollection = firebase2.firestore().collection("completedQuizzes").where("userId", "==", this.UserFromService.uid);
+      const answersCollection = firebase2.firestore().collection("completedQuizzes").where("userId", "==", user.uid);
       const unsubscribe = answersCollection.onSnapshot(querySnapshot => {
         if (querySnapshot.docs !== undefined) {
           querySnapshot.docs.map(doc =>
@@ -375,10 +375,11 @@ export class UserService {
   }
 
    // add completed entry
-   addCompletedQuizEntry(listid: string, quizName: string): any {
+   addCompletedQuizEntry(listid: string, quizName: string, mistakeWords: Array<ClientWord>, correctWords: Array<ClientWord>): any {
     const completedCollection = firebase2.firestore().collection("completedQuizzes");
     let completed: CompletedQuiz = new CompletedQuiz(listid, quizName, new Date(), true, this.UserFromService.uid);
- 
+    completed.mistakeWords = mistakeWords;
+    completed.correctWords = correctWords;
     completedCollection.add(completed);
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, NgZone } from "@angular/core";
 import { RouterExtensions } from "nativescript-angular/router";
 import { Button } from "tns-core-modules/ui/button";
 import { EventData } from "tns-core-modules/data/observable";
@@ -26,6 +26,20 @@ export class MyProfileComponent implements OnInit {
     postsCompletedObserver: Observable<any>;
     userAnswers: Array<Answer> = [];
     userCompleted: Array<CompletedQuiz> = [];
+
+    
+
+    public complets$: Observable<Array<CompletedQuiz>>;
+    private complets: Array<CompletedQuiz> = [];
+
+
+    public answers$: Observable<Array<Answer>>;
+    private answers: Array<Answer> = [];
+
+
+    private listenerUnsubscribe: () => void;
+
+
 
     get userCompleteSorted()  {
         if(this.userCompleted !== undefined)
@@ -93,12 +107,13 @@ export class MyProfileComponent implements OnInit {
         }
     }
 
-    constructor(private userService: UserService)
+    constructor(private userService: UserService, private zone: NgZone)
     {
 
     }
 
     ngOnInit() {
+        this.firestoreCollectionObservable();
         this.postsObserver = this.userService.getAllAnswers("");
         this.postsObserver
            .subscribe({
@@ -108,13 +123,32 @@ export class MyProfileComponent implements OnInit {
                error(error) { console.log(error); },
        });
 
-       this.postsCompletedObserver = this.userService.getAllCompletedQuizzes("");
-       this.postsCompletedObserver
-          .subscribe({
-              next: post => {
-                   this.userCompleted = post;
-              },
-              error(error) { console.log(error); },
-      });
+       
     }
-}
+
+    firestoreCollectionObservable(): void {
+        this.complets$ = Observable.create(subscriber => {
+          const colRef: firestore.CollectionReference = firebase2.firestore().collection("completedQuizzes").where("userId", "==", this.userService.UserFromService.uid);
+          colRef.onSnapshot((snapshot: firestore.QuerySnapshot) => {
+            this.zone.run(() => {
+              this.complets = [];
+              snapshot.forEach(docSnap => this.complets.push(<CompletedQuiz>docSnap.data()));
+              subscriber.next(this.complets);
+            });
+          });
+        });
+
+        // answers
+        this.answers$ = Observable.create(subscriber => {
+            const colRef: firestore.CollectionReference = firebase2.firestore().collection("answers").where("userId", "==", this.userService.UserFromService.uid);
+            colRef.onSnapshot((snapshot: firestore.QuerySnapshot) => {
+              this.zone.run(() => {
+                this.answers = [];
+                snapshot.forEach(docSnap => this.answers.push(<Answer>docSnap.data()));
+                subscriber.next(this.answers);
+              });
+            });
+          });
+      }
+    }
+

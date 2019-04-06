@@ -1,3 +1,4 @@
+import { ClientWord } from "./ClientWord.model";
 
 export class CompletedQuiz {
 
@@ -7,7 +8,8 @@ export class CompletedQuiz {
     public correctAnswers?: number;
     public userId: string;
     public quizName?: string
-
+    public mistakeWords: Array<ClientWord>;
+    public correctWords: Array<ClientWord>;
     constructor(listid: string, quizName: string, completedDate: Date, completed: boolean, uid: string)
     {
         this.listid = listid;

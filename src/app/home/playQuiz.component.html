@@ -7,7 +7,7 @@
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton [visibility]="QuizComplete ? 'collapsed' : 'visible'">
         <Label class="h3 p-15" [text]="infoAboutPreviousEntry" textWrap="true"></Label>
         <StackLayout class="hr-light m-10"></StackLayout>
-        
+
         <Label class="h3 p-15 MainQuestion" textWrap="true" [nsRouterLink]="['/home/singlelist', globalListChoiceId]">
             <FormattedString>
                 <Span [text]="'Question ' + (currentQuestionIndex+1) + ': What is '"></Span>
@@ -31,7 +31,41 @@
             (tap)="onTap($event)"></Button>
     </StackLayout>
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton [visibility]="QuizComplete ? 'visible' : 'collapsed'">
-            <label *ngIf="QuizComplete" class="h1" text="Quiz completed!"></label>
+        <StackLayout>
+            <label class="h1" text="Quiz completed!"></label>
+            <label class="h3" [text]="statsText"></label>
+            <Button class="btn btn-primary btn-active" id="RetakeQuiz"
+           text="Retake quiz" (tap)="retakeQuiz($event)"></Button>
+        </StackLayout>
+        <StackLayout>
+
+            <label class="h2" text="Correctly answered"></label>
+
+            <ListView [items]="correctWords" class="list-group">
+                <ng-template tkTemplateKey="green" let-dataitem="item">
+                    <StackLayout orientation="vertical" class="list-group-item">
+                        <Label [text]="dataitem.english" android:class="label-item"
+                            [nsRouterLink]="['/home/singleword', dataitem?.listid, dataitem?.word_id]"></Label>
+                        <Label [text]="dataitem.japanese_word" android:class="label-item"></Label>
+                        <Label [text]="dataitem.japanese_reading" android:class="label-item"></Label>
+                    </StackLayout>
+                </ng-template>
+            </ListView>
+        </StackLayout>
+        <StackLayout>
+            <label class="h2" text="Mistakenly answered"></label>
+
+            <ListView [items]="mistakeWords" class="list-group">
+                <ng-template tkTemplateKey="green" let-dataitem="item">
+                    <StackLayout orientation="vertical" class="list-group-item">
+                        <Label [text]="dataitem.english" android:class="label-item"
+                            [nsRouterLink]="['/home/singleword', dataitem?.listid, dataitem?.word_id]"></Label>
+                        <Label [text]="dataitem.japanese_word" android:class="label-item"></Label>
+                        <Label [text]="dataitem.japanese_reading" android:class="label-item"></Label>
+                    </StackLayout>
+                </ng-template>
+            </ListView>
+        </StackLayout>
     </StackLayout>
     <Mainmenu selectedIndex="1"></Mainmenu>
 </GridLayout>
