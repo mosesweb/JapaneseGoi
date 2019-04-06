@@ -22,13 +22,16 @@ export class AppComponent implements OnInit {
   {
     
   }
-ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    // Subscribe to begin listening for async result
-    this.UserService.getTheUser();
-    
-
+  async ngOnInit(): Promise<void> {
+    try {
+      await firebase.init({
+        persist: false
+      });
+      console.log(">>>>> Firebase initialized");
+      this.UserService.getTheUser();
+    } catch (err) {
+      console.log(">>>>> Firebase init error: " + err);
+  
   
 applicationOn(launchEvent, (args: ApplicationEventData) => {
   if (args.android) {
@@ -63,4 +66,4 @@ applicationOn(resumeEvent, (args: ApplicationEventData) => {
   
   }
   
-}
+}}

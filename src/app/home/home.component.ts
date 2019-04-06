@@ -138,14 +138,15 @@ export class HomeComponent implements OnInit {
             firebase.login({
                 type: firebase.LoginType.PASSWORD,
                 passwordOptions: {
-                    email: r.userName,
-                    password: r.password
+                    email: "moses@gmail.com",
+                    password: "hejhej"
                 }
             }).then(
                 (result: firebaseUser) => {
                     JSON.stringify(result);
 
                     this.user = result as User;
+                    this.userService.UserFromService = result;
                     this.user.points = 0;
 
 

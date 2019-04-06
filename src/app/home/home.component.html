@@ -12,7 +12,8 @@
 <GridLayout class="page">
         <StackLayout *ngIf="userService.UserFromService == null">
                 <Label class="h3 p-15" *ngIf="userService.UserFromService == null" text="Not a member? Register" (tap)="RegisterNow()" textWrap="true"></Label>
-                <Label class="h3 p-15" *ngIf="userService.UserFromService == null" text="not logged in" textWrap="true"></Label>
+                <Label class="h3 p-15" *ngIf="userService.UserFromService == null" text="not logged in"
+                    textWrap="true"></Label>
         </StackLayout>
 
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton *ngIf="userService.UserFromService != null">

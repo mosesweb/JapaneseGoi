@@ -96,6 +96,7 @@ export class MylistComponent implements OnInit {
                     listid: doc.data().listId})));
 
                 });
+            
 
     }
     

@@ -34,18 +34,9 @@ export class UserService {
 
   getTheUser(): void
   {
-    firebase.init({
-      onAuthStateChanged: (data) => { // optional but useful to immediately re-logon the user when he re-visits your app
-        console.log(data.loggedIn ? "..........Logged in to firebase" : ".........Logged out from firebase");
-        this.UserFromService = data;
-        if (data.loggedIn) {
-          this.UserFromService = data.user;
-          console.log("...........user's email address: " + (data.user.email ? data.user.email : "N/A"));
-        }
-        else
-        this.UserFromService = null;
-      }
-    });
+    firebase.getCurrentUser()
+    .then(user => console.log(this.UserFromService = user))
+    .catch(error => console.log("Trouble in paradise: " + error));
   }
   
   public loggedIn: Boolean = false;
