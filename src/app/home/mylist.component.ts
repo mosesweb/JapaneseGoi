@@ -54,7 +54,7 @@ export class MylistComponent implements OnInit {
             title: "New vocabulary list",
             message: "Create a brand new vocabulary list",
             cancelButtonText: "Cancel",
-            defaultText: "List name",
+            defaultText: "",
             okButtonText: "Create",
             inputType: dialogs.inputType.text
         }).then(r => {

@@ -8,10 +8,11 @@ import { UserService } from "../services/user.service";
 import { getBoolean, setBoolean } from "tns-core-modules/application-settings";
 import { SearchBar } from "tns-core-modules/ui/search-bar";
 
-import { 
-    firestore, 
-    User as firebaseUser, 
-    login as firebaseLogin} from "nativescript-plugin-firebase"
+import {
+    firestore,
+    User as firebaseUser,
+    login as firebaseLogin
+} from "nativescript-plugin-firebase"
 import { DataEntity } from "../model/searchResponse.model";
 import { searchResponseItemClient } from "../model/searchResponseItemClient";
 import { VocabList } from "../model/vocabList.model";
@@ -28,6 +29,7 @@ import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
 import { MainNavigation } from "../model/navigation/mainNavigation.model";
 import { SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view";
 import { alert } from "tns-core-modules/ui/dialogs";
+import * as dialogs from "tns-core-modules/ui/dialogs";
 
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
@@ -42,9 +44,9 @@ setCssFileName("app.css");
 })
 export class HomeComponent implements OnInit {
     public counter: number = 0;
-    public username : string = "";
-    public userEmail : string = "";
-    public userEmail$ : Observable<string>;
+    public username: string = "";
+    public userEmail: string = "";
+    public userEmail$: Observable<string>;
     public picked: string;
     public showlogin: boolean = true;
     loadingUser: boolean = true;
@@ -62,11 +64,11 @@ export class HomeComponent implements OnInit {
     userVocabularyLists: Array<VocabList>;
     DisplaynoResultFound: boolean = false;
     showLoading: boolean = true;
-    
+
     public tabSelectedIndex: number;
     public tabSelectedIndexResult: string;
 
-    onSubmit = (args: any) =>  {
+    onSubmit = (args: any) => {
 
         let searchBar = <SearchBar>args.object;
         const rootFrame = frame.topmost().currentPage;
@@ -76,65 +78,110 @@ export class HomeComponent implements OnInit {
         //     this.responseItems$ = result;
         // });
         this.responseItems$ = this.userService.searchWord(searchBar.text);
-        
+
     }
     currentroute: ActivatedRoute;
-        selectedItem: number;
+    selectedItem: number;
     public onTextChanged(args) {
         let searchBar = <SearchBar>args.object;
         console.log("SearchBar text changed! New value: " + searchBar.text);
     }
 
-    public logoutNow () : void
-    {
-        console.log("logingout..");    
+    public logoutNow(): void {
+        console.log("logingout..");
         firebase.logout();
         this.userService.UserFromService = null;
         this.user = null;
     }
 
-    public LoginNow () : void 
-    {
-        firebase.login({
-            type: firebase.LoginType.GOOGLE,
-          }).then(
-               (result : firebaseUser) => {
-                JSON.stringify(result);
-                
-                this.user = result as User;
-                this.user.points = 0;
+    public RegisterNow() {
+        dialogs.login("Register to Goi", "EMail", "Password").then(r => {
+            firebase.createUser({
+                email: r.userName,
+                password: r.password
+            }).then(
+                function (user) {
+                    alert("Welcome " + user.email + "!");
 
-                
-                const usersCollection = firebase2.firestore().collection("users");
-                const query = usersCollection
-                .where("uid", "==", this.user.uid);
-            
-                query
-                .get()
-                .then(querySnapshot => {
-                    if(querySnapshot.docs.length > 0)
-                    {
-                        console.log('found someone!');
-                        querySnapshot.forEach(doc => {
-                            console.log(`person found: ${doc.id} => ${JSON.stringify(doc.data().name)}`);
+                    const usersCollection = firebase2.firestore().collection("users");
+                    const query = usersCollection
+                        .where("uid", "==", user.uid);
+
+                    query
+                        .get()
+                        .then(querySnapshot => {
+                            if (querySnapshot.docs.length > 0) {
+                                console.log('found someone!');
+                                querySnapshot.forEach(doc => {
+                                    console.log(`person found: ${doc.id} => ${JSON.stringify(doc.data().name)}`);
+                                });
+                            }
+                            else {
+                                console.log(querySnapshot);
+                                console.log('nope no found ill insert this person..');
+                                usersCollection.add(user);
+                            }
                         });
-                        }
-                    else
-                    {
-                        console.log(querySnapshot);
-                    console.log('nope no found ill insert this person..');
-                    usersCollection.add(this.user);
-                    }
-                  
-                });
-              },
-              function (errorMessage) {
-                console.log('NAH.. ' + errorMessage);
-              }
-          );
+                },
+                function (errorMessage) {
+                    alert(errorMessage);
+
+                }
+            );
+
+        });
+    }
+    public LoginNow(): void {
+        dialogs.login("Login to Goi", "Email", "Password").then(r => {
+            console.log("Dialog result: " + r.result + ", user: " + r.userName + ", pwd: " + r.password);
+            console.log(r.userName);
+            firebase.login({
+                type: firebase.LoginType.PASSWORD,
+                passwordOptions: {
+                    email: r.userName,
+                    password: r.password
+                }
+            }).then(
+                (result: firebaseUser) => {
+                    JSON.stringify(result);
+
+                    this.user = result as User;
+                    this.user.points = 0;
+
+
+                    const usersCollection = firebase2.firestore().collection("users");
+                    const query = usersCollection
+                        .where("uid", "==", this.user.uid);
+
+                    query
+                        .get()
+                        .then(querySnapshot => {
+                            if (querySnapshot.docs.length > 0) {
+                                console.log('found someone!');
+                                querySnapshot.forEach(doc => {
+                                    console.log(`person found: ${doc.id} => ${JSON.stringify(doc.data().name)}`);
+                                });
+                            }
+                            else {
+                                console.log(querySnapshot);
+                                console.log('nope no found ill insert this person..');
+                                usersCollection.add(this.user);
+                            }
+
+                        });
+                },
+                function (errorMessage) {
+                    console.log('NAH.. ' + errorMessage);
+                }
+            );
+
+
+        });
+
+
     }
 
-    
+
     onTap(args: EventData) {
         let button = <Button>args.object;
 
@@ -142,16 +189,16 @@ export class HomeComponent implements OnInit {
         firebase.getAuthToken({
             // default false, not recommended to set to true by Firebase but exposed for {N} devs nonetheless :)
             forceRefresh: false
-          }).then(
-              function (token) {
+        }).then(
+            function (token) {
                 console.log("Auth token retrieved: " + token);
-              },
-              function (errorMessage) {
+            },
+            function (errorMessage) {
                 console.log("Auth token retrieval error: " + errorMessage);
-              }
-          );
+            }
+        );
     }
-    constructor(private userService: UserService, private router : Router, private _page: Page,
+    constructor(private userService: UserService, private router: Router, private _page: Page,
         private currentRoute: ActivatedRoute) {
         // Use the component constructor to inject providers.
         // this.responseItems$ = of([]);
@@ -162,34 +209,32 @@ export class HomeComponent implements OnInit {
 
     }
     getUser(): void {
-        if(this.userService.getUser() != null)
-        {
-            this.userService.getUser().subscribe((u) => { 
+        if (this.userService.getUser() != null) {
+            this.userService.getUser().subscribe((u) => {
                 this.user = u;
             });
         }
-      }
+    }
 
     ngOnInit(): void {
         this.users$ = this.userService.getAllUsers();
         this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();
-        this.globalListChoiceText = (this.userService.getlistChoice() === undefined || this.userService.getlistChoice() == "" || this.userService.getlistChoice() == null) ? "Selected Vocabulary List" : 'Selected list: ' + this.userService.getlistChoice(); 
+        this.globalListChoiceText = (this.userService.getlistChoice() === undefined || this.userService.getlistChoice() == "" || this.userService.getlistChoice() == null) ? "Selected Vocabulary List" : 'Selected list: ' + this.userService.getlistChoice();
         this.globalListChoiceId = this.userService.getlistChoiceId();
 
         this.postsObserver = this.userService.getAllVocabLists("");
         this.postsObserver
-           .subscribe({
-               next: post => {
-               this.userVocabularyLists = post;
-               },
-               error(error) { console.log(error); },
-       });
-       this.getSelectedItem();
+            .subscribe({
+                next: post => {
+                    this.userVocabularyLists = post;
+                },
+                error(error) { console.log(error); },
+            });
+        this.getSelectedItem();
 
     }
-    public getSelectedItem = (): void => 
-    {
+    public getSelectedItem = (): void => {
         // return this.userVocabularyLists.find(v => v.listid == this.userService.getlistChoiceId());
     }
 
@@ -197,9 +242,9 @@ export class HomeComponent implements OnInit {
         let picker = <ListPicker>args.object;
         this.picked = this.usersLists$[picker.selectedIndex];
     }
-    public onitemselected = (args:any ) => {
-        if(args.selected !== undefined)
-        this.userService.setlistChoiceWithListId(args.selected);
+    public onitemselected = (args: any) => {
+        if (args.selected !== undefined)
+            this.userService.setlistChoiceWithListId(args.selected);
     }
     public onPageLoaded(args: EventData): void {
         console.log("Page Loaded");
@@ -213,7 +258,7 @@ export class HomeComponent implements OnInit {
         args.view._context.selectedItem = (args.index);
         console.log('item..');
         listview.items[index].Selected = true;
-        
+
 
         console.log(listview.items[index]);
         console.log(args);
@@ -226,27 +271,23 @@ export class HomeComponent implements OnInit {
 
         let list;
         const userObs = this.responseItems$.pipe();
-        userObs.subscribe(val => 
-        {
-            if(val.length > 0)
-            {
+        userObs.subscribe(val => {
+            if (val.length > 0) {
                 this.userService.insertIntoList(this.userService.getlistChoiceId(), val[args.index]);
             }
         });
     }
-    wordClickSimple = (indexNum : number) => {
+    wordClickSimple = (indexNum: number) => {
         const index = indexNum;
         let list;
         console.log("yeah here..");
         const userObs = this.responseItems$.pipe();
-        userObs.subscribe(val => 
-        {
-            if(val.length > 0)
-            {
+        userObs.subscribe(val => {
+            if (val.length > 0) {
                 console.log("go " + indexNum);
                 this.userService.insertIntoList(this.userService.getlistChoiceId(), val[indexNum]);
             }
         });
     }
-    
+
 }

@@ -4,7 +4,7 @@
 
 <GridLayout class="page">
     <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton>
-        <label [text]="'Your profile ' + userService.UserFromService?.name"></label>
+        <label [text]="'Your profile ' + userService.UserFromService?.email"></label>
         <label class="h2" [text]="'Total correct answers: ' + getAmountofCorrect"></label>
         <label class="h2" [text]="'Total wrong answers: ' + getAmountofWrong"></label>
 

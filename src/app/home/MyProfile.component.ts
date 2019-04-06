@@ -26,30 +26,41 @@ export class MyProfileComponent implements OnInit {
 
 
     get userAnswersSorted()  {
-        this.sortByDueDate();
-       return this.userAnswers.reverse();
+        if(this.userAnswers !== undefined)
+        {
+            this.sortByDueDate();
+            return this.userAnswers.reverse();
+        }
     }
     get getAmountofCorrect()  {
+        if(this.userAnswers === undefined)
+        return 0;
+
         return this.userAnswers.filter(a => a.correct == true).length;
     }
     get getAmountofWrong()  {
+        if(this.userAnswers === undefined)
+        return 0;
+        
         return this.userAnswers.filter(a => a.correct == false).length;
-
     }
     private getTime(date?: Date) {
         return date != null ? date.getTime() : 0;
     }
     
     public sortByDueDate(): void {
-        this.userAnswers.sort((a: Answer, b: Answer) => {
-            if(a.answered == null)
-            a.answered = new Date('1999-01-01');
+        if(this.userAnswers !== undefined)
+        {
+            this.userAnswers.sort((a: Answer, b: Answer) => {
+                if(a.answered == null)
+                a.answered = new Date('1999-01-01');
 
-            if(b.answered == null)
-            b.answered = new Date('1999-01-01');
+                if(b.answered == null)
+                b.answered = new Date('1999-01-01');
 
-            return this.getTime(a.answered) - this.getTime(b.answered);
-        });
+                return this.getTime(a.answered) - this.getTime(b.answered);
+            });
+        }
     }
 
     constructor(private userService: UserService)
