@@ -1,6 +1,7 @@
 import { Sense } from "./sense.model";
 import { ClientWord } from "./ClientWord.model";
 import { QuizOption } from "./QuizOption.model";
+import { stringify } from "@angular/core/src/render3/util";
 
 export class QuizWord extends ClientWord {
   
@@ -10,12 +11,15 @@ export class QuizWord extends ClientWord {
         public english: string //a.english
     )
     {
-        super("");
+        super("","");
         
         this.japanese_reading = japanese_reading;
         this.japanese_word = japanese_word;
         this.english = english;
     }
+
+  
+
     public options: Array<QuizOption> = [];
 
     public setOptions(words: Array<ClientWord>): void {
@@ -41,14 +45,15 @@ export class QuizWord extends ClientWord {
         });
 
 
-        let correctOption = opts.find(o => o.correctOption == true);
+        let correctOption: QuizOption = opts.find(o => o.correctOption == true);
         let wrong_options: Array<QuizOption> = opts.filter(o => o.correctOption == false);
-
-        let threeOptions: Array<QuizOption> = this.shuffle(wrong_options).slice(0,3);
-        threeOptions.push(<QuizOption>correctOption);
+        let threeOptions: Array<QuizOption> = [];
+        this.shuffle(wrong_options).slice(0,3).forEach((element: QuizOption) => {
+            threeOptions.push(new QuizOption(element))
+        });;
+        threeOptions.push(new QuizOption(correctOption));
         
         this.options = threeOptions;
-        
         console.log("set complete");
         console.log(this.options.length);
     }

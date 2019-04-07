@@ -9,11 +9,29 @@ export class ClientWord {
     senses?: (Sense)[] | null; 
     word_id: string
 
-    constructor(japanese_reading:string)
+    public japaneseFullReading = "";
+
+    constructor(japanese_reading:string, japanese_word:string)
     {
         if(japanese_reading != "")
-        this.japanese_reading = japanese_reading;
+        {
+            this.japanese_reading = japanese_reading;
+            this.japaneseFullReading = japanese_reading;
+        }
+
+        if(japanese_word != "")
+        {
+            this.japanese_word = japanese_word;
+            this.japaneseFullReading = japanese_word + ' [' + this.japanese_reading + ']';
+        }
+
+        
+        console.log("constructor22");
     }
+
+    
+
+   
 }
 
 

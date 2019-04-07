@@ -62,16 +62,16 @@ export class playQuizComponent implements OnInit {
 
     getRandomOptions = () =>
     {
-        const list = [];
-        const list2 = [];
+        const list: Array<ClientWord> = [];
+        const list2: Array<ClientWord> = [];
         let array = [];
 
         this.post.words.forEach((val : ClientWord) =>
         {
                 let arrsize = (this.post.words.length / 4);
 
-                list.push(val.japanese_reading);
-                list2.push(val.japanese_reading);
+                list.push(val);
+                list2.push(val);
         });
         return list;
         
@@ -103,25 +103,6 @@ export class playQuizComponent implements OnInit {
                 q.setOptions(words);
             });
         return list;
-
-
-        // options.push(words[this.currentQuestionIndex]);
-        // usedIndexes.push(this.currentQuestionIndex);
-
-        // var num1 = this.generateRandom(0, words.length, []);
-        // options.push(words[num1]);
-
-        // var num2   = this.generateRandom(0, words.length, [num1]);
-        // options.push(words[num2]);
-
-        // var num3 = this.generateRandom(0, words.length, [num1, num2]);
-        // options.push(words[num3]);
-
-
-        // let newarr = [];
-        // options.forEach(o => {
-        //     newarr.push(o);
-        // })
     }
     generateRandom (min : number, max : number, numbers : number[]) {
         let num = Math.floor(Math.random() * (max - min + 1)) + min;
