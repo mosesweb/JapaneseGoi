@@ -41,7 +41,7 @@ export class playQuizComponent implements OnInit {
     postsObserver: Observable<any>;
     post: VocabList;
     currentQuestionIndex: number = 0;
-    QuizComplete: boolean;
+    QuizComplete: boolean = false;
 
     infoAboutPreviousEntry: string = 'Good luck!';
     firstWord: ClientWord;
@@ -102,9 +102,6 @@ export class playQuizComponent implements OnInit {
             list.forEach((q: QuizWord)  => {
                 q.setOptions(words);
             });
-
-            console.log("run and..");
-            console.log(list);
         return list;
 
 
@@ -165,8 +162,13 @@ export class playQuizComponent implements OnInit {
     }
     onTap(args: EventData) {
         let button = <Button>args.object;
+        let item_contx: any = button.bindingContext;
+        console.log("incoming guess");
 
-        if(this.japaneseReadingIsCorrect(button.text))
+        let quizWord: QuizWord = button.get("guess");
+        
+
+        if(this.japaneseReadingIsCorrect(quizWord))
         {
             this.infoAboutPreviousEntry = "Previous question: What is "+  this.post.words[this.currentQuestionIndex].english + " in Japanese? Your answer: " + button.text + ". It is correct!"
             this.userService.addAnswerEntry(this.post.words[this.currentQuestionIndex].english, button.text, true, this.listid);
@@ -175,7 +177,7 @@ export class playQuizComponent implements OnInit {
         }
         else
         {
-            this.infoAboutPreviousEntry = "Previous question: What is "+  this.post.words[this.currentQuestionIndex].english + " in Japanese? Your answer: " + button.text + ". It is wrong!"
+            this.infoAboutPreviousEntry = "Previous question: What is "+  this.post.words[this.currentQuestionIndex].english + " in Japanese? Your answer: " + button.text + ". It is wrong!" + ' correct answer should have been: ' + this.post.words[this.currentQuestionIndex].japanese_reading 
             this.userService.addAnswerEntry(this.post.words[this.currentQuestionIndex].english, button.text, false, this.listid);
             this.numberOfMistakes++;
             this.mistakeWords.push(this.post.words[this.currentQuestionIndex]);
@@ -195,9 +197,11 @@ export class playQuizComponent implements OnInit {
         }
     }
 
-    japaneseReadingIsCorrect = (incomingJapaneseReadingGuess : string) => 
+    japaneseReadingIsCorrect = (incomingJapaneseReadingGuess : QuizWord) => 
     {
-        if(this.post.words[this.currentQuestionIndex].japanese_reading == incomingJapaneseReadingGuess)
+        if(this.post.words[this.currentQuestionIndex].japanese_reading == incomingJapaneseReadingGuess.japanese_reading
+            || this.post.words[this.currentQuestionIndex].japanese_word == incomingJapaneseReadingGuess.japanese_word
+            )
             return true;
         return false;
     }

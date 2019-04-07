@@ -280,7 +280,7 @@ export class UserService {
     let posts: Array<VocabList> = [];
     return new Observable(observer => {
       
-      const vocablistCollection = firebase2.firestore().collection("vocablists");
+      const vocablistCollection = firebase2.firestore().collection("vocablists").where("uid", "==", this.UserFromService.uid);
       const unsubscribe = vocablistCollection.onSnapshot(querySnapshot => {
         if (querySnapshot.docs !== undefined) {
           querySnapshot.docs.map(doc =>

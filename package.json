@@ -1,6 +1,6 @@
 {
   "nativescript": {
-    "id": "org.nativescript.HelloWorld",
+    "id": "com.japanesegoi.JapGoi",
     "tns-ios": {
       "version": "4.2.0"
     },
@@ -8,9 +8,9 @@
       "version": "5.2.0"
     }
   },
-  "description": "NativeScript Application",
-  "license": "SEE LICENSE IN <your-license-filename>",
-  "repository": "<fill-your-repository-here>",
+  "description": "Japanese study application",
+  "license": "https://github.com/mosesweb/nativescriptTesting/blob/master/LICENSE",
+  "repository": "https://github.com/mosesweb/nativescriptTesting/",
   "dependencies": {
     "@angular/animations": "^7.2.12",
     "@angular/common": "^7.2.12",
@@ -41,5 +41,5 @@
     "nativescript-dev-webpack": "^0.20.3",
     "typescript": "^3.3.4000"
   },
-  "readme": "NativeScript Application"
+  "readme": "https://github.com/mosesweb/nativescriptTesting/blob/master/README.md"
 }
