@@ -7,9 +7,12 @@ export class ClientWord {
     english: string;
     all_variations: Array<Japanese>;
     senses?: (Sense)[] | null; 
-    word_id: string
+    word_id: string;
 
-    public japaneseFullReading = "";
+
+
+    public japaneseFullReading? = "";
+    public japaneseWordOrReading? = "";
 
     constructor(japanese_reading:string, japanese_word:string)
     {
@@ -25,8 +28,9 @@ export class ClientWord {
             this.japaneseFullReading = japanese_word + ' [' + this.japanese_reading + ']';
         }
 
+        this.japaneseWordOrReading = (this.japanese_word != "" && this.japanese_word != null) ? this.japanese_word : this.japanese_reading;
+
         
-        console.log("constructor22");
     }
 
     

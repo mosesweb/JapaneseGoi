@@ -18,16 +18,16 @@
         </Label>
 
         <Button class="btn btn-primary btn-active" id="Option2"
-            [text]="optionsPerQuestion[currentQuestionIndex]?.options[1].japaneseFullReading"
+            [text]="post?.showKanjiOnly ? optionsPerQuestion[currentQuestionIndex]?.options[1].japaneseWordOrReading : optionsPerQuestion[currentQuestionIndex]?.options[1].japaneseFullReading"
             (tap)="onTap($event)" [guess]="optionsPerQuestion[currentQuestionIndex]?.options[1]"></Button>
         <Button class="btn btn-primary btn-active" id="Option3"
-            [text]="optionsPerQuestion[currentQuestionIndex]?.options[2].japaneseFullReading"
+            [text]="post?.showKanjiOnly ? optionsPerQuestion[currentQuestionIndex]?.options[2].japaneseWordOrReading : optionsPerQuestion[currentQuestionIndex]?.options[2].japaneseFullReading"
             (tap)="onTap($event)" [guess]="optionsPerQuestion[currentQuestionIndex]?.options[2]"></Button>
         <Button class="btn btn-primary btn-active" id="Option3"
-            [text]="optionsPerQuestion[currentQuestionIndex]?.options[3].japaneseFullReading"
+            [text]="post?.showKanjiOnly ? optionsPerQuestion[currentQuestionIndex]?.options[3].japaneseWordOrReading : optionsPerQuestion[currentQuestionIndex]?.options[3].japaneseFullReading"
             (tap)="onTap($event)" [guess]="optionsPerQuestion[currentQuestionIndex]?.options[3]"></Button>
         <Button class="btn btn-primary btn-active" id="Option1"
-            [text]="optionsPerQuestion[currentQuestionIndex]?.options[0].japaneseFullReading"
+            [text]="post?.showKanjiOnly ? optionsPerQuestion[currentQuestionIndex]?.options[0].japaneseWordOrReading : optionsPerQuestion[currentQuestionIndex]?.options[0].japaneseFullReading"
             (tap)="onTap($event)" [guess]="optionsPerQuestion[currentQuestionIndex]?.options[0]"></Button>
 
     </StackLayout>

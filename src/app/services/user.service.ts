@@ -158,7 +158,7 @@ export class UserService {
         uid: uid
       });
 
-    let AddedVo = new VocabList(vocablist.title, uid, guid);
+    let AddedVo = new VocabList(vocablist.title, uid, guid, true);
 
     callback(AddedVo);
   }
@@ -191,7 +191,7 @@ export class UserService {
 
         querySnapshot.forEach(doc => {
           this.vocablists.push(
-            new VocabList(doc.data().title, "", doc.data().listId)
+            new VocabList(doc.data().title, "", doc.data().listId, true)
           );
         });
         callback(of(this.vocablists));
@@ -410,6 +410,7 @@ export class UserService {
             title: doc.data().title,
             uid: doc.data().uid,
             listid: doc.data().listId,
+            showKanjiOnly: doc.data().showKanjiOnly  !== undefined ? doc.data().showKanjiOnly : true,
             words: doc.data().words !== undefined ? doc.data().words.map(w => <ClientWord>{
               japanese_reading: w.japanese_reading,
               japanese_word: w.japanese_word,
