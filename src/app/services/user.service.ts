@@ -354,6 +354,14 @@ export class UserService {
   }
   // return all completed quizzes
   getAllCompletedQuizzes(token: string, user: User | null = null) {
+    
+    firebase.getCurrentUser()
+    .then(user => { 
+
+      
+    })
+    .catch(error => console.log("Trouble in paradise: " + error));
+
     let posts: Array<CompletedQuiz> = [];
     console.log("lets se..");
     console.log(this.UserFromService);

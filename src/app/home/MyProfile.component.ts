@@ -113,7 +113,6 @@ export class MyProfileComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.firestoreCollectionObservable();
         this.postsObserver = this.userService.getAllAnswers("");
         this.postsObserver
            .subscribe({
@@ -122,33 +121,14 @@ export class MyProfileComponent implements OnInit {
                },
                error(error) { console.log(error); },
        });
-
-       
+       this.postsCompletedObserver = this.userService.getAllCompletedQuizzes("", this.userService.UserFromService);
+       this.postsCompletedObserver
+          .subscribe({
+              next: post => {
+                   this.userCompleted = post;
+              },
+              error(error) { console.log(error); },
+      });
     }
-
-    firestoreCollectionObservable(): void {
-        this.complets$ = Observable.create(subscriber => {
-          const colRef: firestore.CollectionReference = firebase2.firestore().collection("completedQuizzes").where("userId", "==", this.userService.UserFromService.uid);
-          colRef.onSnapshot((snapshot: firestore.QuerySnapshot) => {
-            this.zone.run(() => {
-              this.complets = [];
-              snapshot.forEach(docSnap => this.complets.push(new CompletedQuiz(docSnap.data().listid, docSnap.data().quizName, docSnap.data().completedDate, docSnap.data().completed, docSnap.data().userId)));
-              subscriber.next(this.complets);
-            });
-          });
-        });
-
-        // answers
-        this.answers$ = Observable.create(subscriber => {
-            const colRef: firestore.CollectionReference = firebase2.firestore().collection("answers").where("userId", "==", this.userService.UserFromService.uid);
-            colRef.onSnapshot((snapshot: firestore.QuerySnapshot) => {
-              this.zone.run(() => {
-                this.answers = [];
-                snapshot.forEach(docSnap => this.answers.push(<Answer>docSnap.data()));
-                subscriber.next(this.answers);
-              });
-            });
-          });
-      }
     }
 
