@@ -296,7 +296,8 @@ export class UserService {
                   all_variations: w.all_variations,
                   english: w.english,
                   word_id: w.word_id,
-                  listid: querySnapshot.docs[0].data().listId // could be done prettier..
+                  japaneseFullReading: "",
+                  listid: querySnapshot.docs[0].data().listId // could be done prettier..,
                 }) : []
               })
           );
@@ -408,6 +409,7 @@ export class UserService {
               all_variations: w.all_variations,
               english: w.english,
               word_id: w.word_id,
+              japaneseFullReading:"",
               listid: querySnapshot.docs[0].data().listId // could be done prettier..
             }) : []
           });
@@ -424,7 +426,7 @@ export class UserService {
     console.log("got inside..");
     console.log("wid: " + wordId);
     console.log("lid: " + listId);
-    let word: ClientWord = new ClientWord("");
+    let word: ClientWord = new ClientWord("","");
     return new Observable(observer => {
       const vocablistCollection = firebase2.firestore().collection("vocablists").where("listId", "==", listId);
 
