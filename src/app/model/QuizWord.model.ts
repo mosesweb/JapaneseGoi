@@ -52,7 +52,7 @@ export class QuizWord extends ClientWord {
             threeOptions.push(new QuizOption(element))
         });;
         threeOptions.push(new QuizOption(correctOption));
-        
+        threeOptions = this.shuffle(threeOptions);
         this.options = threeOptions;
         console.log("set complete");
         console.log(this.options.length);

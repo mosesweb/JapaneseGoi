@@ -410,7 +410,7 @@ export class UserService {
             title: doc.data().title,
             uid: doc.data().uid,
             listid: doc.data().listId,
-            showKanjiOnly: doc.data().showKanjiOnly  !== undefined ? doc.data().showKanjiOnly : true,
+            showKanjiOnly: doc.data().showKanjiOnly !== undefined && doc.data().showKanjiOnly != null ? doc.data().showKanjiOnly : true,
             words: doc.data().words !== undefined ? doc.data().words.map(w => <ClientWord>{
               japanese_reading: w.japanese_reading,
               japanese_word: w.japanese_word,
@@ -491,6 +491,11 @@ export class UserService {
       }
     });
   }
+
+
+
+
+
 }
 
 

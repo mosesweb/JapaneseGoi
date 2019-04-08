@@ -11,7 +11,7 @@
 
         <Label class="p-12 MainQuestion" textWrap="true" [nsRouterLink]="['/home/singlelist', globalListChoiceId]">
             <FormattedString>
-                <Span [text]="'Question ' + (currentQuestionIndex+1) + ': What is '"></Span>
+                <Span [text]="'Question ' + QuestionNumber + ': What is '"></Span>
                 <Span class="boldText" [text]="post?.words[currentQuestionIndex]?.english"></Span>
                 <Span text=" in japanese?"></Span>
             </FormattedString>

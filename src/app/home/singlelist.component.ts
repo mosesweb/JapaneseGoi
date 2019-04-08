@@ -86,6 +86,7 @@ export class SinglelistComponent implements OnInit {
                 vocablistCollection.doc(docid).delete();
                 this.currentList = null;
                 this.userService.setlistChoiceWithListId(null);
+                this.router.navigate(['home/mylists']);
            }
      });
 

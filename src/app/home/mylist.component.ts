@@ -61,7 +61,7 @@ export class MylistComponent implements OnInit {
             if(r.result && r.text != "")
             {
                 console.log("Result: " + r.result + ", text: " + r.text);
-                let newList = new VocabList(r.text, this.userService.UserFromService.uid);
+                let newList = new VocabList(r.text, this.userService.UserFromService.uid, null, false);
                 this.userService.addVocabList(newList, this.userService.UserFromService.uid, (n) =>
                 {
                     this.vocablists$.subscribe(o => o.push(n));
@@ -108,7 +108,7 @@ export class MylistComponent implements OnInit {
               this.vocablists = [];
               snapshot.forEach(docSnap => 
                 {
-                    this.vocablists.push(new VocabList(docSnap.data().title, "", docSnap.data().listId));
+                    this.vocablists.push(new VocabList(docSnap.data().title, "", docSnap.data().listId, false));
                 });
               subscriber.next(this.vocablists);
           });

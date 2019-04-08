@@ -46,7 +46,7 @@ export class playQuizComponent implements OnInit {
     infoAboutPreviousEntry: string = 'Good luck!';
     firstWord: ClientWord;
     options: ClientWord[] = [];
-    optionsPerQuestion: Array<QuizWord>;
+    optionsPerQuestion: Array<QuizWord> = [];
     currentQuestionLevel: number = 0;
     statsText: string;
     
@@ -55,6 +55,12 @@ export class playQuizComponent implements OnInit {
 
     mistakeWords: Array<ClientWord> = [];
     correctWords: Array<ClientWord> = [];
+
+    
+    public get QuestionNumber() : string {
+        return (this.currentQuestionIndex + 1).toString();
+    }
+    
 
 
     constructor(private userService: UserService, private route : ActivatedRoute) {
@@ -130,6 +136,7 @@ export class playQuizComponent implements OnInit {
                 },
                 error(error) { console.log(error); }, // optional
         });
+
     }
     retakeQuiz(args: EventData)
     {

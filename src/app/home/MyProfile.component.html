@@ -5,17 +5,18 @@
 <GridLayout class="page" columns="*, auto" rows="*, auto">
     <StackLayout row="0" col="0" class="m-15" sdkExampleTitle sdkToggleNavButton>
         <label [text]="'Your profile ' + userService.UserFromService?.email"></label>
-        <label class="h2" *ngIf="userAmountofComplete != null && userAmountofComplete !== undefined" [text]="'Total quiz taken: ' + userAmountofComplete"></label>
-        <label class="h2" *ngIf="getAmountofCorrect != null && getAmountofCorrect !== undefined" [text]="'Total correct answers: ' + getAmountofCorrect"></label>
-        <label class="h2" [text]="'Total wrong answers: ' + getAmountofWrong"></label>
+        <Label *ngIf="loading" text="loading..."></Label>
+        <Label class="h1" [text]="'Total quiz taken: ' + items?.length"></Label>
 
-        <ListView height="700" *ngIf="userCompleteSorted != null && userCompleteSorted !== undefined" [items]="userCompleteSorted" class="list-group">
-        <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-            <StackLayout [class.odd]="odd" [class.even]="even" class="list-group-item">
-                <Label [text]="item.getDateShort + ': ' + item.quizName"></Label>
-            </StackLayout>
-        </ng-template>
-    </ListView>
+        <ListView height="100%" [items]="userCompleteSorted" class="list-group">
+            <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                <StackLayout height="60" class="list-group-item">
+                    <Label [text]="item?.getDateShort + ': ' + item?.quizName"></Label>
+                    <Label [text]="'Scored:' + item?.correctWords?.length + ' of ' + item?.getTotalQuestions"></Label>
+                </StackLayout>
+            </ng-template>
+        </ListView>
+
     </StackLayout>
     <Mainmenu row="1" col="0" selectedIndex="2"></Mainmenu>
 </GridLayout>

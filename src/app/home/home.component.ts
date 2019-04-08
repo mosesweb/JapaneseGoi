@@ -133,13 +133,11 @@ export class HomeComponent implements OnInit {
     }
     public LoginNow(): void {
         dialogs.login("Login to Goi", "Email", "Password").then(r => {
-            console.log("Dialog result: " + r.result + ", user: " + r.userName + ", pwd: " + r.password);
-            console.log(r.userName);
             firebase.login({
                 type: firebase.LoginType.PASSWORD,
                 passwordOptions: {
-                    email: "moses@gmail.com",
-                    password: "hejhej"
+                    email: r.userName, //'moses@gmail.com',
+                    password: r.password //'hejhej'
                 }
             }).then(
                 (result: firebaseUser) => {
