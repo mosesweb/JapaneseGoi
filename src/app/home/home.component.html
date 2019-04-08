@@ -1,56 +1,42 @@
 <Page>
     <ActionBar class="action-bar">
-    <Label class="action-bar-title" text="JapaneseStudy"></Label>
-    <ActionItem ios.systemIcon="16" ios.position="right" *ngIf="userService.UserFromService != null" text="Logout"
-        (tap)="logoutNow()" android.position="popup"></ActionItem>
-    <ActionItem ios.systemIcon="16" ios.position="right" text="Login" (tap)="LoginNow()" android.position="popup"
-        *ngIf="userService.UserFromService == null"></ActionItem>
-</ActionBar>
-
-
-
-<GridLayout class="page">
-        <StackLayout *ngIf="userService.UserFromService == null">
-                <Label class="h3 p-15" *ngIf="userService.UserFromService == null" text="Not a member? Register" (tap)="RegisterNow()" textWrap="true"></Label>
-                <Label class="h3 p-15" *ngIf="userService.UserFromService == null" text="not logged in"
-                    textWrap="true"></Label>
+        <Label class="action-bar-title" text="JapaneseStudy"></Label>
+        <ActionItem ios.systemIcon="16" ios.position="right" *ngIf="userService.UserFromService != null" text="Logout"
+            (tap)="logoutNow()" android.position="popup"></ActionItem>
+        <ActionItem ios.systemIcon="16" ios.position="right" text="Login" (tap)="LoginNow()" android.position="popup"
+            *ngIf="userService.UserFromService == null"></ActionItem>
+    </ActionBar>
+    <GridLayout class="page">
+        <StackLayout class="m-15" *ngIf="userService.UserFromService == null">
+            <Label class="h1" text="Welcome to JapGoi beta!"></Label>
+            <Button class="btn btn-primary btn-active" *ngIf="userService.UserFromService == null"
+                text="Not a member? Register" (tap)="RegisterNow()" textWrap="true"></Button>
+            <Button class="btn btn-primary btn-active" *ngIf="userService.UserFromService == null" text="Login"
+                (tap)="LoginNow()" textWrap="true"></Button>
         </StackLayout>
 
-    <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton *ngIf="userService.UserFromService != null">
-
-            
+        <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton *ngIf="userService.UserFromService != null">
 
             <FilterSelect class="h3" *ngIf="userVocabularyLists" height="100" [items]="userVocabularyLists"
-            (change)="onitemselected($event)" [hint]="globalListChoiceText" modal_title="Vocabulary list"
-            search_param="title" primary_key="listid" multiple="false" render="label">
-        </FilterSelect>
+                (change)="onitemselected($event)" [hint]="globalListChoiceText" modal_title="Vocabulary list"
+                search_param="title" primary_key="listid" multiple="false" render="label">
+            </FilterSelect>
 
             <SearchBar hint="Search on a word" [text]="searchPhrase" (textChange)="onTextChanged($event)"
-            (submit)="onSubmit($event)"></SearchBar>
-        <Label text="No results" *ngIf="(responseItems$ | async)?.length == 0"></Label>
-            <ListView height="700" (itemTap)="wordClick($event)"
-            [items]="responseItems$ | async" class="list-group" id="resultList">
-            <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
-                <StackLayout [class.highlight]="item.Selected == true" class="list-group-item">
-                    <Label [text]='item.English'></Label>
-                    <Label [text]='item.MainJapaneseWord'></Label>
-                    <!-- <Label [text]='"index: " + i'></Label>-->
-                    <Label [text]='item.MainJapaneseReading'></Label>
-                </StackLayout>
-            </ng-template>
+                (submit)="onSubmit($event)"></SearchBar>
+            <Label text="No results" *ngIf="(responseItems$ | async)?.length == 0"></Label>
+            <ListView height="700" (itemTap)="wordClick($event)" [items]="responseItems$ | async" class="list-group"
+                id="resultList">
+                <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                    <StackLayout [class.highlight]="item.Selected == true" class="list-group-item">
+                        <Label [text]='item.English'></Label>
+                        <Label [text]='item.MainJapaneseWord'></Label>
+                        <!-- <Label [text]='"index: " + i'></Label>-->
+                        <Label [text]='item.MainJapaneseReading'></Label>
+                    </StackLayout>
+                </ng-template>
             </ListView>
-        <!-- >> button-tap-event-html -->
-        <!-- <Button class="btn btn-primary btn-active" id="button" text="getAuthToken" (tap)="onTap($event)"></Button> -->
-        <!-- <Button class="btn btn-primary" id="login-button" *ngIf="userService.UserFromService == null" text="Login" (tap)="LoginNow()"></Button> -->
-        <!-- <Button class="btn btn-primary" id="logout-button" *ngIf="userService.UserFromService != null" text="Logout" (tap)="logoutNow()"></Button> -->
-       
-        <!-- <Button class="btn btn-primary" text="My lists" *ngIf="userService.UserFromService != null" [nsRouterLink]="['mylists']" pageTransition="slide" clearHistory="true"></Button> -->
-
-      
-
-
-      
-    </StackLayout>
-    <Mainmenu></Mainmenu>
-</GridLayout>
+        </StackLayout>
+    </GridLayout>
 </Page>
+<Mainmenu *ngIf="userService.UserFromService != null"></Mainmenu>
