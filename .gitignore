@@ -25,6 +25,8 @@ yarn-error.log*
 tmp/
 typings/
 
+App_Resources/Android/google-services.json
+
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json

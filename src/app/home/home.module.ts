@@ -11,13 +11,15 @@ import { playQuizComponent } from "./playQuiz.component";
 import { MyProfileComponent } from "./MyProfile.component";
 import { mainmenuModule } from "../directives/mainmenu.module";
 import { mainMenuComponent } from "../directives/menu/Mainmenu.component";
+import { NativeScriptPickerModule } from "nativescript-picker/angular";
 
 @NgModule({
     imports: [
         NativeScriptCommonModule,
         HomeRoutingModule,
         NativeScriptFormsModule,
-        mainmenuModule
+        mainmenuModule,
+        NativeScriptPickerModule
     ],
     declarations: [
         HomeComponent,

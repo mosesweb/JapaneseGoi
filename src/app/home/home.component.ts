@@ -30,7 +30,8 @@ import { MainNavigation } from "../model/navigation/mainNavigation.model";
 import { SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view";
 import { alert } from "tns-core-modules/ui/dialogs";
 import * as dialogs from "tns-core-modules/ui/dialogs";
-
+import { ObservableArray } from "tns-core-modules/data/observable-array/observable-array";
+import { test } from "../model/test.model";
 const firebase = require("nativescript-plugin-firebase")
 const firebase2 = require("nativescript-plugin-firebase/app");
 const frame = require('ui/frame');
@@ -42,7 +43,10 @@ setCssFileName("app.css");
     moduleId: module.id,
     templateUrl: "./home.component.html"
 })
+
 export class HomeComponent implements OnInit {
+
+
     public counter: number = 0;
     public username: string = "";
     public userEmail: string = "";
@@ -136,8 +140,8 @@ export class HomeComponent implements OnInit {
             firebase.login({
                 type: firebase.LoginType.PASSWORD,
                 passwordOptions: {
-                    email: r.userName, //'moses@gmail.com',
-                    password: r.password //'hejhej'
+                    email: r.userName, // 'moses@gmail.com',
+                    password: r.password // 'hejhej'
                 }
             }).then(
                 (result: firebaseUser) => {
@@ -205,33 +209,31 @@ export class HomeComponent implements OnInit {
         this.currentroute = currentRoute;
         this.tabSelectedIndex = 0;
         this.tabSelectedIndexResult = "Profile Tab (tabSelectedIndex = 0 )";
-
+        this.globalListChoiceText = (this.userService.getlistChoice() === undefined || this.userService.getlistChoice() == "" || this.userService.getlistChoice() == null) ? "Selected Vocabulary List" : 'Selected list: ' + this.userService.getlistChoice();
+        let testlist = new Array<VocabList>(); 
+        testlist.push(new VocabList("Loading","loading","loading",false));
+        this.userVocabularyLists = testlist;
+        this.getUser();
     }
     getUser(): void {
         if (this.userService.getUser() != null) {
             this.userService.getUser().subscribe((u) => {
                 this.user = u;
+                if(u != null)
+                {
+                    this.userVocabularyLists = this.userService.getListOfAllVocabList();
+                    this.getSelectedItem();
+                }
             });
         }
     }
 
+    public pickerItems: ObservableArray<test>;
+
+    
     ngOnInit(): void {
-        this.users$ = this.userService.getAllUsers();
-        this.userEmail$ = this.userService.getUserName();
         this.globalListChoice = this.userService.getlistChoice();
-        this.globalListChoiceText = (this.userService.getlistChoice() === undefined || this.userService.getlistChoice() == "" || this.userService.getlistChoice() == null) ? "Selected Vocabulary List" : 'Selected list: ' + this.userService.getlistChoice();
         this.globalListChoiceId = this.userService.getlistChoiceId();
-
-        this.postsObserver = this.userService.getAllVocabLists("");
-        this.postsObserver
-            .subscribe({
-                next: post => {
-                    this.userVocabularyLists = post;
-                },
-                error(error) { console.log(error); },
-            });
-        this.getSelectedItem();
-
     }
     public getSelectedItem = (): void => {
         // return this.userVocabularyLists.find(v => v.listid == this.userService.getlistChoiceId());

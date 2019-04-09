@@ -165,7 +165,7 @@ export class playQuizComponent implements OnInit {
         }
         else
         {
-            this.infoAboutPreviousEntry = "Previous question: What is "+  this.post.words[this.currentQuestionIndex].english + " in Japanese? Your answer: " + button.text + ". It is wrong!" + ' correct answer should have been: ' + this.post.words[this.currentQuestionIndex].japanese_reading 
+            this.infoAboutPreviousEntry = "Previous question: What is "+  this.post.words[this.currentQuestionIndex].english + " in Japanese? Your answer: " + button.text + ". It is wrong!" + ' correct answer should have been: ' + this.post.words[this.currentQuestionIndex].japaneseFullReading 
             this.userService.addAnswerEntry(this.post.words[this.currentQuestionIndex].english, button.text, false, this.listid);
             this.numberOfMistakes++;
             this.mistakeWords.push(this.post.words[this.currentQuestionIndex]);

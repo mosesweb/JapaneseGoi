@@ -7,6 +7,7 @@ import { UserService } from "../services/user.service";
 import { SetupItemViewArgs } from "nativescript-angular/directives";
 import { ItemEventData } from "tns-core-modules/ui/list-view";
 import * as dialogs from "tns-core-modules/ui/dialogs";
+import { map } from 'rxjs/operators';
 
 import {
     firestore
@@ -56,7 +57,6 @@ export class MyProfileComponent implements OnInit {
 
 
     constructor(private userService: UserService) {
-
     }
 
     ngOnInit() {

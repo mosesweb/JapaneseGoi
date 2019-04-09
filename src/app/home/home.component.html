@@ -6,8 +6,8 @@
         <ActionItem ios.systemIcon="16" ios.position="right" text="Login" (tap)="LoginNow()" android.position="popup"
             *ngIf="userService.UserFromService == null"></ActionItem>
     </ActionBar>
-    <GridLayout class="page">
-        <StackLayout class="m-15" *ngIf="userService.UserFromService == null">
+    <GridLayout class="page" columns="*" rows="*,auto">
+        <StackLayout  col="0" row="0" class="m-15" *ngIf="userService.UserFromService == null">
             <Label class="h1" text="Welcome to JapGoi beta!"></Label>
             <Button class="btn btn-primary btn-active" *ngIf="userService.UserFromService == null"
                 text="Not a member? Register" (tap)="RegisterNow()" textWrap="true"></Button>
@@ -15,9 +15,9 @@
                 (tap)="LoginNow()" textWrap="true"></Button>
         </StackLayout>
 
-        <StackLayout class="m-15" sdkExampleTitle sdkToggleNavButton *ngIf="userService.UserFromService != null">
+        <StackLayout  col="0" row="0" class="m-15" sdkExampleTitle sdkToggleNavButton *ngIf="userService.UserFromService != null">
 
-            <FilterSelect class="h3" *ngIf="userVocabularyLists" height="100" [items]="userVocabularyLists"
+            <FilterSelect class="h3 filterselectHome" *ngIf="userVocabularyLists" [items]="userVocabularyLists"
                 (change)="onitemselected($event)" [hint]="globalListChoiceText" modal_title="Vocabulary list"
                 search_param="title" primary_key="listid" multiple="false" render="label">
             </FilterSelect>
@@ -25,7 +25,7 @@
             <SearchBar hint="Search on a word" [text]="searchPhrase" (textChange)="onTextChanged($event)"
                 (submit)="onSubmit($event)"></SearchBar>
             <Label text="No results" *ngIf="(responseItems$ | async)?.length == 0"></Label>
-            <ListView height="700" (itemTap)="wordClick($event)" [items]="responseItems$ | async" class="list-group"
+            <ListView height="100%" (itemTap)="wordClick($event)" [items]="responseItems$ | async" class="list-group"
                 id="resultList">
                 <ng-template let-item="item" let-i="index" let-odd="odd" let-even="even">
                     <StackLayout [class.highlight]="item.Selected == true" class="list-group-item">
@@ -37,6 +37,8 @@
                 </ng-template>
             </ListView>
         </StackLayout>
+        <StackLayout col="0" row="1">
+        <Mainmenu *ngIf="userService.UserFromService != null"></Mainmenu>
+    </StackLayout>
     </GridLayout>
 </Page>
-<Mainmenu *ngIf="userService.UserFromService != null"></Mainmenu>

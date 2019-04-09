@@ -23,6 +23,8 @@ import { Sense } from '../model/sense.model';
 import { HttpClient } from '@angular/common/http';
 import { Answer } from '../model/Answer.model';
 import { CompletedQuiz } from '../model/completedQuiz.model';
+import { ObservableArray } from 'tns-core-modules/data/observable-array/observable-array';
+import { test } from '../model/test.model';
 
 const firebase = require("nativescript-plugin-firebase");
 const http = require('http');
@@ -32,13 +34,12 @@ const firebase2 = require("nativescript-plugin-firebase/app");
 @Injectable()
 export class UserService {
 
-  getTheUser(): void
-  {
+  getTheUser(): void {
     firebase.getCurrentUser()
-    .then(user => console.log(this.UserFromService = user))
-    .catch(error => console.log("Trouble in paradise: " + error));
+      .then(user => console.log(this.UserFromService = user))
+      .catch(error => console.log("Trouble in paradise: " + error));
   }
-  
+
   public loggedIn: Boolean = false;
   public UserFromService: User
   getUser(): Observable<User> {
@@ -275,11 +276,41 @@ export class UserService {
       );
   }
 
+
+  getListOfAllVocabList = (): Array<VocabList> => {
+    const vocablistCollection = firebase2.firestore().collection("vocablists").where("uid", "==", this.UserFromService.uid);
+    let posts: Array<VocabList> = [];
+
+    vocablistCollection.onSnapshot(querySnapshot => {
+      if (querySnapshot.docs !== undefined) {
+        querySnapshot.docs.map(doc =>
+          posts.push(<VocabList>
+            {
+              title: doc.data().title,
+              uid: doc.data().uid,
+              listid: doc.data().listId,
+              words: doc.data().words !== undefined ? doc.data().words.map(w => <ClientWord>{
+                japanese_reading: w.japanese_reading,
+                japanese_word: w.japanese_word,
+                senses: w.senses,
+                all_variations: w.all_variations,
+                english: w.english,
+                word_id: w.word_id,
+                japaneseFullReading: "",
+                listid: querySnapshot.docs[0].data().listId // could be done prettier..,
+              }) : []
+            })
+        )
+      }
+    })
+    return posts;
+  }
+
   // return all vocabulary lists
   getAllVocabLists(token: string) {
     let posts: Array<VocabList> = [];
     return new Observable(observer => {
-      
+
       const vocablistCollection = firebase2.firestore().collection("vocablists").where("uid", "==", this.UserFromService.uid);
       const unsubscribe = vocablistCollection.onSnapshot(querySnapshot => {
         if (querySnapshot.docs !== undefined) {
@@ -343,7 +374,7 @@ export class UserService {
                 answeredShort: new Date(doc.data().answered).toDateString()
               })
           );
-          
+
           observer.next(posts);
         }
         return () => {
@@ -354,13 +385,13 @@ export class UserService {
   }
   // return all completed quizzes
   getAllCompletedQuizzes(token: string, user: User | null = null) {
-    
-    firebase.getCurrentUser()
-    .then(user => { 
 
-      
-    })
-    .catch(error => console.log("Trouble in paradise: " + error));
+    firebase.getCurrentUser()
+      .then(user => {
+
+
+      })
+      .catch(error => console.log("Trouble in paradise: " + error));
 
     let posts: Array<CompletedQuiz> = [];
     console.log("lets se..");
@@ -383,8 +414,8 @@ export class UserService {
     });
   }
 
-   // add completed entry
-   addCompletedQuizEntry(listid: string, quizName: string, mistakeWords: Array<ClientWord>, correctWords: Array<ClientWord>): any {
+  // add completed entry
+  addCompletedQuizEntry(listid: string, quizName: string, mistakeWords: Array<ClientWord>, correctWords: Array<ClientWord>): any {
     const completedCollection = firebase2.firestore().collection("completedQuizzes");
     let completed: CompletedQuiz = new CompletedQuiz(listid, quizName, new Date(), true, this.UserFromService.uid);
     completed.mistakeWords = mistakeWords;
@@ -418,7 +449,7 @@ export class UserService {
               all_variations: w.all_variations,
               english: w.english,
               word_id: w.word_id,
-              japaneseFullReading:"",
+              japaneseFullReading: w.japanese_word + ' [' + w.japanese_reading + ']',
               listid: querySnapshot.docs[0].data().listId // could be done prettier..
             }) : []
           });
@@ -435,7 +466,7 @@ export class UserService {
     console.log("got inside..");
     console.log("wid: " + wordId);
     console.log("lid: " + listId);
-    let word: ClientWord = new ClientWord("","");
+    let word: ClientWord = new ClientWord("", "");
     return new Observable(observer => {
       const vocablistCollection = firebase2.firestore().collection("vocablists").where("listId", "==", listId);
 
@@ -497,5 +528,4 @@ export class UserService {
 
 
 }
-
 
