@@ -112,6 +112,7 @@ export class HomeComponent implements OnInit {
                         .where("uid", "==", user.uid);
 
                         this.userService.UserFromService = user;
+                        this.userVocabularyLists = null;
 
                     query
                         .get()
@@ -171,6 +172,7 @@ export class HomeComponent implements OnInit {
                                 console.log('found someone!');
                                 querySnapshot.forEach(doc => {
                                     console.log(`person found: ${doc.id} => ${JSON.stringify(doc.data().name)}`);
+                                    this.getUser(); // basically getListOfAllVocabList()
                                 });
                             }
                             else {
@@ -229,21 +231,17 @@ export class HomeComponent implements OnInit {
         this.tabSelectedIndex = 0;
         this.tabSelectedIndexResult = "Profile Tab (tabSelectedIndex = 0 )";
         this.globalListChoiceText = (this.userService.getlistChoice() === undefined || this.userService.getlistChoice() == "" || this.userService.getlistChoice() == null) ? "Selected Vocabulary List" : 'Selected list: ' + this.userService.getlistChoice();
-        let testlist = new Array<VocabList>();
-        testlist.push(new VocabList("Loading", "loading", "loading", false));
-        this.userVocabularyLists = testlist;
         this.getUser();
     }
 
     getUser(): void {
-        firebase.init({
-            onAuthStateChanged: function(data) { // optional but useful to immediately re-logon the user when he re-visits your app
-              console.log(data.loggedIn ? "Logged in to firebase" : "Logged out from firebase");
-              if (data.loggedIn) {
-                console.log("user's email address: " + (data.user.email ? data.user.email : "N/A"));
-              }
-            }
-          });
+        firebase.getCurrentUser()
+        .then((user) => 
+        {
+            this.userService.UserFromService = user;
+            this.userVocabularyLists = this.userService.getListOfAllVocabList();
+        })
+        .catch(error => console.log("Trouble in paradise: " + error));
     }
 
     public pickerItems: ObservableArray<test>;
