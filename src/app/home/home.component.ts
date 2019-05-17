@@ -104,12 +104,14 @@ export class HomeComponent implements OnInit {
                 email: r.userName,
                 password: r.password
             }).then(
-                function (user) {
+                (user) => {
                     alert("Welcome " + user.email + "!");
 
                     const usersCollection = firebase2.firestore().collection("users");
                     const query = usersCollection
                         .where("uid", "==", user.uid);
+
+                        this.userService.UserFromService = user;
 
                     query
                         .get()
