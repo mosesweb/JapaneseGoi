@@ -46,7 +46,6 @@ setCssFileName("app.css");
 
 export class HomeComponent implements OnInit {
 
-
     public counter: number = 0;
     public username: string = "";
     public userEmail: string = "";
@@ -84,6 +83,7 @@ export class HomeComponent implements OnInit {
         this.responseItems$ = this.userService.searchWord(searchBar.text);
 
     }
+
     currentroute: ActivatedRoute;
     selectedItem: number;
     public onTextChanged(args) {
@@ -128,20 +128,26 @@ export class HomeComponent implements OnInit {
                         });
                 },
                 function (errorMessage) {
-                    alert(errorMessage);
+                    dialogs.alert({
+                        title: "No user created",
+                        message: errorMessage,
+                        okButtonText: "OK, got it"
+                    })
 
                 }
             );
 
         });
     }
+
     public LoginNow(): void {
         dialogs.login("Login to Goi", "Email", "Password").then(r => {
+            try {
             firebase.login({
                 type: firebase.LoginType.PASSWORD,
                 passwordOptions: {
-                    email: r.userName, // 'moses@gmail.com',
-                    password: r.password // 'hejhej'
+                    email: r.userName,
+                    password: r.password
                 }
             }).then(
                 (result: firebaseUser) => {
@@ -174,16 +180,26 @@ export class HomeComponent implements OnInit {
                         });
                 },
                 function (errorMessage) {
-                    console.log('NAH.. ' + errorMessage);
+                    console.log(r.result);
+                    if(r.userName == "" || r.password  =="")
+                    alert("Please type in your username and password");
+
+                    console.log(errorMessage);
+                    dialogs.alert({
+                        title: "Cant login",
+                        message: errorMessage,
+                        okButtonText: "OK, got it"
+                    })
                 }
             );
-
-
+        }
+        catch(ex) {
+            console.log("ex!");
+            console.log(ex);
+        }
         });
-
-
+        
     }
-
 
     onTap(args: EventData) {
         let button = <Button>args.object;
@@ -201,6 +217,7 @@ export class HomeComponent implements OnInit {
             }
         );
     }
+
     constructor(private userService: UserService, private router: Router, private _page: Page,
         private currentRoute: ActivatedRoute) {
         // Use the component constructor to inject providers.
@@ -210,27 +227,25 @@ export class HomeComponent implements OnInit {
         this.tabSelectedIndex = 0;
         this.tabSelectedIndexResult = "Profile Tab (tabSelectedIndex = 0 )";
         this.globalListChoiceText = (this.userService.getlistChoice() === undefined || this.userService.getlistChoice() == "" || this.userService.getlistChoice() == null) ? "Selected Vocabulary List" : 'Selected list: ' + this.userService.getlistChoice();
-        let testlist = new Array<VocabList>(); 
-        testlist.push(new VocabList("Loading","loading","loading",false));
+        let testlist = new Array<VocabList>();
+        testlist.push(new VocabList("Loading", "loading", "loading", false));
         this.userVocabularyLists = testlist;
         this.getUser();
     }
+
     getUser(): void {
-        if (this.userService.getUser() != null) {
-            this.userService.getUser().subscribe((u) => {
-                this.user = u;
-                if(u != null)
-                {
-                    this.userVocabularyLists = this.userService.getListOfAllVocabList();
-                    this.getSelectedItem();
-                }
-            });
-        }
+        firebase.init({
+            onAuthStateChanged: function(data) { // optional but useful to immediately re-logon the user when he re-visits your app
+              console.log(data.loggedIn ? "Logged in to firebase" : "Logged out from firebase");
+              if (data.loggedIn) {
+                console.log("user's email address: " + (data.user.email ? data.user.email : "N/A"));
+              }
+            }
+          });
     }
 
     public pickerItems: ObservableArray<test>;
 
-    
     ngOnInit(): void {
         this.globalListChoice = this.userService.getlistChoice();
         this.globalListChoiceId = this.userService.getlistChoiceId();
@@ -281,7 +296,6 @@ export class HomeComponent implements OnInit {
     wordClickSimple = (indexNum: number) => {
         const index = indexNum;
         let list;
-        console.log("yeah here..");
         const userObs = this.responseItems$.pipe();
         userObs.subscribe(val => {
             if (val.length > 0) {

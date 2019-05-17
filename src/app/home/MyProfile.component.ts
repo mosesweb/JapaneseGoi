@@ -19,6 +19,7 @@ import { CompletedQuiz } from "../model/completedQuiz.model";
 import { isLoadingProperty } from "tns-core-modules/ui/image/image";
 const firebase2 = require("nativescript-plugin-firebase/app");
 
+
 @Component({
     selector: "Myprofile",
     moduleId: module.id,
@@ -56,7 +57,7 @@ export class MyProfileComponent implements OnInit {
     }
 
 
-    constructor(private userService: UserService) {
+    constructor(private userService: UserService, private zone: NgZone) {
     }
 
     ngOnInit() {

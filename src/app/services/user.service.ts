@@ -40,14 +40,10 @@ export class UserService {
       .catch(error => console.log("Trouble in paradise: " + error));
   }
 
+
   public loggedIn: Boolean = false;
   public UserFromService: User
-  getUser(): Observable<User> {
 
-    const userdata = from(firebase.getCurrentUser());
-    const example = userdata.pipe(map((val: User) => val));
-    return example;
-  }
   public globalListChoice: string;
 
   insertIntoList = (listId: string, word: searchResponseItemClient): void => {
@@ -115,7 +111,6 @@ export class UserService {
               });
           }
         });
-
       });
   }
   setlistChoice = (listchoice: string): void => {
@@ -188,8 +183,6 @@ export class UserService {
     query
       .get()
       .then(querySnapshot => {
-
-
         querySnapshot.forEach(doc => {
           this.vocablists.push(
             new VocabList(doc.data().title, "", doc.data().listId, true)
@@ -238,7 +231,6 @@ export class UserService {
         })
 
         callback(of(this.clientItemsList));
-
 
       }, (e) => {
         console.log(e)
